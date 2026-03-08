@@ -1,16 +1,13 @@
 {
-  "name": "container",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "fullstack-cp",
+  "private": true,
+  "workspaces": ["frontend", "backend"],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "concurrently \"npm run start-frontend\" \"npm run start-backend\"",
+    "start-frontend": "npm run dev --workspace=frontend",
+    "start-backend": "npm start --workspace=backend"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "express": "^5.2.1",
-    "sqlite3": "^5.1.7"
+  "devDependencies": {
+    "concurrently": "^9.1.0"
   }
 }
