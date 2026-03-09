@@ -1,10 +1,10 @@
-const { db } = require("./db");
+const { pool } = require("./db");
 
 function findAllUsers() {
   return new Promise((resolve, reject) => {
-    db.all("SELECT * FROM users", [], (err, rows) => {
+    pool.query("SELECT * FROM users", [], (err, res) => {
       if (err) return reject(err);
-      resolve(rows);
+      resolve(res.rows);
     });
   });
 }

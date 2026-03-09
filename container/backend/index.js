@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const db = require("./database/db");
 const usersRouter = require("./routes/usersRouter");
@@ -5,9 +6,10 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
-db.initializeDatabase();
 
-const connectToDatabaseAndStartServer = () => {
+const connectToDatabaseAndStartServer = async () => {
+  await db.initializeDatabase();
+
   const server = app.listen(port, () => {
     console.info(`Server is running on port ${port}`);
   });
@@ -16,8 +18,11 @@ const connectToDatabaseAndStartServer = () => {
 };
 
 const setupGracefulShutdown = (server) => {
-  const shutdown = () => {
-    server.close();
+  const shutdown = async () => {
+    await db.pool.end();
+    server.close(() => {
+      process.exit(0);
+    });
   };
 
   process.on("SIGTERM", shutdown); // system manager, some other application

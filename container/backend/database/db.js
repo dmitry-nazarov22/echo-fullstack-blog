@@ -1,66 +1,58 @@
-const sqlite3 = require("sqlite3").verbose();
-const db = new sqlite3.Database(":memory:");
+require("dotenv").config();
+const { Pool } = require("pg");
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+});
 
 async function initializeDatabase() {
-  db.serialize(() => {
-    db.run(`
+  await pool.query(`
         CREATE TABLE IF NOT EXISTS users (
-            id          INTEGER     PRIMARY KEY,
+            id          SERIAL      PRIMARY KEY,
             username    TEXT        UNIQUE          NOT NULL
-        )
+        );
     `);
 
-    db.run(`
+  await pool.query(`
         CREATE TABLE IF NOT EXISTS posts (
-            id          INTEGER     PRIMARY KEY,
-            user_id     INTEGER,
+            id          SERIAL      PRIMARY KEY,
+            user_id     INTEGER     REFERENCES users(id),
             body        TEXT        NOT NULL,
-            created_at  DATETIME    DEFAULT     CURRENT_TIMESTAMP,
-
-            FOREIGN KEY (user_id) REFERENCES users(id)
-        )
+            created_at  TIMESTAMP   DEFAULT     CURRENT_TIMESTAMP
+        );
     `);
 
-    db.run(`
+  await pool.query(`
         CREATE TABLE IF NOT EXISTS comments (
-            id          INTEGER     PRIMARY KEY,
-            post_id     INTEGER,
-            user_id     INTEGER,
+            id          SERIAL      PRIMARY KEY,
+            post_id     INTEGER     REFERENCES  posts(id),
+            user_id     INTEGER     REFERENCES  users(id),
             body        TEXT        NOT NULL,
-            created_at  DATETIME    DEFAULT     CURRENT_TIMESTAMP,
-
-            FOREIGN KEY (post_id) REFERENCES posts(id),
-            FOREIGN KEY (user_id) REFERENCES users(id)
-        )
+            created_at  TIMESTAMP   DEFAULT     CURRENT_TIMESTAMP
+        );
     `);
 
-    db.run(`
+  await pool.query(`
         CREATE TABLE IF NOT EXISTS likes (
-            post_id     INTEGER,
-            user_id     INTEGER,
+            post_id     INTEGER     REFERENCES  posts(id),
+            user_id     INTEGER     REFERENCES  users(id),
 
-            PRIMARY KEY (post_id, user_id),
-
-            FOREIGN KEY (post_id) REFERENCES posts(id),
-            FOREIGN KEY (user_id) REFERENCES users(id)
-        )
+            PRIMARY KEY (post_id, user_id)
+        );
     `);
-  });
 
-  insertData();
+  // await insertData();
 }
 
-function insertData() {
-  db.serialize(() => {
-    // Insert data, the ? placeholders prevent SQL injection
-    db.run("INSERT INTO users (username) VALUES (?)", ["dimanazarov"]);
-    db.run("INSERT INTO users (username) VALUES (?)", ["user1"]);
-    db.run("INSERT INTO users (username) VALUES (?)", ["user2"]);
-    db.run("INSERT INTO users (username) VALUES (?)", ["randomname123"]);
-  });
+async function insertData() {
+  // Insert data, the ? placeholders prevent SQL injection
+  pool.query("INSERT INTO users (username) VALUES ($1)", ["dimanazarov"]);
+  pool.query("INSERT INTO users (username) VALUES ($1)", ["user1"]);
+  pool.query("INSERT INTO users (username) VALUES ($1)", ["user2"]);
+  pool.query("INSERT INTO users (username) VALUES ($1)", ["randomname123"]);
 }
 
 module.exports = {
-  db,
+  pool,
   initializeDatabase,
 };
