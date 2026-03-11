@@ -1,12 +1,9 @@
 require("dotenv").config();
 const { Pool } = require("pg");
 
-const isProd = process.env.NODE_ENV === "production";
-
 const pool = new Pool({
-  connectionString: isProd
-    ? process.env.DB_DATABASE_URL
-    : process.env.EXTERNAL_DATABASE_URL,
+  connectionString:
+    process.env.DB_DATABASE_URL || process.env.EXTERNAL_DATABASE_URL,
   ssl: { rejectUnauthorized: false },
 });
 
