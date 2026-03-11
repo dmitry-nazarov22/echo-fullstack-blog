@@ -1,11 +1,17 @@
 require("dotenv").config();
 const { Pool } = require("pg");
 
+const isProd = process.env.NODE_ENV === "production";
+
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: isProd
+    ? process.env.DB_DATABASE_URL
+    : process.env.EXTERNAL_DATABASE_URL,
+  ssl: { rejectUnauthorized: false },
 });
 
 async function initializeDatabase() {
+  console.info("Initializing database");
   await pool.query(`
         CREATE TABLE IF NOT EXISTS users (
             id          SERIAL      PRIMARY KEY,
@@ -41,15 +47,7 @@ async function initializeDatabase() {
         );
     `);
 
-  // await insertData();
-}
-
-async function insertData() {
-  // Insert data, the ? placeholders prevent SQL injection
-  pool.query("INSERT INTO users (username) VALUES ($1)", ["dimanazarov"]);
-  pool.query("INSERT INTO users (username) VALUES ($1)", ["user1"]);
-  pool.query("INSERT INTO users (username) VALUES ($1)", ["user2"]);
-  pool.query("INSERT INTO users (username) VALUES ($1)", ["randomname123"]);
+  console.info("Tables created");
 }
 
 module.exports = {
