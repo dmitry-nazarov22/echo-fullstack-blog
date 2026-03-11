@@ -19,8 +19,11 @@ const connectToDatabaseAndStartServer = async () => {
 
 const setupGracefulShutdown = (server) => {
   const shutdown = async () => {
+    console.info("Shutting down gracefully...");
+
     await db.pool.end();
     server.close(() => {
+      console.info("HTTP server closed");
       process.exit(0);
     });
   };
