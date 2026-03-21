@@ -2,7 +2,7 @@ const express = require("express");
 const usersRouter = express.Router();
 const users = require("../database/users");
 
-usersRouter.get("/api/users", async (req, res) => {
+usersRouter.get("/", async (req, res) => {
   try {
     const result = await users.findAllUsers();
     res.send(result);
