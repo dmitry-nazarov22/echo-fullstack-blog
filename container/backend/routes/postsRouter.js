@@ -11,4 +11,14 @@ postsRouter.get("/", async (req, res) => {
   }
 });
 
+postsRouter.delete("/:id", async (req, res) => {
+  const id = parseInt(req.params.id);
+  try {
+    const post = await posts.deletePostById(id);
+    res.status(204).send();
+  } catch (err) {
+    res.status(404).send(err);
+  }
+});
+
 module.exports = postsRouter;
