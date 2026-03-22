@@ -15,8 +15,8 @@ postsRouter.get("/", async (req, res) => {
 postsRouter.get("/:userId", async (req, res) => {
   try {
     const id = parseInt(req.params.userId);
-    const posts = await posts.findPostsByUserId(id);
-    res.send(posts);
+    const userPosts = await posts.findPostsByUserId(id);
+    res.send(userPosts);
   } catch (err) {
     res.status(404).send(err);
   }

@@ -39,14 +39,14 @@ function findPostsByUserId(user_id) {
 function savePost(post) {
   return new Promise((resolve, reject) => {
     pool.query(
-      "INSERT INTO posts (user_id, body) VALUES ($1, $2)",
+      "INSERT INTO posts (user_id, body) VALUES ($1, $2) RETURNING *",
       [post.user_id, post.body],
       (err) => {
         if (err) {
           reject("Error inserting post data: " + err);
           return;
         }
-        resolve(post);
+        resolve(res.rows[0]);
       },
     );
   });
