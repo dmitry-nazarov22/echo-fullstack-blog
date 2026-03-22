@@ -5,9 +5,11 @@ const usersRouter = require("./routes/usersRouter");
 const postsRouter = require("./routes/postsRouter");
 const commentsRouter = require("./routes/commentsRouter");
 const app = express();
+const cors = require("cors");
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
+app.use(cors());
 
 const connectToDatabaseAndStartServer = async () => {
   await db.initializeDatabase();

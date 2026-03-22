@@ -1,1 +1,9 @@
-GET http://localhost:3000/api/users
+GET http://localhost:3000/users
+###
+POST http://localhost:3000/posts
+Content-Type: application/json
+
+{
+  "user_id": 5,
+  "body": "hey! this is the first post!"
+}
