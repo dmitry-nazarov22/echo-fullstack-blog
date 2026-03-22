@@ -41,7 +41,7 @@ function savePost(post) {
     pool.query(
       "INSERT INTO posts (user_id, body) VALUES ($1, $2) RETURNING *",
       [post.user_id, post.body],
-      (err) => {
+      (err, res) => {
         if (err) {
           reject("Error inserting post data: " + err);
           return;
