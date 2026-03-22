@@ -29,7 +29,7 @@ postsRouter.post("/", async (req, res) => {
     const post = await posts.savePost({ user_id, body });
     res.status(201).send(post);
   } catch (err) {
-    res.status(404).send();
+    res.status(500).send();
   }
 });
 
