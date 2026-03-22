@@ -21,4 +21,16 @@ postsRouter.delete("/:id", async (req, res) => {
   }
 });
 
+postsRouter.post("/", async (req, res) => {
+  try {
+    const user_id = 1; // TODO: add multiple users and authentication
+    const body = req.body.body;
+
+    const post = await posts.savePost({ user_id, body });
+    res.status(201).send(post);
+  } catch (err) {
+    res.status(404).send();
+  }
+});
+
 module.exports = postsRouter;
