@@ -35,7 +35,8 @@ export default function Profile({ fetchPostsByUserId, fetchUserById, deletePost,
 
     return (
         <div className='container'>
-            <h2>{username}</h2>
+            <h2>@{username}</h2>
+            <p>Description to profile will be here</p>
             <ul>
                 {userPosts.map((post) => (
                     <li key={post.id} className='post-card'>
