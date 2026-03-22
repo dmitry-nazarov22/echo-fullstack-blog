@@ -1,6 +1,6 @@
 export default function Profile() {
     return (
-        <div>
+        <div className="container">
             <h2>username here</h2>
             <h3>Posts:</h3>
             <ul>
