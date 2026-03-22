@@ -1,9 +1,18 @@
 GET http://localhost:3000/users
 ###
+
 POST http://localhost:3000/posts
 Content-Type: application/json
 
 {
   "user_id": 5,
   "body": "hey! this is the first post!"
+}
+###
+
+PATCH http://localhost:3000/posts/6
+Content-Type: application/json
+
+{
+    "body": "updated text!!!"
 }

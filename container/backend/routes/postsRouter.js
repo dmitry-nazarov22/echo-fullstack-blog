@@ -44,4 +44,16 @@ postsRouter.post("/", async (req, res) => {
   }
 });
 
+postsRouter.patch("/:id", async (req, res) => {
+  const id = req.params.id;
+  const body = req.body.body;
+
+  try {
+    const updatedPost = await posts.edit(id, body);
+    res.json(updatedPost);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
 module.exports = postsRouter;

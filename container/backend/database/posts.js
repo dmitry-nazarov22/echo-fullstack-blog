@@ -73,9 +73,34 @@ function deletePostById(id) {
   });
 }
 
+function edit(id, body) {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `UPDATE posts SET body = $1 WHERE id = $2 RETURNING *`,
+      [body, id],
+      (err, res) => {
+        if (err) {
+          reject("Failed to update post: " + "err");
+          return;
+        }
+
+        if (res.rowCount === 0) {
+          reject({
+            error: `Post with ID ${id} not found.`,
+          });
+          return;
+        }
+
+        resolve(res.rows[0]);
+      },
+    );
+  });
+}
+
 module.exports = {
   findAllPosts,
   savePost,
   deletePostById,
   findPostsByUserId,
+  edit,
 };
