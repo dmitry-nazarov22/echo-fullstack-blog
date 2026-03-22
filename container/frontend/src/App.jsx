@@ -50,12 +50,21 @@ function App() {
     }
   }
 
+  const deletePost = async (id) => {
+    try {
+      await axios.delete(`${import.meta.env.VITE_API_URL}/posts/${id}`);
+      setPosts(prev => prev.filter(post => post.id != id));
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   return (
     <>
       <Router>
         <Routes>
           <Route element={<Layout />}>
-            <Route path="/" element={<Home posts={posts} fetchPosts={fetchPosts} createPost={createPost} />} />
+            <Route path="/" element={<Home posts={posts} fetchPosts={fetchPosts} createPost={createPost} deletePost={deletePost} />} />
             <Route path="/profile" element={<Profile fetchUserById={fetchUserById} fetchPostsByUserId={fetchPostsByUserId} />} />
             <Route path="*" element={<NotFound />} />
           </Route>

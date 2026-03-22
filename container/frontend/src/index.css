@@ -17,12 +17,6 @@
   gap: 10px;
 }
 
-.form-inline textarea {
-  width: 50ch;
-  max-width: 100%;
-  height: auto;
-}
-
 .post-card {
   box-shadow: 0 4px 8px 0 rgba(46, 46, 46, 0.2);
   padding: 20px;
@@ -46,4 +40,9 @@
 .post-card-date {
   font-size:xx-small;
   float: right;
+  color: #b3b3b3;
+}
+
+.button-container {
+  align-self: flex-end;
 }

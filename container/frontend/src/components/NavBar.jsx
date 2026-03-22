@@ -16,6 +16,7 @@ export default function Navbar() {
 
     return (
         <nav style={{ background: '#ffffff', padding: '10px', minWidth: '100vw'}}>
+
         <NavLink
             to="/"
             style={({ isActive }) => isActive ? { ...linkStyle, ...activeStyle } : linkStyle}
