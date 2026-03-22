@@ -9,6 +9,10 @@ A project made for a TAMK-fullstack course. Featuring:
 
 This README will be updated later during this project.
 
+## ONRENDER LINK
+
+[check the deployed progress here](https://echo-fullstack-blog-app.onrender.com)
+
 ## DATABASE STRUCTURE
 
 ```
