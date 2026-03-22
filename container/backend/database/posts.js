@@ -16,6 +16,26 @@ function findAllPosts() {
   });
 }
 
+function findPostsByUserId(user_id) {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `SELECT posts.id, posts.body, posts.created_at, users.username
+      FROM posts
+      JOIN users ON posts.user_id = users.id
+      WHERE posts.user_id = $1
+      ORDER BY posts.created_at DESC`,
+      [user_id],
+      (err, res) => {
+        if (err) {
+          reject("Failed to find posts by user id.");
+          return;
+        }
+        resolve(res.rows);
+      },
+    );
+  });
+}
+
 function savePost(post) {
   return new Promise((resolve, reject) => {
     pool.query(
@@ -57,4 +77,5 @@ module.exports = {
   findAllPosts,
   savePost,
   deletePostById,
+  findPostsByUserId,
 };
