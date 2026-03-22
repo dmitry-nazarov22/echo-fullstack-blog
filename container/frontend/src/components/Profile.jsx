@@ -12,8 +12,14 @@ export default function Profile({ fetchPostsByUserId, fetchUserById, deletePost,
     }
 
     const saveEditing = async (id) => {
-        editPost(id, editText);
+        await editPost(id, editText);
+        setUserPosts(prev => prev.map(p => p.id === id ? { ...p, body: editText } : p));
         setEditingId(null);
+    }
+
+    const handleDelete = async (id) => {
+        await deletePost(id);
+        setUserPosts(prev => prev.filter(p => p.id !== id));
     }
 
     useEffect(() => {
@@ -52,7 +58,7 @@ export default function Profile({ fetchPostsByUserId, fetchUserById, deletePost,
                             ) : (
                                 <button className='button-edit' onClick={() => startEditing(post)}>Edit</button>
                             )}
-                            <button className='button-delete' onClick={() => deletePost(post.id)}>Delete</button>
+                            <button className='button-delete' onClick={() => handleDelete(post.id)}>Delete</button>
                         </div>
 
                     </li>
