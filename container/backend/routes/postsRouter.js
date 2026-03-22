@@ -23,7 +23,7 @@ postsRouter.delete("/:id", async (req, res) => {
 
 postsRouter.post("/", async (req, res) => {
   try {
-    const user_id = 1; // TODO: add multiple users and authentication
+    const user_id = req.body.user_id;
     const body = req.body.body;
 
     const post = await posts.savePost({ user_id, body });
