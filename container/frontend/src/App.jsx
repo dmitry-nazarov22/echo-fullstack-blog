@@ -1,24 +1,32 @@
-import { useState, useEffect } from 'react'
-import './App.css'
+import { useState } from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+import Home from "./pages/Home";
+import NotFound from "./pages/NotFound";
+import Layout from "./components/Layout";
+import Profile from "./components/Profile";
 
 function App() {
-  const [users, setUsers] = useState([]);
+  const [posts, setPosts] = useState([]);
 
-  useEffect(() => {
-    const fetchLocations = async () => {
-      const response = await fetch("/api/users");
-      const data = await response.json();
-      setUsers(data);
-    };
-    fetchLocations();
-  }, []);
+  const fetchPosts = async () => {
+    const response = await fetch("/api/posts");
+    const data = await response.json();
+    setPosts(data);
+  };
 
   return (
-    <ul>
-      {users.map((usr) => (
-        <li key={usr.id}>{usr.username}</li>
-      ))}
-    </ul>
+    <>
+      <Router>
+        <Routes>
+          <Route element={<Layout />}>
+            <Route path="/" element={<Home posts={posts} fetchPosts={fetchPosts} />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="*" element={<NotFound />} />
+          </Route>
+        </Routes>
+      </Router>
+    </>
   );
 }
 
