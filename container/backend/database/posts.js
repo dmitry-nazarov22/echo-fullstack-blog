@@ -2,10 +2,17 @@ const { pool } = require("./db");
 
 function findAllPosts() {
   return new Promise((resolve, reject) => {
-    pool.query("SELECT * FROM posts", [], (err, res) => {
-      if (err) return reject(err);
-      resolve(res.rows);
-    });
+    pool.query(
+      `SELECT posts.id, posts.body, posts.created_at, users.username
+    FROM posts
+    JOIN users ON posts.user_id = users.id
+    ORDER BY posts.created_at DESC`,
+      [],
+      (err, res) => {
+        if (err) return reject(err);
+        resolve(res.rows);
+      },
+    );
   });
 }
 

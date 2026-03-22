@@ -42,7 +42,11 @@ export default function Home({ posts, fetchPosts, createPost }) {
             </form>
             <ul>
                 {posts.map((post) => (
-                    <li key={post.id}>{post.body}</li>
+                    <li key={post.id} className='post-card'>
+                        <p className='post-card-username'>{post.username}</p>
+                        <p className='post-card-body'>{post.body}</p>
+                        <p className='post-card-date'>{post.created_at}</p>
+                    </li>
                 ))}
             </ul>
         </div>

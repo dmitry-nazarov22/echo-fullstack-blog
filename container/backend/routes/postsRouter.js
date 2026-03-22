@@ -5,6 +5,7 @@ const posts = require("../database/posts");
 postsRouter.get("/", async (req, res) => {
   try {
     const result = await posts.findAllPosts();
+    console.log(result);
     res.send(result);
   } catch (err) {
     res.status(500).send();
