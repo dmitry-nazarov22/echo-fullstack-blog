@@ -44,7 +44,7 @@ function App() {
         ...newPost
       });
 
-      setPosts(prev => [...prev, res.data]);
+      setPosts(prev => [res.data, ...prev]);
     } catch (err) {
       console.error(err);
     }
@@ -59,13 +59,25 @@ function App() {
     }
   }
 
+  const editPost = async (id, editText) => {
+    try {
+      await axios.patch(`${import.meta.env.VITE_API_URL}/posts/${id}`, {
+        body: editText
+      });
+
+      setPosts(prev => prev.map(p => p.id === id ? { ...p, body: editText} : p));
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   return (
     <>
       <Router>
         <Routes>
           <Route element={<Layout />}>
             <Route path="/" element={<Home posts={posts} fetchPosts={fetchPosts} createPost={createPost} deletePost={deletePost} />} />
-            <Route path="/profile" element={<Profile fetchUserById={fetchUserById} fetchPostsByUserId={fetchPostsByUserId} />} />
+            <Route path="/profile" element={<Profile fetchUserById={fetchUserById} fetchPostsByUserId={fetchPostsByUserId} editPost={editPost} />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>

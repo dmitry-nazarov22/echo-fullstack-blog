@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-export default function Home({ posts, fetchPosts, createPost, deletePost }) {
+export default function Home({ posts, fetchPosts, createPost }) {
     const [form, setForm] = useState("");
     const [message, setMessage] = useState("");
 
@@ -46,10 +46,6 @@ export default function Home({ posts, fetchPosts, createPost, deletePost }) {
                         <p className='post-card-username'>{post.username}</p>
                         <p className='post-card-body'>{post.body}</p>
                         <p className='post-card-date'>{post.created_at}</p>
-                        <div className='button-container'>
-                            <button className='button-edit'>Edit</button>
-                            <button className='button-delete' onClick={() => deletePost(post.id)}>Delete</button>
-                        </div>
                     </li>
                 ))}
             </ul>

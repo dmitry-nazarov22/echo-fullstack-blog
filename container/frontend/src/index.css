@@ -28,6 +28,14 @@
   width: 70vw;
 }
 
+.post-card textarea {
+  width: 100%;
+  min-height: 60px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: none;
+}
+
 .post-card-username {
   font-weight: bold;
   font-size: small;

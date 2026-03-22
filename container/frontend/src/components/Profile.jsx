@@ -1,8 +1,20 @@
 import { useEffect, useState } from "react";
 
-export default function Profile({ fetchPostsByUserId, fetchUserById }) {
+export default function Profile({ fetchPostsByUserId, fetchUserById, deletePost, editPost }) {
     const [userPosts, setUserPosts] = useState([]);
     const [username, setUsername] = useState("");
+    const [editingId, setEditingId] = useState(null);
+    const [editText, setEditText] = useState("");
+
+    const startEditing = (post) => {
+        setEditingId(post.id);
+        setEditText(post.body);
+    }
+
+    const saveEditing = async (id) => {
+        editPost(id, editText);
+        setEditingId(null);
+    }
 
     useEffect(() => {
         const loadUserData = async () => {
@@ -21,9 +33,28 @@ export default function Profile({ fetchPostsByUserId, fetchUserById }) {
             <ul>
                 {userPosts.map((post) => (
                     <li key={post.id} className='post-card'>
+
                         <p className='post-card-username'>{post.username}</p>
-                        <p className='post-card-body'>{post.body}</p>
+
+                        {editingId === post.id ? (
+                                <textarea
+                                value={editText}
+                                onChange={(e) => setEditText(e.target.value)}
+                                />
+                            ) : (
+                                <p className='post-card-body'>{post.body}</p>
+                            )
+                        }
                         <p className='post-card-date'>{post.created_at}</p>
+                        <div className='button-container'>
+                            {editingId === post.id ? (
+                                <button onClick={() => saveEditing(post.id)}>Save</button>
+                            ) : (
+                                <button className='button-edit' onClick={() => startEditing(post)}>Edit</button>
+                            )}
+                            <button className='button-delete' onClick={() => deletePost(post.id)}>Delete</button>
+                        </div>
+
                     </li>
                 ))}
             </ul>
