@@ -92,4 +92,5 @@ module.exports = {
   findLikesByUserId,
   saveLike,
   deleteLikeById,
+  isPostLikedByUserId,
 };
