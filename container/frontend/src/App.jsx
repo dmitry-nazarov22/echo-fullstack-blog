@@ -74,8 +74,21 @@ function App() {
       <Router>
         <Routes>
           <Route element={<Layout />}>
-            <Route path="/" element={<Home posts={posts} fetchPosts={fetchPosts} createPost={createPost} deletePost={deletePost} />} />
-            <Route path="/profile" element={<Profile fetchUserById={fetchUserById} fetchPostsByUserId={fetchPostsByUserId} editPost={editPost} deletePost={deletePost} />} />
+            <Route path="/" element={<Home
+              posts={posts}
+              setPosts={setPosts}
+              fetchPosts={fetchPosts}
+              fetchPostsByUserId={fetchPostsByUserId}
+              createPost={createPost}
+              deletePost={deletePost}
+              editPost={editPost}
+              />} />
+            <Route path="/profile" element={<Profile
+              fetchUserById={fetchUserById}
+              fetchPostsByUserId={fetchPostsByUserId}
+              editPost={editPost}
+              deletePost={deletePost}
+              />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>

@@ -1,6 +1,15 @@
 import { useState, useEffect } from 'react'
+import Posts from "../components/Posts";
 
-export default function Home({ posts, fetchPosts, createPost }) {
+export default function Home({
+    posts,
+    setPosts,
+    fetchPosts,
+    fetchPostsByUserId,
+    createPost,
+    deletePost,
+    editPost,
+}) {
     const [form, setForm] = useState("");
     const [message, setMessage] = useState("");
 
@@ -40,15 +49,13 @@ export default function Home({ posts, fetchPosts, createPost }) {
                 <p>{message}</p>
                 <button type="submit">Post</button>
             </form>
-            <ul>
-                {posts.map((post) => (
-                    <li key={post.id} className='post-card'>
-                        <p className='post-card-username'>{post.username}</p>
-                        <p className='post-card-body'>{post.body}</p>
-                        <p className='post-card-date'>{post.created_at}</p>
-                    </li>
-                ))}
-            </ul>
+            <Posts
+                posts={posts}
+                setPosts={setPosts}
+                fetchPostsByUserId={fetchPostsByUserId}
+                deletePost={deletePost}
+                editPost={editPost}
+            />
         </div>
     );
 }
