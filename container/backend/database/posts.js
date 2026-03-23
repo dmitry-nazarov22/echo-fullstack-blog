@@ -3,10 +3,12 @@ const { pool } = require("./db");
 function findAllPosts() {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT posts.id, posts.body, posts.created_at, users.username
-    FROM posts
-    JOIN users ON posts.user_id = users.id
-    ORDER BY posts.created_at DESC`,
+      `SELECT posts.id, posts.body, posts.created_at, users.username,
+      COUNT(likes.post_id) AS likes
+      FROM posts
+      JOIN users ON posts.user_id = users.id
+      LEFT JOIN likes ON posts.id = likes.post_id
+      ORDER BY posts.created_at DESC`,
       [],
       (err, res) => {
         if (err) return reject(err);
@@ -19,9 +21,11 @@ function findAllPosts() {
 function findPostsByUserId(user_id) {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT posts.id, posts.body, posts.created_at, users.username
+      `SELECT posts.id, posts.body, posts.created_at, users.username,
+      COUNT(likes.post_id) AS likes
       FROM posts
       JOIN users ON posts.user_id = users.id
+      LEFT JOIN likes ON posts.id = likes.post_id
       WHERE posts.user_id = $1
       ORDER BY posts.created_at DESC`,
       [user_id],
