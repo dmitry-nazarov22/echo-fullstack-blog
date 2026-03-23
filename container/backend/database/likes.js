@@ -73,6 +73,20 @@ function deleteLikeById(like) {
   });
 }
 
+function isPostLikedByUserId(post_id, user_id) {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `SELECT 1 FROM likes WHERE post_id = $1 AND user_id = $2`,
+      [post_id, user_id],
+      (err, res) => {
+        if (err) return reject("Failed to check for like by user ID");
+
+        resolve(res.rowCount > 0);
+      },
+    );
+  });
+}
+
 module.exports = {
   countLikesByPostId,
   findLikesByUserId,
