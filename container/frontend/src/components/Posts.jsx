@@ -37,9 +37,7 @@ export default function Posts({ posts,
 
     const deleteLike = async (like) => {
         try {
-        await axios.delete(`${import.meta.env.VITE_API_URL}/likes/post/${like.post_id}/user/${like.user_id}`, {
-            ...like
-        });
+        await axios.delete(`${import.meta.env.VITE_API_URL}/likes/post/${like.post_id}/user/${like.user_id}`);
         } catch (err) {
         console.error(err);
         }
@@ -50,7 +48,8 @@ export default function Posts({ posts,
             const res = await axios.get(`${import.meta.env.VITE_API_URL}/likes/post/${post_id}/user/${user_id}`);
             return res.data;
         } catch (err) {
-        console.error(err);
+            console.error(err);
+            return false;
         }
     }
 
@@ -58,8 +57,10 @@ export default function Posts({ posts,
         const isLiked = await isPostLiked(post_id, user_id);
         if (isLiked) {
             await deleteLike({ post_id, user_id });
+            setPosts(prev => prev.map(p => p.id === post_id ? { ...p, likes: (Number(p.likes) || 0) - 1 } : p));
         } else {
             await addLike({ post_id, user_id });
+            setPosts(prev => prev.map(p => p.id === post_id ? { ...p, likes: (Number(p.likes) || 0) + 1 } : p));
         }
     }
 
