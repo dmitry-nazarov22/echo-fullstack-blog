@@ -8,6 +8,7 @@ function findAllPosts() {
       FROM posts
       JOIN users ON posts.user_id = users.id
       LEFT JOIN likes ON posts.id = likes.post_id
+      GROUP BY posts.id, users.username
       ORDER BY posts.created_at DESC`,
       [],
       (err, res) => {
@@ -27,6 +28,7 @@ function findPostsByUserId(user_id) {
       JOIN users ON posts.user_id = users.id
       LEFT JOIN likes ON posts.id = likes.post_id
       WHERE posts.user_id = $1
+      GROUP BY posts.id, users.username
       ORDER BY posts.created_at DESC`,
       [user_id],
       (err, res) => {
