@@ -9,6 +9,9 @@ export default function Profile({ fetchPostsByUserId, fetchUserById, deletePost,
         const loadUserData = async () => {
             const user = await fetchUserById(5);
             setUsername(user.username);
+
+            const posts = await fetchPostsByUserId(5);
+            setUserPosts(posts);
         };
         loadUserData();
     }, []);

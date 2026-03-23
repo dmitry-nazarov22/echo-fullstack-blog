@@ -1,6 +1,12 @@
+import axios from 'axios';
 import { useEffect, useState } from "react";
 
-export default function Posts({ posts, setPosts, fetchPostsByUserId, deletePost, editPost }) {
+export default function Posts({ posts,
+    setPosts,
+    fetchPostsByUserId,
+    deletePost,
+    editPost,
+}) {
     const [editingId, setEditingId] = useState(null);
     const [editText, setEditText] = useState("");
 
@@ -20,13 +26,25 @@ export default function Posts({ posts, setPosts, fetchPostsByUserId, deletePost,
         setPosts(prev => prev.filter(p => p.id !== id));
     }
 
-    useEffect(() => {
-        const loadUserData = async () => {
-            const posts = await fetchPostsByUserId(5);
-            setPosts(posts);
-        };
-        loadUserData();
-    }, []);
+    const addLike = async (like) => {
+        try {
+        await axios.post(`${import.meta.env.VITE_API_URL}/likes`, {
+            ...like
+        });
+        } catch (err) {
+        console.error(err);
+        }
+    }
+
+    const deleteLike = async (like) => {
+        try {
+        await axios.delete(`${import.meta.env.VITE_API_URL}/likes`, {
+            ...like
+        });
+        } catch (err) {
+        console.error(err);
+        }
+    }
 
     return (
         <ul>
@@ -45,13 +63,20 @@ export default function Posts({ posts, setPosts, fetchPostsByUserId, deletePost,
                         )
                     }
                     <p className='post-card-date'>{post.created_at}</p>
-                    <div className='button-container'>
-                        {editingId === post.id ? (
-                            <button onClick={() => saveEditing(post.id)}>Save</button>
-                        ) : (
-                            <button className='button-edit' onClick={() => startEditing(post)}>Edit</button>
-                        )}
-                        <button className='button-delete' onClick={() => handleDelete(post.id)}>Delete</button>
+                    <div className="button-container">
+                        <div className='button-container-left'>
+                            <button>Like</button>
+                            <p>{post.likes}</p>
+                            <button>Comment</button>
+                        </div>
+                        <div className='button-container-right'>
+                            {editingId === post.id ? (
+                                <button onClick={() => saveEditing(post.id)}>Save</button>
+                            ) : (
+                                <button className='button-edit' onClick={() => startEditing(post)}>Edit</button>
+                            )}
+                            <button className='button-delete' onClick={() => handleDelete(post.id)}>Delete</button>
+                        </div>
                     </div>
 
                 </li>
