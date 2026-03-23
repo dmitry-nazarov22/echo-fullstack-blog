@@ -50,5 +50,23 @@
 }
 
 .button-container {
+  display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding-top: 5px;
+}
+
+.button-container-right {
+  display: flex;
   align-self: flex-end;
+}
+.button-container-left {
+  display: flex;
+  align-self: flex-start;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.button-container-left p {
+  font-size: x-small;
 }
