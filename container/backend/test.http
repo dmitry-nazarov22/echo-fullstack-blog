@@ -26,3 +26,9 @@ Content-Type: application/json
 GET http://localhost:3000/comments/user/5
 ### FIND COMMENTS BY POST_ID
 GET http://localhost:3000/comments/post/10
+
+### LIKE OPERATIONS
+### COUNT LIKES BY POST_ID
+GET http://localhost:3000/likes/post/10
+### FIND LIKES BY USER_ID
+GET http://localhost:3000/likes/user/5
