@@ -22,10 +22,10 @@ likesRouter.get("/post/:postId", async (req, res) => {
   }
 });
 
-likesRouter.delete("/", async (req, res) => {
+likesRouter.delete("/post/:post_id/user/:user_id", async (req, res) => {
   try {
-    const post_id = req.body.post_id;
-    const user_id = req.body.user_id;
+    const post_id = parseInt(req.params.post_id);
+    const user_id = parseInt(req.params.user_id);
 
     await likes.deleteLikeById({ post_id, user_id, body });
     res.status(204).send();
@@ -39,10 +39,10 @@ likesRouter.post("/", async (req, res) => {
     const post_id = req.body.post_id;
     const user_id = req.body.user_id;
 
-    const like = await like.saveComment({ post_id, user_id });
+    const like = await like.saveLike({ post_id, user_id });
     res.status(201).send(like);
   } catch (err) {
-    res.status(500).send();
+    res.status(500).send(err);
   }
 });
 
