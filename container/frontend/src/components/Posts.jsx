@@ -37,11 +37,29 @@ export default function Posts({ posts,
 
     const deleteLike = async (like) => {
         try {
-        await axios.delete(`${import.meta.env.VITE_API_URL}/likes`, {
+        await axios.delete(`${import.meta.env.VITE_API_URL}/likes/post/${like.post_id}/user/${like.user_id}`, {
             ...like
         });
         } catch (err) {
         console.error(err);
+        }
+    }
+
+    const isPostLiked = async (post_id, user_id) => {
+        try {
+            const res = await axios.get(`${import.meta.env.VITE_API_URL}/likes/post/${post_id}/user/${user_id}`);
+            return res.data;
+        } catch (err) {
+        console.error(err);
+        }
+    }
+
+    const handleLike = async (post_id, user_id) => {
+        const isLiked = await isPostLiked(post_id, user_id);
+        if (isLiked) {
+            await deleteLike({ post_id, user_id });
+        } else {
+            await addLike({ post_id, user_id });
         }
     }
 
@@ -64,7 +82,7 @@ export default function Posts({ posts,
                     <p className='post-card-date'>{post.created_at}</p>
                     <div className="button-container">
                         <div className='button-container-left'>
-                            <button>Like</button>
+                            <button onClick={() => handleLike(post.id, 5)}>Like</button>
                             <p>{post.likes}</p>
                             <button>Comment</button>
                         </div>
