@@ -4,6 +4,7 @@ const db = require("./database/db");
 const usersRouter = require("./routes/usersRouter");
 const postsRouter = require("./routes/postsRouter");
 const commentsRouter = require("./routes/commentsRouter");
+const likesRouter = require("./routes/likesRouter");
 const app = express();
 const cors = require("cors");
 const port = process.env.PORT || 3000;
@@ -44,5 +45,6 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/users", usersRouter);
 app.use("/posts", postsRouter);
 app.use("/comments", commentsRouter);
+app.use("/likes", likesRouter);
 
 connectToDatabaseAndStartServer();
