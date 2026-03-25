@@ -44,7 +44,7 @@ export default function Home({
     return (
         <div className='container'>
             <form className="form-inline" onSubmit={handleSubmit}>
-                <input type="text" placeholder="Write your post here..." onChange={handleChange} required />
+                <input className='form-textarea' type="text" placeholder="Write your post here..." onChange={handleChange} required />
 
                 <p>{message}</p>
                 <button type="submit">Post</button>

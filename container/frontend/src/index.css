@@ -16,6 +16,13 @@
   gap: 10px;
 }
 
+.form-textarea {
+  min-width: 50vw;
+  border: solid 1px #e2e2e2;
+  box-shadow: 0 2px 4px 0 rgba(46, 46, 46, 0.2);
+
+}
+
 .post-card {
   box-shadow: 0 2px 4px 0 rgba(46, 46, 46, 0.2);
   padding: 5px 20px 5px 20px;
@@ -28,14 +35,6 @@
   width: 70vw;
 }
 
-.post-card textarea {
-  width: 100%;
-  min-height: 60px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  resize: none;
-}
-
 .post-card-username {
   font-weight: bold;
   font-size: small;
@@ -43,6 +42,14 @@
 
 .post-card-body {
   font-size: small;
+}
+
+.post-card-body textarea {
+  width: 100%;
+  min-height: 1000px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: none;
 }
 
 .post-card-date {
@@ -91,6 +98,14 @@
   align-self: flex-start;
   flex-direction: row;
   gap: 10px;
+}
+
+.button-container-left textarea {
+  border: 1px solid #ccc;
+  min-width: 30vw;
+
+  border-radius: 4px;
+  resize: none;
 }
 
 .button-container-left p {
