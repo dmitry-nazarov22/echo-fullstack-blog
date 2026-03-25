@@ -85,6 +85,17 @@ export default function Post({ post, setPosts }) {
                     </div>
                 </div>
             </div>
+            <div className='comments-section'>
+                <ul>
+                    {comments.map((comment) => (
+                        <li key={comment.id} className='comment-card'>
+                            <p className='comment-username'>@{comment.username}</p>
+                            <p className='comment-body'>{comment.body}</p>
+                            <p className='comment-date'>{comment.created_at}</p>
+                        </li>
+                    ))}
+                </ul>
+            </div>
         </div>
     );
 }
