@@ -22,6 +22,16 @@ commentsRouter.get("/post/:postId", async (req, res) => {
   }
 });
 
+commentsRouter.get("/post/first/:postId", async (req, res) => {
+  try {
+    const id = parseInt(req.params.postId);
+    const firstComment = await comments.findFirstCommentByPostId(id);
+    res.send(firstComment);
+  } catch (err) {
+    res.status(404).send(err);
+  }
+});
+
 commentsRouter.delete("/:id", async (req, res) => {
   const id = parseInt(req.params.id);
   try {
