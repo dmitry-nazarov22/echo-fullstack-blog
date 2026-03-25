@@ -28,11 +28,18 @@ export default function Posts({ posts,
         setCommentText("");
     }
 
+    const cancelCommenting = () => {
+        setCommentingId(null);
+        setCommentText("");
+    }
+
     const postComment = async (user_id) => {
         try {
             axios.post(`${import.meta.env.VITE_API_URL}/comments`,
-                { commentingId, user_id, commentText }
+                {
+                    post_id: commentingId, user_id: user_id, body: commentText }
             )
+            setCommentingId(null);
         } catch (err) {
             console.error(err);
         }
@@ -121,7 +128,18 @@ export default function Posts({ posts,
                         <div className='button-container-left'>
                             <button onClick={() => handleLike(post.id, 5)}>Like</button>
                             <p>{post.likes}</p>
-                            <button>Comment</button>
+                            {commentingId === post.id ? (
+                                <>
+                                    <button onClick={() => cancelCommenting()}>Cancel</button>
+                                    <textarea value={commentText} onChange={(e) => {
+                                            setCommentText(e.target.value);
+                                            setCommentingId(post.id);
+                                        }} placeholder='Write your comment here...'>
+                                    </textarea>
+                                    <button onClick={() => postComment(5)}>Post</button>
+                                </>
+                            ) : (<button onClick={() => startCommenting(post)}>Comment</button>)
+                            }
                         </div>
                         <div className='button-container-right'>
                             {editingId === post.id ? (
