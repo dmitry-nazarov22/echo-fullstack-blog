@@ -8,6 +8,8 @@ export default function Posts({ posts,
 }) {
     const [editingId, setEditingId] = useState(null);
     const [editText, setEditText] = useState("");
+    const [commentingId, setCommentingId] = useState(null);
+    const [commentText, setCommentText] = useState("");
     const [firstComments, setFirstComments] = useState({});
 
     const startEditing = (post) => {
@@ -19,6 +21,21 @@ export default function Posts({ posts,
         await editPost(id, editText);
         setPosts(prev => prev.map(p => p.id === id ? { ...p, body: editText } : p));
         setEditingId(null);
+    }
+
+    const startCommenting = (post) => {
+        setCommentingId(post.id);
+        setCommentText("");
+    }
+
+    const postComment = async (user_id) => {
+        try {
+            axios.post(`${import.meta.env.VITE_API_URL}/comments`,
+                { commentingId, user_id, commentText }
+            )
+        } catch (err) {
+            console.error(err);
+        }
     }
 
     const handleDelete = async (id) => {
