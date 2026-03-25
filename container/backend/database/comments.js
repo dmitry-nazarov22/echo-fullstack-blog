@@ -20,6 +20,27 @@ function findCommentsByPostId(post_id) {
   });
 }
 
+function findFirstCommentByPostId(post_id) {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `SELECT comments.id, comments.body, comments.created_at, users.username
+      FROM comments
+      JOIN users ON comments.user_id = users.id
+      WHERE comments.post_id = $1
+      ORDER BY comments.created_at DESC
+      LIMIT 1`,
+      [post_id],
+      (err, res) => {
+        if (err) {
+          reject("Failed to find first comment by post id.");
+          return;
+        }
+        resolve(res.rows);
+      },
+    );
+  });
+}
+
 function findCommentsByUserId(user_id) {
   return new Promise((resolve, reject) => {
     pool.query(
@@ -103,6 +124,7 @@ function edit(id, body) {
 
 module.exports = {
   findCommentsByPostId,
+  findFirstCommentByPostId,
   findCommentsByUserId,
   saveComment,
   deleteCommentById,
