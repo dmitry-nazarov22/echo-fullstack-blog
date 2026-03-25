@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Posts({ posts,
     setPosts,
@@ -8,6 +8,7 @@ export default function Posts({ posts,
 }) {
     const [editingId, setEditingId] = useState(null);
     const [editText, setEditText] = useState("");
+    const [firstComments, setFirstComments] = useState({});
 
     const startEditing = (post) => {
         setEditingId(post.id);
@@ -31,7 +32,7 @@ export default function Posts({ posts,
             ...like
         });
         } catch (err) {
-        console.error(err);
+            console.error(err);
         }
     }
 
@@ -39,7 +40,7 @@ export default function Posts({ posts,
         try {
         await axios.delete(`${import.meta.env.VITE_API_URL}/likes/post/${like.post_id}/user/${like.user_id}`);
         } catch (err) {
-        console.error(err);
+            console.error(err);
         }
     }
 
@@ -49,7 +50,6 @@ export default function Posts({ posts,
             return res.data;
         } catch (err) {
             console.error(err);
-            return false;
         }
     }
 
@@ -63,6 +63,25 @@ export default function Posts({ posts,
             setPosts(prev => prev.map(p => p.id === post_id ? { ...p, likes: (Number(p.likes) || 0) + 1 } : p));
         }
     }
+
+    const fetchFirstComment = async (post_id) => {
+        try {
+            const res = await axios.get(`${import.meta.env.VITE_API_URL}/comments/post/first/${post_id}`);
+            setFirstComments(prev => ({
+                ...prev, [post_id]: res.data[0]
+            }))
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    useEffect(() => {
+        posts.forEach(post => {
+            if (!firstComments[post.id]) {
+                fetchFirstComment(post.id);
+            }
+        })
+    }, [posts])
 
     return (
         <ul>
@@ -96,7 +115,19 @@ export default function Posts({ posts,
                             <button className='button-delete' onClick={() => handleDelete(post.id)}>Delete</button>
                         </div>
                     </div>
-
+                    <div>
+                        {firstComments[post.id] ? (
+                        <>
+                            <div className='comment-card'>
+                                <p className='comment-username'>{firstComments[post.id].username} commented:</p>
+                                <p className='comment-body'>{firstComments[post.id].body}</p>
+                                <p className='comment-date'>{firstComments[post.id].created_at}</p>
+                            </div>
+                        </>
+                        ) : (
+                            <p></p>
+                        )}
+                    </div>
                 </li>
             ))}
         </ul>
