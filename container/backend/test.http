@@ -26,6 +26,15 @@ Content-Type: application/json
 GET http://localhost:3000/comments/user/5
 ### FIND COMMENTS BY POST_ID
 GET http://localhost:3000/comments/post/10
+### CREATE COMMENT
+POST http://localhost:3000/comments
+Content-Type: application/json
+
+{
+  "post_id": 10,
+  "user_id": 5,
+  "body": "hey comments are visible!"
+}
 
 ### LIKE OPERATIONS
 ### COUNT LIKES BY POST_ID
