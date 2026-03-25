@@ -5,9 +5,9 @@ export default function Post({ post, setPosts }) {
     const [commentText, setCommentText] = useState("");
     const [comments, setComments] = useState([]);
 
-    const fetchAllComments = async () => {
+    const fetchCommentsByPost = async (post_id) => {
         try {
-            const res = axios.get(`${import.meta.env.VITE_API_URL}/comments`);
+            const res = await axios.get(`${import.meta.env.VITE_API_URL}/comments/post/${post_id}`);
             setComments(res.data);
         } catch (err) {
             console.error(err);
@@ -64,7 +64,7 @@ export default function Post({ post, setPosts }) {
     }
 
     useEffect(() => {
-
+        fetchCommentsByPost(post.id);
     }, [])
 
     return (
