@@ -3,6 +3,16 @@ import { useEffect, useState } from "react";
 
 export default function Post({ post, setPosts }) {
     const [commentText, setCommentText] = useState("");
+    const [comments, setComments] = useState([]);
+
+    const fetchAllComments = async () => {
+        try {
+            const res = axios.get(`${import.meta.env.VITE_API_URL}/comments`);
+            setComments(res.data);
+        } catch (err) {
+            console.error(err);
+        }
+    }
 
     const postComment = async (user_id) => {
         try {
