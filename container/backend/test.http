@@ -35,6 +35,8 @@ Content-Type: application/json
   "user_id": 5,
   "body": "hey comments are visible!"
 }
+### DELETE COMMENT BY ID
+DELETE http://localhost:3000/comments/11
 
 ### LIKE OPERATIONS
 ### COUNT LIKES BY POST_ID

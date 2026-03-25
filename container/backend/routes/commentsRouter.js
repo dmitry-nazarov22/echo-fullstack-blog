@@ -35,7 +35,7 @@ commentsRouter.get("/post/first/:postId", async (req, res) => {
 commentsRouter.delete("/:id", async (req, res) => {
   const id = parseInt(req.params.id);
   try {
-    const comments = await comments.deleteCommentById(id);
+    await comments.deleteCommentById(id);
     res.status(204).send();
   } catch (err) {
     res.status(404).send(err);
