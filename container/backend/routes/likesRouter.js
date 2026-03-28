@@ -2,6 +2,9 @@ const express = require("express");
 const likesRouter = express.Router();
 const likes = require("../database/likes");
 
+/**
+ * Endpoint GET for finding likes by user ID to show them in profile.
+ */
 likesRouter.get("/user/:userId", async (req, res) => {
   try {
     const id = parseInt(req.params.userId);
@@ -12,6 +15,9 @@ likesRouter.get("/user/:userId", async (req, res) => {
   }
 });
 
+/**
+ * Endpoint GET to get likes count on Posts to show amount of likes near the button.
+ */
 likesRouter.get("/post/:postId", async (req, res) => {
   try {
     const id = parseInt(req.params.postId);
@@ -22,6 +28,9 @@ likesRouter.get("/post/:postId", async (req, res) => {
   }
 });
 
+/**
+ * Endpoint GET to find if user has liked the post.
+ */
 likesRouter.get("/post/:post_id/user/:user_id", async (req, res) => {
   try {
     const post_id = parseInt(req.params.post_id);
@@ -33,6 +42,9 @@ likesRouter.get("/post/:post_id/user/:user_id", async (req, res) => {
   }
 });
 
+/**
+ * Endpoint DELETE to delete like by user_id and post_id together from the database.
+ */
 likesRouter.delete("/post/:post_id/user/:user_id", async (req, res) => {
   try {
     const post_id = parseInt(req.params.post_id);
@@ -45,6 +57,9 @@ likesRouter.delete("/post/:post_id/user/:user_id", async (req, res) => {
   }
 });
 
+/**
+ * Endpoint POST to save like to the database.
+ */
 likesRouter.post("/", async (req, res) => {
   try {
     const post_id = req.body.post_id;
