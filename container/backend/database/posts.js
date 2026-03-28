@@ -1,5 +1,10 @@
 const { pool } = require("./db");
 
+/**
+ * Finds all posts.
+ *
+ * @returns Promise, which resolves with posts array or rejects with error.
+ */
 function findAllPosts() {
   return new Promise((resolve, reject) => {
     pool.query(
@@ -19,6 +24,12 @@ function findAllPosts() {
   });
 }
 
+/**
+ * Finds all posts by user ID to list them in profile.
+ *
+ * @param {*} user_id Users ID for finding posts.
+ * @returns Promise that resolves with users posts array or with error message.
+ */
 function findPostsByUserId(user_id) {
   return new Promise((resolve, reject) => {
     pool.query(
@@ -42,6 +53,14 @@ function findPostsByUserId(user_id) {
   });
 }
 
+/**
+ * Saves post to database, to store new posts.
+ *
+ * Returning the res.rows[0] to show values, that are added by database (such as post ID)
+ *
+ * @param {*} post Post object to save.
+ * @returns Promise that resolves with saved Post object or rejects with error.
+ */
 function savePost(post) {
   return new Promise((resolve, reject) => {
     pool.query(
@@ -58,6 +77,15 @@ function savePost(post) {
   });
 }
 
+/**
+ * Deletes post by ID to remove it from database.
+ *
+ * res.rowcount shows affected rows number. In this case if no posts were deleted
+ * it is 0.
+ *
+ * @param {*} id Post ID to be removed.
+ * @returns Promise which resolves empty or rejects with different errors.
+ */
 function deletePostById(id) {
   return new Promise((resolve, reject) => {
     pool.query("DELETE FROM posts WHERE id = $1", [id], (err, res) => {
@@ -79,6 +107,16 @@ function deletePostById(id) {
   });
 }
 
+/**
+ * Edit post by id in the database.
+ *
+ * res.rowcount shows affected rows number. In this case if no posts were edited
+ * it is 0.
+ *
+ * @param {*} id Post ID by which the editable post is found in the db.
+ * @param {*} body Body text of the post.
+ * @returns Promise which resolves with edited Post object or rejects with error message.
+ */
 function edit(id, body) {
   return new Promise((resolve, reject) => {
     pool.query(
