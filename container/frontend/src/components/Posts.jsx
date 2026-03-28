@@ -206,6 +206,7 @@ export default function Posts({ posts,
                     {editingId === post.id ? (
                             <textarea
                             value={editText}
+                            onClick={(e) => e.stopPropagation()}
                             onChange={(e) => setEditText(e.target.value)}
                             />
                         ) : (
@@ -215,28 +216,49 @@ export default function Posts({ posts,
                     <p className='post-card-date'>{post.created_at}</p>
                     <div className="button-container">
                         <div className='button-container-left'>
-                            <button onClick={() => handleLike(post.id, 5)}>Like</button> {/* HARD CODED VALUE; will be updated when auth is added */}
+                            <button onClick={(e) => {
+                                handleLike(post.id, 5);
+                                e.stopPropagation();
+                            }}>Like</button> {/* HARD CODED VALUE; will be updated when auth is added */}
                             <p>{post.likes}</p>
                             {commentingId === post.id ? (
                                 <>
-                                    <button onClick={() => cancelCommenting()}>Cancel</button>
-                                    <textarea value={commentText} onChange={(e) => {
-                                            setCommentText(e.target.value);
-                                            setCommentingId(post.id);
-                                        }} placeholder='Write your comment here...'>
+                                    <button onClick={(e) => {
+                                        cancelCommenting();
+                                        e.stopPropagation();
+                                    }}>Cancel</button>
+                                    <textarea onClick={(e) => e.stopPropagation()} value={commentText} onChange={(e) => {
+                                        setCommentText(e.target.value);
+                                        setCommentingId(post.id);
+                                    }} placeholder='Write your comment here...'>
                                     </textarea>
-                                    <button onClick={() => postComment(5)}>Post</button> {/* HARD CODED VALUE; will be updated when auth is added */}
+                                    <button onClick={(e) => {
+                                        postComment(5);
+                                        e.stopPropagation();
+                                    }}>Post</button> {/* HARD CODED VALUE; will be updated when auth is added */}
                                 </>
-                            ) : (<button onClick={() => startCommenting(post)}>Comment</button>)
+                            ) : (<button onClick={(e) => {
+                                startCommenting(post);
+                                e.stopPropagation();
+                            }}>Comment</button>)
                             }
                         </div>
                         <div className='button-container-right'>
                             {editingId === post.id ? (
-                                <button onClick={() => saveEditing(post.id)}>Save</button>
+                                <button onClick={(e) => {
+                                    saveEditing(post.id);
+                                    e.stopPropagation();
+                                }}>Save</button>
                             ) : (
-                                <button className='button-edit' onClick={() => startEditing(post)}>Edit</button>
+                                <button className='button-edit' onClick={(e) => {
+                                    startEditing(post)
+                                    e.stopPropagation();
+                                }}>Edit</button>
                             )}
-                            <button className='button-delete' onClick={() => handleDelete(post.id)}>Delete</button>
+                            <button className='button-delete' onClick={(e) => {
+                                handleDelete(post.id);
+                                e.stopPropagation();
+                            }}>Delete</button>
                         </div>
                     </div>
                     <div>
