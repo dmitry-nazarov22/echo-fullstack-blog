@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from "react";
 
-export default function Post({ post, setPosts }) {
+export default function Post({ post, setPosts, closePost }) {
     const [commentText, setCommentText] = useState("");
     const [comments, setComments] = useState([]);
 
@@ -68,8 +68,9 @@ export default function Post({ post, setPosts }) {
     }, [])
 
     return (
-        <div className='container'>
+        <div className='post-container'>
             <div className='post-card'>
+                <button className='close-post-button' onClick={() => closePost()}>Close</button>
                 <p className='post-card-username'>{post.username}</p>
                 <p className='post-card-body'>{post.body}</p>
                 <p className='post-card-date'>{post.created_at}</p>
