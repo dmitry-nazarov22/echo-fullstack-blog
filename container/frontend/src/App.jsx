@@ -8,8 +8,14 @@ import Layout from "./components/Layout";
 import Profile from "./components/Profile";
 
 function App() {
+  /**
+   * State for all posts to display in the feed.
+   */
   const [posts, setPosts] = useState([]);
 
+  /**
+   * Fetches all posts and sets them in a state.
+   */
   const fetchPosts = async () => {
     try {
       const res = await axios.get(`${import.meta.env.VITE_API_URL}/posts`);
@@ -19,6 +25,12 @@ function App() {
     }
   };
 
+  /**
+   * Fetches posts by user ID to show in Profile.
+   *
+   * @param {int} user_id ID of the user.
+   * @returns Array of posts of given user.
+   */
   const fetchPostsByUserId = async (user_id) => {
     try {
       const res = await axios.get(`${import.meta.env.VITE_API_URL}/posts/${user_id}`);
@@ -29,6 +41,12 @@ function App() {
     }
   }
 
+  /**
+   * Fetches user object by user ID to display name and description in profile.
+   *
+   * @param {int} id ID of the user
+   * @returns User object.
+   */
   const fetchUserById = async (id) => {
     try {
       const res = await axios.get(`${import.meta.env.VITE_API_URL}/users/${id}`);
@@ -38,6 +56,11 @@ function App() {
     }
   }
 
+  /**
+   * Create and save a post into the database.
+   *
+   * @param {Object} newPost Object containing user_id and body text.
+   */
   const createPost = async (newPost) => {
     try {
       const res = await axios.post(`${import.meta.env.VITE_API_URL}/posts`, {
@@ -50,6 +73,11 @@ function App() {
     }
   }
 
+  /**
+   * Delete post from database.
+   *
+   * @param {int} id ID of the post
+   */
   const deletePost = async (id) => {
     try {
       await axios.delete(`${import.meta.env.VITE_API_URL}/posts/${id}`);
@@ -59,6 +87,12 @@ function App() {
     }
   }
 
+  /**
+   * Edit post in the database.
+   *
+   * @param {int} id ID of the post.
+   * @param {String} editText Text to display in the post.
+   */
   const editPost = async (id, editText) => {
     try {
       await axios.patch(`${import.meta.env.VITE_API_URL}/posts/${id}`, {
