@@ -1,5 +1,11 @@
 const { pool } = require("./db");
 
+/**
+ * Show count of likes on specified post to show it in frontend near like button.
+ *
+ * @param {int} post_id Post ID by which the posts likes are found
+ * @returns Promise which resolves with likes count or rejects with error message.
+ */
 function countLikesByPostId(post_id) {
   return new Promise((resolve, reject) => {
     pool.query(
@@ -16,6 +22,12 @@ function countLikesByPostId(post_id) {
   });
 }
 
+/**
+ * Find all likes by user id to filter out posts and show all users liked posts in profile.
+ *
+ * @param {int} user_id User ID to find likes of
+ * @returns Promise which resolves with all likes that are done by user or rejects with error message.
+ */
 function findLikesByUserId(user_id) {
   return new Promise((resolve, reject) => {
     pool.query(
@@ -32,6 +44,12 @@ function findLikesByUserId(user_id) {
   });
 }
 
+/**
+ * Saves like to database.
+ *
+ * @param {Object} like Like object containing post_id and user_id.
+ * @returns Promise which resolves with like object or rejects with error message
+ */
 function saveLike(like) {
   return new Promise((resolve, reject) => {
     pool.query(
@@ -48,6 +66,12 @@ function saveLike(like) {
   });
 }
 
+/**
+ * Deletes like from database.
+ *
+ * @param {Object} like Like object containing post_id and user_id.
+ * @returns Promise which resolves empty or rejects with error message
+ */
 function deleteLikeById(like) {
   return new Promise((resolve, reject) => {
     pool.query(
@@ -73,6 +97,13 @@ function deleteLikeById(like) {
   });
 }
 
+/**
+ * Tells if user has liked a post or not, to not allow duplicate likes.
+ *
+ * @param {int} post_id Post ID to be checked for like
+ * @param {int} user_id User ID to be checked for like
+ * @returns True if post has been liked or false if not.
+ */
 function isPostLikedByUserId(post_id, user_id) {
   return new Promise((resolve, reject) => {
     pool.query(
