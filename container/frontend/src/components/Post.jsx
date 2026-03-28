@@ -69,8 +69,8 @@ export default function Post({ post, setPosts, closePost }) {
     /**
      * Sends GET request to find out if post is liked or not by the user.
      *
-     * @param {*} post_id Posts ID
-     * @param {*} user_id Users ID
+     * @param {int} post_id Posts ID
+     * @param {int} user_id Users ID
      * @returns
      */
     const isPostLiked = async (post_id, user_id) => {
@@ -90,8 +90,8 @@ export default function Post({ post, setPosts, closePost }) {
      * At this point code wise getting negative likes is possible, but isPostLiked
      * removes that possibility.
      *
-     * @param {*} post_id Posts ID
-     * @param {*} user_id Users ID
+     * @param {int} post_id Posts ID
+     * @param {int} user_id Users ID
      */
     const handleLike = async (post_id, user_id) => {
         const isLiked = await isPostLiked(post_id, user_id);
