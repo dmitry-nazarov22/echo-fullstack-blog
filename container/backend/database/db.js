@@ -3,10 +3,16 @@ const { Pool } = require("pg");
 
 const pool = new Pool({
   connectionString:
+    // DB_DATABASE_URL in prod || EXTERNAL_DATABASE_URL from local .env for dev
     process.env.DB_DATABASE_URL || process.env.EXTERNAL_DATABASE_URL,
   ssl: { rejectUnauthorized: false },
 });
 
+/**
+ * Initializes the database.
+ *
+ * Creates all tables with needed columns if they do not exist while starting the server.
+ */
 async function initializeDatabase() {
   console.info("Initializing database");
   await pool.query(`
