@@ -17,7 +17,7 @@ function findAllUsers() {
 /**
  * Finds user by id.
  *
- * @param {*} id User id, by which the search will be done.
+ * @param {int} id User id, by which the search will be done.
  * @returns Promise; resolves into single user object or reject with error.
  * Can reject into 'User not found' message if no rows are found.
  */
