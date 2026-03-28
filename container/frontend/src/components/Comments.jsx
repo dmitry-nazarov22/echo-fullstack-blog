@@ -1,7 +1,14 @@
 import axios from 'axios';
 
 export default function Comments({ comments, setComments }) {
-
+    /**
+     * Handles comment deletion when delete button is pressed.
+     *
+     * Sends HTTP request to delete comment and handles state management by
+     * by filtering out deleted comment.
+     *
+     * @param {int} commentId Comments ID
+     */
     const handleCommentDelete = async (commentId) => {
         try {
             await axios.delete(`${import.meta.env.VITE_API_URL}/comments/${commentId}`);
