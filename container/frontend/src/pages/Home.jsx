@@ -10,13 +10,33 @@ export default function Home({
     deletePost,
     editPost,
 }) {
+    /**
+     * State for forms text value.
+     */
     const [form, setForm] = useState("");
+    /**
+     * State for message to be displayed under the form. Not used yet.
+     */
     const [message, setMessage] = useState("");
 
+    /**
+     * Changes form state when forms input-area value changes.
+     *
+     * @param {Event} e event of changing the text in the input field.
+     */
     const handleChange = (e) => {
         setForm(e.target.value);
     };
 
+    /**
+     * Handles submit button pressing.
+     *
+     * Calls createPost with new Post body and (hard coded atp) user_id to send HTTP request.
+     * e.preventDefault() doesn't allow Browsers deafult behavior. In this case updating page on submitting.
+     * Changes are handled by states.
+     *
+     * @param {Event} e event of pressing the button
+     */
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -36,7 +56,9 @@ export default function Home({
         }
     };
 
-
+    /**
+     * Fetches posts on first initialization of the page.
+     */
     useEffect(() => {
         fetchPosts();
     }, []);
