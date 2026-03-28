@@ -2,6 +2,9 @@ const express = require("express");
 const usersRouter = express.Router();
 const users = require("../database/users");
 
+/**
+ * Endpoint to get all users from the database, to search through users.
+ */
 usersRouter.get("/", async (req, res) => {
   try {
     const result = await users.findAllUsers();
@@ -11,6 +14,9 @@ usersRouter.get("/", async (req, res) => {
   }
 });
 
+/**
+ * Endpoint to get user by id. No use cases yet. Made for testing.
+ */
 usersRouter.get("/:id", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
