@@ -27,7 +27,7 @@ function findAllPosts() {
 /**
  * Finds all posts by user ID to list them in profile.
  *
- * @param {*} user_id Users ID for finding posts.
+ * @param {int} user_id Users ID for finding posts.
  * @returns Promise that resolves with users posts array or with error message.
  */
 function findPostsByUserId(user_id) {
@@ -58,7 +58,7 @@ function findPostsByUserId(user_id) {
  *
  * Returning the res.rows[0] to show values, that are added by database (such as post ID)
  *
- * @param {*} post Post object to save.
+ * @param {Object} post Post object to save.
  * @returns Promise that resolves with saved Post object or rejects with error.
  */
 function savePost(post) {
@@ -83,7 +83,7 @@ function savePost(post) {
  * res.rowcount shows affected rows number. In this case if no posts were deleted
  * it is 0.
  *
- * @param {*} id Post ID to be removed.
+ * @param {int} id Post ID to be removed.
  * @returns Promise which resolves empty or rejects with different errors.
  */
 function deletePostById(id) {
@@ -113,8 +113,8 @@ function deletePostById(id) {
  * res.rowcount shows affected rows number. In this case if no posts were edited
  * it is 0.
  *
- * @param {*} id Post ID by which the editable post is found in the db.
- * @param {*} body Body text of the post.
+ * @param {int} id Post ID by which the editable post is found in the db.
+ * @param {String} body Body text of the post.
  * @returns Promise which resolves with edited Post object or rejects with error message.
  */
 function edit(id, body) {
