@@ -2,6 +2,9 @@ const express = require("express");
 const commentsRouter = express.Router();
 const comments = require("../database/comments");
 
+/**
+ * Endpoint GET to find comments by user ID to show them in profile.
+ */
 commentsRouter.get("/user/:userId", async (req, res) => {
   try {
     const id = parseInt(req.params.userId);
@@ -12,6 +15,9 @@ commentsRouter.get("/user/:userId", async (req, res) => {
   }
 });
 
+/**
+ * Endpoint GET to find comments by post ID to show them under individual post.
+ */
 commentsRouter.get("/post/:postId", async (req, res) => {
   try {
     const id = parseInt(req.params.postId);
@@ -22,6 +28,9 @@ commentsRouter.get("/post/:postId", async (req, res) => {
   }
 });
 
+/**
+ * Endpoint GET to find the latest comment for post to showcase it in the feed.
+ */
 commentsRouter.get("/post/first/:postId", async (req, res) => {
   try {
     const id = parseInt(req.params.postId);
@@ -32,6 +41,9 @@ commentsRouter.get("/post/first/:postId", async (req, res) => {
   }
 });
 
+/**
+ * Endpoint DELETE to delete comment from the database.
+ */
 commentsRouter.delete("/:id", async (req, res) => {
   const id = parseInt(req.params.id);
   try {
@@ -42,6 +54,9 @@ commentsRouter.delete("/:id", async (req, res) => {
   }
 });
 
+/**
+ * Endpoint POST to save comment to the database.
+ */
 commentsRouter.post("/", async (req, res) => {
   try {
     const post_id = req.body.post_id;
@@ -55,6 +70,9 @@ commentsRouter.post("/", async (req, res) => {
   }
 });
 
+/**
+ * Endpoint PATCH to edit comments by ID.
+ */
 commentsRouter.patch("/:id", async (req, res) => {
   const id = req.params.id;
   const body = req.body.body;
