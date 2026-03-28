@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from "react";
+import Post from "./Post";
 
 export default function Posts({ posts,
     setPosts,
@@ -11,6 +12,7 @@ export default function Posts({ posts,
     const [commentingId, setCommentingId] = useState(null);
     const [commentText, setCommentText] = useState("");
     const [firstComments, setFirstComments] = useState({});
+    const [selectedPostId, setSelectedPostId] = useState(null);
 
     const startEditing = (post) => {
         setEditingId(post.id);
@@ -108,9 +110,12 @@ export default function Posts({ posts,
     }, [posts])
 
     return (
+        <>
         <ul>
             {posts.map((post) => (
-                <li key={post.id} className='post-card'>
+                <li key={post.id} className='post-card' onClick={() => {
+                    setSelectedPostId(post.id);
+                }}>
 
                     <p className='post-card-username'>{post.username}</p>
 
@@ -163,8 +168,17 @@ export default function Posts({ posts,
                             <p></p>
                         )}
                     </div>
+                    {selectedPostId === post.id ? (
+                        <div onClick={(e) => { e.stopPropagation() }}>
+                        {/* stopPropagation doesn't trigger li-elements onClick when clicking on <Post /> */}
+                            <Post post={post} setPosts={setPosts} closePost={() => setSelectedPostId(null)} />
+                        </div>
+
+                    ) : ( <div></div>
+                    )}
                 </li>
             ))}
         </ul>
+        </>
     );
 }
