@@ -7,34 +7,68 @@ export default function Posts({ posts,
     deletePost,
     editPost,
 }) {
+    /** State for posts ID that is being edited. */
     const [editingId, setEditingId] = useState(null);
+    /** State for the text in the edit field. */
     const [editText, setEditText] = useState("");
+    /** State for the posts ID that is being commented. */
     const [commentingId, setCommentingId] = useState(null);
+    /** State for the text in the comment field. */
     const [commentText, setCommentText] = useState("");
+    /** State for all first Comments; saved as { post_id: comment }. */
     const [firstComments, setFirstComments] = useState({});
+    /** State for selected post, which will be maximised to full screen. */
     const [selectedPostId, setSelectedPostId] = useState(null);
 
+    /**
+     * When edit button is pressed this method sets posts ID as editingID and will
+     * input posts body into the text field.
+     *
+     * @param {Object} post Post object
+     */
     const startEditing = (post) => {
         setEditingId(post.id);
         setEditText(post.body);
     }
 
+    /**
+     * Handles saving editing of the post by calling editPost function.
+     *
+     * Also calls setPosts again and changes old value with the edited value.
+     *
+     * @param {int} id ID of the post to edit.
+     */
     const saveEditing = async (id) => {
         await editPost(id, editText);
         setPosts(prev => prev.map(p => p.id === id ? { ...p, body: editText } : p));
         setEditingId(null);
     }
 
+    /**
+     * Handles comment button pressing so only one post is commented at a time.
+     *
+     * Sets commenting ID to post id and resets commentText.
+     *
+     * @param {Object} post post Object
+     */
     const startCommenting = (post) => {
         setCommentingId(post.id);
         setCommentText("");
     }
 
+    /**
+     * Handles cancel button when commenting. Resetting states.
+     */
     const cancelCommenting = () => {
         setCommentingId(null);
         setCommentText("");
     }
 
+    /**
+     *  Sends POST request to save comment to database. Uses states for comment.
+     *
+     * @param {int} user_id Users ID.
+     */
     const postComment = async (user_id) => {
         try {
             axios.post(`${import.meta.env.VITE_API_URL}/comments`,
@@ -47,11 +81,23 @@ export default function Posts({ posts,
         }
     }
 
+    /**
+     * Handles delete button pressing.
+     *
+     * TODO: verification of the press; now it deletes instantly.
+     *
+     * @param {int} id Comments ID.
+     */
     const handleDelete = async (id) => {
         await deletePost(id);
         setPosts(prev => prev.filter(p => p.id !== id));
     }
 
+    /**
+     * Sends POST request to save like to database.
+     *
+     * @param {Object} like Like Object containing post_id and user_id
+     */
     const addLike = async (like) => {
         try {
         await axios.post(`${import.meta.env.VITE_API_URL}/likes`, {
@@ -62,6 +108,11 @@ export default function Posts({ posts,
         }
     }
 
+    /**
+     * Sends DELETE request to delete like from the database.
+     *
+     * @param {Object} like Like Object containing post_id and user_id
+     */
     const deleteLike = async (like) => {
         try {
         await axios.delete(`${import.meta.env.VITE_API_URL}/likes/post/${like.post_id}/user/${like.user_id}`);
@@ -70,6 +121,14 @@ export default function Posts({ posts,
         }
     }
 
+    /**
+     * Sends GET request to find out if user has liked a post to do the correct operation
+     * afterwards.
+     *
+     * @param {int} post_id Posts ID
+     * @param {int} user_id Users ID
+     * @returns
+     */
     const isPostLiked = async (post_id, user_id) => {
         try {
             const res = await axios.get(`${import.meta.env.VITE_API_URL}/likes/post/${post_id}/user/${user_id}`);
@@ -79,6 +138,21 @@ export default function Posts({ posts,
         }
     }
 
+    /**
+     * Handles like-button click.
+     *
+     * Checks if user has liked the post or not. If user has liked the post
+     * deletes the like on click, if not, then saves the like by calling set functions.
+     *
+     * Also handles likes displaying with both operations updating only the liked/unliked
+     * post and just its like value.
+     *
+     * At this point code wise getting negative likes is possible, but isPostLiked
+     * removes that possibility.
+     *
+     * @param {int} post_id Posts ID
+     * @param {int} user_id Users ID
+     */
     const handleLike = async (post_id, user_id) => {
         const isLiked = await isPostLiked(post_id, user_id);
         if (isLiked) {
@@ -90,6 +164,12 @@ export default function Posts({ posts,
         }
     }
 
+    /**
+     * Sends GET request to get latest comment of the post.
+     * Sets the firstComments state with post_id as the key.
+     *
+     * @param {int} post_id Posts ID
+     */
     const fetchFirstComment = async (post_id) => {
         try {
             const res = await axios.get(`${import.meta.env.VITE_API_URL}/comments/post/first/${post_id}`);
@@ -101,6 +181,10 @@ export default function Posts({ posts,
         }
     }
 
+    /**
+     * Everytime posts state is changed fetches latest comments for all posts,
+     * which don't have them yet.
+     */
     useEffect(() => {
         posts.forEach(post => {
             if (!firstComments[post.id]) {
@@ -131,7 +215,7 @@ export default function Posts({ posts,
                     <p className='post-card-date'>{post.created_at}</p>
                     <div className="button-container">
                         <div className='button-container-left'>
-                            <button onClick={() => handleLike(post.id, 5)}>Like</button>
+                            <button onClick={() => handleLike(post.id, 5)}>Like</button> {/* HARD CODED VALUE; will be updated when auth is added */}
                             <p>{post.likes}</p>
                             {commentingId === post.id ? (
                                 <>
@@ -141,7 +225,7 @@ export default function Posts({ posts,
                                             setCommentingId(post.id);
                                         }} placeholder='Write your comment here...'>
                                     </textarea>
-                                    <button onClick={() => postComment(5)}>Post</button>
+                                    <button onClick={() => postComment(5)}>Post</button> {/* HARD CODED VALUE; will be updated when auth is added */}
                                 </>
                             ) : (<button onClick={() => startCommenting(post)}>Comment</button>)
                             }
