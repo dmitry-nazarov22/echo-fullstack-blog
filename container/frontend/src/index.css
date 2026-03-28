@@ -73,6 +73,13 @@
   color: #b3b3b3;
 }
 
+.comments-section {
+  background: rgb(255, 255, 255);
+  padding: 20px;
+  border-radius: 6px;
+  overflow: scroll;
+}
+
 .comment-card {
   background: #fafafa;
   margin: 20px;
