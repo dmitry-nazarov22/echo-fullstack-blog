@@ -2,6 +2,9 @@ const express = require("express");
 const postsRouter = express.Router();
 const posts = require("../database/posts");
 
+/**
+ * Endpoint to get all posts to display them in the feed.
+ */
 postsRouter.get("/", async (req, res) => {
   try {
     const result = await posts.findAllPosts();
@@ -12,6 +15,9 @@ postsRouter.get("/", async (req, res) => {
   }
 });
 
+/**
+ * Endpoint for getting posts by user ID to display them in profile.
+ */
 postsRouter.get("/:userId", async (req, res) => {
   try {
     const id = parseInt(req.params.userId);
@@ -22,6 +28,9 @@ postsRouter.get("/:userId", async (req, res) => {
   }
 });
 
+/**
+ * Endpoint for DELETE post by id from the database.
+ */
 postsRouter.delete("/:id", async (req, res) => {
   const id = parseInt(req.params.id);
   try {
@@ -32,6 +41,9 @@ postsRouter.delete("/:id", async (req, res) => {
   }
 });
 
+/**
+ * Endpoint POST for saving post by id to the database.
+ */
 postsRouter.post("/", async (req, res) => {
   try {
     const user_id = req.body.user_id;
@@ -44,6 +56,9 @@ postsRouter.post("/", async (req, res) => {
   }
 });
 
+/**
+ * Endpoint PATCH to edit post by id in the database
+ */
 postsRouter.patch("/:id", async (req, res) => {
   const id = req.params.id;
   const body = req.body.body;
