@@ -11,6 +11,21 @@
   align-items: center;
 }
 
+.post-container {
+  display: flex;
+  position: fixed;
+  inset: 0;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.012);
+  backdrop-filter: blur(10px);
+}
+
+.close-post-button {
+  align-self: flex-end;
+}
+
 .form-inline {
   display: flex;
   gap: 10px;
@@ -24,6 +39,7 @@
 }
 
 .post-card {
+  background: #ffffff;
   box-shadow: 0 2px 4px 0 rgba(46, 46, 46, 0.2);
   padding: 5px 20px 5px 20px;
   margin-bottom: 10px;
@@ -58,7 +74,7 @@
 }
 
 .comment-card {
-  background-color: #fafafa;
+  background: #fafafa;
   margin: 20px;
   border: solid 1px #e2e2e2;
   text-decoration: none;
