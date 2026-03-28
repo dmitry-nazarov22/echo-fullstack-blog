@@ -2,9 +2,17 @@ import { useEffect, useState } from "react";
 import Posts from "./Posts";
 
 export default function Profile({ fetchPostsByUserId, fetchUserById, deletePost, editPost }) {
+    /** State for all posts made by user. */
     const [userPosts, setUserPosts] = useState([]);
+    /** State for username to display in the profile. */
     const [username, setUsername] = useState("");
 
+    /**
+     * On initialization loads user data:
+     * - all posts made by user
+     * - user object for username (and description when added)
+     * - in the future: likes and comments made by user
+     */
     useEffect(() => {
         const loadUserData = async () => {
             const user = await fetchUserById(5);
