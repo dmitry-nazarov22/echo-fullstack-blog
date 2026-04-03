@@ -42,8 +42,8 @@ function findUserById(id) {
 function saveUser(user) {
   return new Promise((resolve, reject) => {
     pool.query(
-      "INSERT INTO users (username, password, description) VALUES ($1, $2, $3) RETURNING *",
-      [user.username, user.password, user.description],
+      "INSERT INTO users (username, password) VALUES ($1, $2) RETURNING *",
+      [user.username, user.password],
       (err, res) => {
         if (err) return reject(err);
         resolve(res.rows[0]);
