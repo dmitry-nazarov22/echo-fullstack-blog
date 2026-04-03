@@ -6,6 +6,8 @@ import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 import Layout from "./components/Layout";
 import Profile from "./components/Profile";
+import Login from "./components/Login";
+import Register from "./components/Register";
 
 function App() {
   /**
@@ -103,6 +105,17 @@ function App() {
     }
   }
 
+  /**
+   * Save user to the database.
+   *
+   * @param {Object} user user to be saved.
+   */
+  const createUser = async (user) => {
+        await axios.post(`${import.meta.env.VITE_API_URL}/users/register`, {
+          ...user
+        });
+    }
+
   return (
     <>
       <Router>
@@ -123,6 +136,8 @@ function App() {
               editPost={editPost}
               deletePost={deletePost}
               />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register createUser={createUser} />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
