@@ -2,6 +2,13 @@ const express = require("express");
 const usersRouter = express.Router();
 const bcrypt = require("bcrypt");
 const users = require("../database/users");
+const initializePassport = require("../passport-config");
+const passport = require("passport");
+
+initializePassport(
+  passport,
+  async (username) => await users.findUserByUsername(username),
+);
 
 /**
  * Endpoint to get all users from the database, to search through users.
