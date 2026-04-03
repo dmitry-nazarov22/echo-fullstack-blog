@@ -1,5 +1,6 @@
 const express = require("express");
 const usersRouter = express.Router();
+const bcrypt = require("bcrypt");
 const users = require("../database/users");
 
 /**
@@ -24,6 +25,22 @@ usersRouter.get("/:id", async (req, res) => {
     res.send(user);
   } catch (err) {
     res.status(404).send(err);
+  }
+});
+
+/**
+ * Endpoint POST for saving user to the database.
+ */
+usersRouter.post("/register", async (req, res) => {
+  try {
+    const username = req.body.username;
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
+    const user = await users.saveUser({ username, password: hashedPassword });
+    res.status(201).send(user);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send();
   }
 });
 

@@ -2,6 +2,15 @@
 ### FIND ALL USERS
 GET http://localhost:3000/users
 
+### CREATE USER
+POST http://localhost:3000/users/register
+Content-Type: application/json
+
+{
+  "username": "testuser3",
+  "password": "12345"
+}
+
 ### POST OPERATIONS
 ### FIND POST BY USER_ID
 GET http://localhost:3000/posts/5
