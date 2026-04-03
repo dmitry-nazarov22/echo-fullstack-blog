@@ -32,6 +32,27 @@ function findUserById(id) {
 }
 
 /**
+ * Finds user by username.
+ *
+ * @param {String} username Username, by which the search will be done.
+ * @returns Promise; resolves into single user object or reject with error.
+ * Can reject into 'User not found' message if no rows are found.
+ */
+function findUserByUsername(username) {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      "SELECT * FROM users WHERE username = $1",
+      [username],
+      (err, res) => {
+        if (err) return reject(err);
+        if (res.rows.length === 0) return reject("User not found");
+        resolve(res.rows[0]);
+      },
+    );
+  });
+}
+
+/**
  * Saves user to database.
  *
  * Returning the res.rows[0] to show values, that are added by database (such as user ID)
@@ -55,5 +76,6 @@ function saveUser(user) {
 module.exports = {
   findAllUsers,
   findUserById,
+  findUserByUsername,
   saveUser,
 };
