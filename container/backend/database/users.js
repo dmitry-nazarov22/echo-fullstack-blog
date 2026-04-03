@@ -31,7 +31,21 @@ function findUserById(id) {
   });
 }
 
+function saveUser(user) {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      "INSERT INTO users (username, password, description) VALUES ($1, $2, $3) RETURNING *",
+      [user.username, user.password, user.description],
+      (err, res) => {
+        if (err) return reject(err);
+        resolve(res.rows[0]);
+      },
+    );
+  });
+}
+
 module.exports = {
   findAllUsers,
   findUserById,
+  saveUser,
 };
