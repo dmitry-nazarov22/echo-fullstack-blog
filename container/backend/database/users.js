@@ -31,6 +31,14 @@ function findUserById(id) {
   });
 }
 
+/**
+ * Saves user to database.
+ *
+ * Returning the res.rows[0] to show values, that are added by database (such as user ID)
+ *
+ * @param {Object} user User to be saved.
+ * @returns Promise that resolves with saved User object or rejects with error.
+ */
 function saveUser(user) {
   return new Promise((resolve, reject) => {
     pool.query(
