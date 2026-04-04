@@ -82,8 +82,10 @@ usersRouter.post("/login", async (req, res, next) => {
  * Endpoint DELETE to log out user.
  */
 usersRouter.delete("/logout", (req, res) => {
-  req.logOut();
-  res.status(200).send({ message: "Log out successful" });
+  req.logOut((err) => {
+    if (err) return res.status(500).send({ message: "Logout failed." });
+    res.status(200).send({ message: "Logged out succesfully." });
+  });
 });
 
 module.exports = usersRouter;
