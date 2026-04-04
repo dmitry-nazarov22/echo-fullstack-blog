@@ -8,6 +8,7 @@ const passport = require("passport");
 initializePassport(
   passport,
   async (username) => await users.findUserByUsername(username),
+  async (id) => await users.findUserById(id),
 );
 
 /**
@@ -49,6 +50,34 @@ usersRouter.post("/register", async (req, res) => {
     console.log(err);
     res.status(500).send();
   }
+});
+
+/**
+ * Endpoint POST for logging user in to the database.
+ */
+usersRouter.post("/login", async (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
+    if (err) {
+      return res.status(500).send({ message: err.message });
+    }
+
+    if (!user) {
+      return res.status(401).send({ message: info.message });
+    }
+
+    req.logIn(user, (loginErr) => {
+      if (loginErr) {
+        return res.status(500).send({ message: loginErr.message });
+      }
+
+      return res
+        .status(200)
+        .send({
+          message: "Login successful",
+          user: { id: user.id, username: user.username },
+        });
+    });
+  })(req, res, next);
 });
 
 module.exports = usersRouter;
