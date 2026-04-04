@@ -1,6 +1,11 @@
+import { useContext } from "react";
 import { NavLink } from "react-router-dom";
+import AuthContext from "../context/AuthContext";
 
 export default function Navbar() {
+    /** State for logged in user ID to use for posting */
+    const { userId, logout } = useContext(AuthContext);
+
     const linkStyle = {
         color: '#000000',
         margin: '10px',
@@ -30,12 +35,16 @@ export default function Navbar() {
             </NavLink>
         </div>
         <div className="login-links">
-            <NavLink
-                to="/login"
-                style={({ isActive }) => isActive ? { ...linkStyle, ...activeStyle } : linkStyle}
-            >
-                Login
-            </NavLink>
+            {userId === null ? (<>
+                <NavLink
+                    to="/login"
+                    style={({ isActive }) => isActive ? { ...linkStyle, ...activeStyle } : linkStyle}
+                >
+                    Login
+                </NavLink>
+            </>) : (<>
+                <button onClick={() => logout()}>Logout</button>
+            </>)}
         </div>
         </nav>
     );
