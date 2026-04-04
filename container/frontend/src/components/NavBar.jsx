@@ -3,7 +3,6 @@ import { NavLink } from "react-router-dom";
 export default function Navbar() {
     const linkStyle = {
         color: '#000000',
-        fontWeight: 'bold',
         margin: '10px',
         textDecoration: 'none',
         paddingBottom: '2px',
