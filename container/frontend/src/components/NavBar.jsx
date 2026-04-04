@@ -16,19 +16,28 @@ export default function Navbar() {
 
     return (
         <nav style={{ background: '#ffffff', padding: '10px', minWidth: '100vw'}}>
-
-        <NavLink
-            to="/"
-            style={({ isActive }) => isActive ? { ...linkStyle, ...activeStyle } : linkStyle}
-        >
-            Home
-        </NavLink>
-        <NavLink
-            to="/profile"
-            style={({ isActive }) => isActive ? { ...linkStyle, ...activeStyle } : linkStyle}
-        >
-            Profile
-        </NavLink>
+        <div className="main-links">
+            <NavLink
+                to="/"
+                style={({ isActive }) => isActive ? { ...linkStyle, ...activeStyle } : linkStyle}
+            >
+                Home
+            </NavLink>
+            <NavLink
+                to="/profile"
+                style={({ isActive }) => isActive ? { ...linkStyle, ...activeStyle } : linkStyle}
+            >
+                Profile
+            </NavLink>
+        </div>
+        <div className="login-links">
+            <NavLink
+                to="/login"
+                style={({ isActive }) => isActive ? { ...linkStyle, ...activeStyle } : linkStyle}
+            >
+                Login
+            </NavLink>
+        </div>
         </nav>
     );
 }
