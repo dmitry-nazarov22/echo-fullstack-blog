@@ -1,5 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import Posts from "../components/Posts";
+import AuthContext from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 export default function Home({
     posts,
@@ -10,14 +12,14 @@ export default function Home({
     deletePost,
     editPost,
 }) {
-    /**
-     * State for forms text value.
-     */
+    /** State for forms text value. */
     const [form, setForm] = useState("");
-    /**
-     * State for message to be displayed under the form. Not used yet.
-     */
+    /** State for message to be displayed under the form. Not used yet. */
     const [message, setMessage] = useState("");
+    /** State for logged in user ID to use for posting */
+    const { userId } = useContext(AuthContext);
+    /** State for navigating through views */
+    const navigate = useNavigate();
 
     /**
      * Changes form state when forms input-area value changes.
@@ -31,7 +33,7 @@ export default function Home({
     /**
      * Handles submit button pressing.
      *
-     * Calls createPost with new Post body and (hard coded atp) user_id to send HTTP request.
+     * Calls createPost with new Post body and user_id to send HTTP request.
      * e.preventDefault() doesn't allow Browsers deafult behavior. In this case updating page on submitting.
      * Changes are handled by states.
      *
@@ -40,12 +42,14 @@ export default function Home({
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        if (userId == null) return navigate('/login');
+
         if (!form) {
             setMessage("Post can't be empty!");
         } else {
 
             const newPost = {
-                user_id: 5, // TODO: User-specified id
+                user_id: userId,
                 body: form,
             };
 
