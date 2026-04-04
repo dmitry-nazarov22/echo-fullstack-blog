@@ -1,4 +1,5 @@
 import { createContext, useState } from "react";
+import api from "../api/axios";
 
 const AuthContext = createContext();
 
@@ -9,7 +10,9 @@ export function AuthProvider({ children }) {
         setUserId(id);
     }
 
-    const logout = () => {
+    const logout = async () => {
+        const res = await api.delete('/users/logout');
+        console.log(res);
         setUserId(null);
     }
 
