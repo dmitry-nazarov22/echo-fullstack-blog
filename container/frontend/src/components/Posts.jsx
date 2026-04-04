@@ -23,6 +23,8 @@ export default function Posts({ posts,
     const [selectedPostId, setSelectedPostId] = useState(null);
     /** State for logged in user ID to use for posting */
     const { userId } = useContext(AuthContext);
+    /** State for username to display in the profile. */
+    const [username, setUsername] = useState("");
     /** State for navigating through views */
     const navigate = useNavigate();
 
@@ -192,7 +194,8 @@ export default function Posts({ posts,
 
     /**
      * Everytime posts state is changed fetches latest comments for all posts,
-     * which don't have them yet.
+     * which don't have them yet, and load username to compare with post author
+     * -> if author is same as active user display edit and delete buttons
      */
     useEffect(() => {
         posts.forEach(post => {
@@ -200,6 +203,16 @@ export default function Posts({ posts,
                 fetchFirstComment(post.id);
             }
         })
+
+        const loadUserData = async () => {
+            try {
+                const res = await api.get(`/users/${userId}`);
+                setUsername(res.data.username);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+        loadUserData();
     }, [posts])
 
     return (
@@ -253,21 +266,28 @@ export default function Posts({ posts,
                             }
                         </div>
                         <div className='button-container-right'>
-                            {editingId === post.id ? (
-                                <button onClick={(e) => {
-                                    saveEditing(post.id);
-                                    e.stopPropagation();
-                                }}>Save</button>
+                            {username === post.username ? (
+                                <>
+                                    {editingId === post.id ? (
+                                        <button onClick={(e) => {
+                                            saveEditing(post.id);
+                                            e.stopPropagation();
+                                        }}>Save</button>
+                                    ) : (
+                                        <button className='button-edit' onClick={(e) => {
+                                            startEditing(post)
+                                            e.stopPropagation();
+                                        }}>Edit</button>
+                                    )}
+                                    <button className='button-delete' onClick={(e) => {
+                                        handleDelete(post.id);
+                                        e.stopPropagation();
+                                    }}>Delete</button>
+                                </>
                             ) : (
-                                <button className='button-edit' onClick={(e) => {
-                                    startEditing(post)
-                                    e.stopPropagation();
-                                }}>Edit</button>
+                                <>
+                                </>
                             )}
-                            <button className='button-delete' onClick={(e) => {
-                                handleDelete(post.id);
-                                e.stopPropagation();
-                            }}>Delete</button>
                         </div>
                     </div>
                     <div>
