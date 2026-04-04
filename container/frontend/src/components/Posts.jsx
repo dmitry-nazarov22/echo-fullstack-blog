@@ -1,6 +1,8 @@
 import api from '../api/axios';
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Post from "./Post";
+import AuthContext from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 export default function Posts({ posts,
     setPosts,
@@ -19,6 +21,10 @@ export default function Posts({ posts,
     const [firstComments, setFirstComments] = useState({});
     /** State for selected post, which will be maximised to full screen. */
     const [selectedPostId, setSelectedPostId] = useState(null);
+    /** State for logged in user ID to use for posting */
+    const { userId } = useContext(AuthContext);
+    /** State for navigating through views */
+    const navigate = useNavigate();
 
     /**
      * When edit button is pressed this method sets posts ID as editingID and will
@@ -52,6 +58,7 @@ export default function Posts({ posts,
      * @param {Object} post post Object
      */
     const startCommenting = (post) => {
+        if (userId == null) return navigate('/login');
         setCommentingId(post.id);
         setCommentText("");
     }
@@ -154,6 +161,8 @@ export default function Posts({ posts,
      * @param {int} user_id Users ID
      */
     const handleLike = async (post_id, user_id) => {
+        if (userId == null) return navigate('/login');
+
         const isLiked = await isPostLiked(post_id, user_id);
         if (isLiked) {
             await deleteLike({ post_id, user_id });
@@ -217,9 +226,9 @@ export default function Posts({ posts,
                     <div className="button-container">
                         <div className='button-container-left'>
                             <button onClick={(e) => {
-                                handleLike(post.id, 5);
+                                handleLike(post.id, userId);
                                 e.stopPropagation();
-                            }}>Like</button> {/* HARD CODED VALUE; will be updated when auth is added */}
+                            }}>Like</button>
                             <p>{post.likes}</p>
                             {commentingId === post.id ? (
                                 <>
@@ -233,9 +242,9 @@ export default function Posts({ posts,
                                     }} placeholder='Write your comment here...'>
                                     </textarea>
                                     <button onClick={(e) => {
-                                        postComment(5);
+                                        postComment(userId);
                                         e.stopPropagation();
-                                    }}>Post</button> {/* HARD CODED VALUE; will be updated when auth is added */}
+                                    }}>Post</button>
                                 </>
                             ) : (<button onClick={(e) => {
                                 startCommenting(post);
