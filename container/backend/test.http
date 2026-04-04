@@ -11,6 +11,16 @@ Content-Type: application/json
   "password": "12345"
 }
 
+### LOGIN USER
+
+POST http://localhost:3000/users/login
+Content-Type: application/json
+
+{
+  "username": "testuser3",
+  "password": "12345"
+}
+
 ### POST OPERATIONS
 ### FIND POST BY USER_ID
 GET http://localhost:3000/posts/5
