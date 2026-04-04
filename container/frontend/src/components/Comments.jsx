@@ -1,4 +1,4 @@
-import axios from 'axios';
+import api from "../api/axios";
 
 export default function Comments({ comments, setComments }) {
     /**
@@ -11,7 +11,7 @@ export default function Comments({ comments, setComments }) {
      */
     const handleCommentDelete = async (commentId) => {
         try {
-            await axios.delete(`${import.meta.env.VITE_API_URL}/comments/${commentId}`);
+            await api.delete(`${import.meta.env.VITE_API_URL}/comments/${commentId}`);
             setComments(prev => prev.filter(p => p.id !== commentId));
         } catch (err) {
             console.error(err);

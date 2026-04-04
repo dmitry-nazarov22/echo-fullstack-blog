@@ -1,4 +1,4 @@
-import axios from 'axios';
+import api from '../api/axios';
 import { useEffect, useState } from "react";
 import Post from "./Post";
 
@@ -71,7 +71,7 @@ export default function Posts({ posts,
      */
     const postComment = async (user_id) => {
         try {
-            axios.post(`${import.meta.env.VITE_API_URL}/comments`,
+            api.post(`${import.meta.env.VITE_API_URL}/comments`,
                 {
                     post_id: commentingId, user_id: user_id, body: commentText }
             )
@@ -100,7 +100,7 @@ export default function Posts({ posts,
      */
     const addLike = async (like) => {
         try {
-        await axios.post(`${import.meta.env.VITE_API_URL}/likes`, {
+        await api.post(`${import.meta.env.VITE_API_URL}/likes`, {
             ...like
         });
         } catch (err) {
@@ -115,7 +115,7 @@ export default function Posts({ posts,
      */
     const deleteLike = async (like) => {
         try {
-        await axios.delete(`${import.meta.env.VITE_API_URL}/likes/post/${like.post_id}/user/${like.user_id}`);
+        await api.delete(`${import.meta.env.VITE_API_URL}/likes/post/${like.post_id}/user/${like.user_id}`);
         } catch (err) {
             console.error(err);
         }
@@ -131,7 +131,7 @@ export default function Posts({ posts,
      */
     const isPostLiked = async (post_id, user_id) => {
         try {
-            const res = await axios.get(`${import.meta.env.VITE_API_URL}/likes/post/${post_id}/user/${user_id}`);
+            const res = await api.get(`${import.meta.env.VITE_API_URL}/likes/post/${post_id}/user/${user_id}`);
             return res.data;
         } catch (err) {
             console.error(err);
@@ -172,7 +172,7 @@ export default function Posts({ posts,
      */
     const fetchFirstComment = async (post_id) => {
         try {
-            const res = await axios.get(`${import.meta.env.VITE_API_URL}/comments/post/first/${post_id}`);
+            const res = await api.get(`${import.meta.env.VITE_API_URL}/comments/post/first/${post_id}`);
             setFirstComments(prev => ({
                 ...prev, [post_id]: res.data[0]
             }))

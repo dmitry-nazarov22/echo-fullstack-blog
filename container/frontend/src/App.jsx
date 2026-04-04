@@ -1,6 +1,7 @@
-import axios from 'axios';
 import { useState } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+import api from './api/axios';
 
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
@@ -20,7 +21,7 @@ function App() {
    */
   const fetchPosts = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/posts`);
+      const res = await api.get(`/posts`);
       setPosts(res.data);
     } catch (err) {
       console.error(err);
@@ -35,7 +36,7 @@ function App() {
    */
   const fetchPostsByUserId = async (user_id) => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/posts/${user_id}`);
+      const res = await api.get(`/posts/${user_id}`);
       return res.data;
     } catch (err) {
       console.error(err);
@@ -51,7 +52,7 @@ function App() {
    */
   const fetchUserById = async (id) => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/users/${id}`);
+      const res = await api.get(`/users/${id}`);
       return res.data;
     } catch (err) {
       console.error(err);
@@ -65,7 +66,7 @@ function App() {
    */
   const createPost = async (newPost) => {
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_URL}/posts`, {
+      const res = await api.post(`/posts`, {
         ...newPost
       });
 
@@ -82,7 +83,7 @@ function App() {
    */
   const deletePost = async (id) => {
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL}/posts/${id}`);
+      await api.delete(`/posts/${id}`);
       setPosts(prev => prev.filter(post => post.id != id));
     } catch (err) {
       console.error(err);
@@ -97,7 +98,7 @@ function App() {
    */
   const editPost = async (id, editText) => {
     try {
-      await axios.patch(`${import.meta.env.VITE_API_URL}/posts/${id}`, {
+      await api.patch(`/posts/${id}`, {
         body: editText
       });
     } catch (err) {
@@ -111,10 +112,10 @@ function App() {
    * @param {Object} user user to be saved.
    */
   const createUser = async (user) => {
-        await axios.post(`${import.meta.env.VITE_API_URL}/users/register`, {
-          ...user
-        });
-    }
+      await api.post(`/users/register`, {
+        ...user
+      });
+  }
 
   return (
     <>
