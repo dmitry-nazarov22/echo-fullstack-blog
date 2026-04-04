@@ -39,9 +39,10 @@ export default function Profile({ fetchPostsByUserId, fetchUserById, deletePost,
                 <>
                 <div className="container">
                     <h2>You're not logged in</h2>
-                    <div className="button-container"></div>
-                    <button onClick={() => navigate('/login')}>Login</button>
-                    <button onClick={() => navigate('/register')}>Register</button>
+                    <div className="not-logged-buttons">
+                        <button onClick={() => navigate('/login')}>Login</button>
+                        <button onClick={() => navigate('/register')}>Register</button>
+                    </div>
                 </div>
                 </>
             ) : (

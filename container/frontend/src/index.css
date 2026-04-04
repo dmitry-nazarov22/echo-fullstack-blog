@@ -169,3 +169,20 @@ nav {
   font-size: small;
   font-weight: 500;
 }
+
+.not-logged-buttons {
+  display: flex;
+}
+
+.not-logged-buttons button {
+  border-radius: 10px;
+  background-color: #3f3f3f;
+  color: white;
+  font-size: 12px;
+  border: none;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  margin: 10px;
+}
