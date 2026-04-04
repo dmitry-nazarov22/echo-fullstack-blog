@@ -7,10 +7,21 @@ const commentsRouter = require("./routes/commentsRouter");
 const likesRouter = require("./routes/likesRouter");
 const app = express();
 const cors = require("cors");
+const session = require("express-session");
+const passport = require("passport");
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(cors());
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+  }),
+);
+app.use(passport.initialize());
+app.use(passport.session());
 
 const connectToDatabaseAndStartServer = async () => {
   await db.initializeDatabase();
