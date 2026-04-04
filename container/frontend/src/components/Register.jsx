@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { NavLink } from "react-router-dom";
 
 export default function Register({ createUser }) {
     const [username, setUsername] = useState("");
@@ -53,7 +54,7 @@ export default function Register({ createUser }) {
             </div>
             <button type="submit">Register</button>
             </form>
-            <a href="/login">Already a user? Login</a>
+            <NavLink to="/login">Already a user? Login</NavLink>
         </div>
     );
 }
