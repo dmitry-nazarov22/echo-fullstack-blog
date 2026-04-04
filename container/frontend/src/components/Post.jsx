@@ -1,12 +1,18 @@
 import api from "../api/axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Comments from './Comments';
+import AuthContext from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export default function Post({ post, setPosts, closePost }) {
     /** State for comment field text value. */
     const [commentText, setCommentText] = useState("");
     /** State for comments array. */
     const [comments, setComments] = useState([]);
+    /** State for logged in user ID to use for posting */
+    const { userId } = useContext(AuthContext);
+    /** State for navigating through views */
+    const navigate = useNavigate();
 
     /**
      * Fetches all comments by posts ID to display them under the post.
@@ -28,6 +34,7 @@ export default function Post({ post, setPosts, closePost }) {
      * @param {int} user_id Users ID
      */
     const postComment = async (user_id) => {
+        if (userId == null) return navigate('/login');
         try {
             api.post(`${import.meta.env.VITE_API_URL}/comments`,
                 {
@@ -94,6 +101,8 @@ export default function Post({ post, setPosts, closePost }) {
      * @param {int} user_id Users ID
      */
     const handleLike = async (post_id, user_id) => {
+        if (userId == null) return navigate('/login');
+
         const isLiked = await isPostLiked(post_id, user_id);
         if (isLiked) {
             await deleteLike({ post_id, user_id });
@@ -120,13 +129,13 @@ export default function Post({ post, setPosts, closePost }) {
                 <p className='post-card-date'>{post.created_at}</p>
                 <div className="button-container">
                     <div className='button-container-left'>
-                        <button onClick={() => handleLike(post.id, 5)}>Like</button> {/* HARD CODED VALUE; will be updated when auth is added */}
+                        <button onClick={() => handleLike(post.id, userId)}>Like</button>
                         <p>{post.likes}</p>
                         <textarea value={commentText} onChange={
                             (e) => setCommentText(e.target.value)
                             } placeholder='Write your comment here...'>
                         </textarea>
-                        <button onClick={() => postComment(5)}>Post comment</button> {/* HARD CODED VALUE; will be updated when auth is added */}
+                        <button onClick={() => postComment(userId)}>Post comment</button>
                     </div>
                 </div>
             </div>
