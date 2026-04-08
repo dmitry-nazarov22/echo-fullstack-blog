@@ -54,6 +54,34 @@ function findPostsByUserId(user_id) {
 }
 
 /**
+ * Find post by id.
+ *
+ * @param {int} id Posts id.
+ * @returns Promise that resolves with a post object or with error message.
+ */
+function findPostById(id) {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `SELECT posts.id, posts.body, posts.created_at, users.username,
+      COUNT(likes.post_id) AS likes
+      FROM posts
+      JOIN users ON posts.user_id = users.id
+      LEFT JOIN likes ON posts.id = likes.post_id
+      WHERE posts.id = $1
+      GROUP BY posts.id, users.username`,
+      [id],
+      (err, res) => {
+        if (err) {
+          reject("Failed to find a post by id.");
+          return;
+        }
+        resolve(res.rows);
+      },
+    );
+  });
+}
+
+/**
  * Saves post to database, to store new posts.
  *
  * Returning the res.rows[0] to show values, that are added by database (such as post ID)
@@ -143,6 +171,7 @@ function edit(id, body) {
 
 module.exports = {
   findAllPosts,
+  findPostById,
   savePost,
   deletePostById,
   findPostsByUserId,
