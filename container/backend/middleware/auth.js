@@ -1,3 +1,5 @@
+const posts = require("../database/posts");
+
 function checkAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
@@ -14,19 +16,28 @@ function checkNotAuthenticated(req, res, next) {
   return next();
 }
 
-function checkAuthenticationForUD(req, res, next) {
+async function checkAuthenticationForUD(req, res, next) {
   if (!req.isAuthenticated()) {
     return res.status(401).send({ message: "You must log in first" });
   }
 
-  if (req.params.id.equals(req.params.userId)) {
-    return next();
+  let post;
+
+  try {
+    const postId = parseInt(req.params.id);
+    post = await posts.findPostById(postId);
+  } catch (err) {
+    return res.status(404).send(err);
   }
 
-  return res.status(401).send({
-    message:
-      "Access restricted: this operation is only allowed for your own user",
-  });
+  if (post.user_id !== req.user.id) {
+    return res.status(403).send({
+      message:
+        "Access restricted: this operation is only allowed for own posts",
+    });
+  }
+
+  next();
 }
 
 module.exports = {
