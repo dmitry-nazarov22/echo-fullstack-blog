@@ -62,7 +62,7 @@ function findPostsByUserId(user_id) {
 function findPostById(id) {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT posts.id, posts.body, posts.created_at, users.username,
+      `SELECT posts.id, posts.body, posts.created_at, posts.user_id, users.username,
       COUNT(likes.post_id) AS likes
       FROM posts
       JOIN users ON posts.user_id = users.id
@@ -75,7 +75,7 @@ function findPostById(id) {
           reject("Failed to find a post by id.");
           return;
         }
-        resolve(res.rows);
+        resolve(res.rows[0]);
       },
     );
   });
