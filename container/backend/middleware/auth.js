@@ -14,4 +14,23 @@ function checkNotAuthenticated(req, res, next) {
   return next();
 }
 
-module.exports = { checkAuthenticated };
+function checkAuthenticationForUD(req, res, next) {
+  if (!req.isAuthenticated()) {
+    return res.status(401).send({ message: "You must log in first" });
+  }
+
+  if (req.params.id.equals(req.params.userId)) {
+    return next();
+  }
+
+  return res.status(401).send({
+    message:
+      "Access restricted: this operation is only allowed for your own user",
+  });
+}
+
+module.exports = {
+  checkAuthenticated,
+  checkNotAuthenticated,
+  checkAuthenticationForUD,
+};
