@@ -33,6 +33,14 @@ Content-Type: application/json
   "body": "hey! this is the first post!"
 }
 ### EDIT POST
+PATCH http://localhost:3000/posts/20
+Content-Type: application/json
+
+{
+    "body": "Logged in user: updated text!!!"
+}
+
+### ERROR: EDIT POST
 PATCH http://localhost:3000/posts/6
 Content-Type: application/json
 

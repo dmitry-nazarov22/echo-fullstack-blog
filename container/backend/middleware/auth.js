@@ -30,7 +30,11 @@ async function checkAuthenticationForUD(req, res, next) {
     return res.status(404).send(err);
   }
 
-  if (post.user_id !== req.user.id) {
+  if (!post) {
+    return res.status(404).send({ message: "Post not found" });
+  }
+
+  if (post.user_id != req.user.id) {
     return res.status(403).send({
       message:
         "Access restricted: this operation is only allowed for own posts",
