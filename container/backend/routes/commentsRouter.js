@@ -1,6 +1,7 @@
 const express = require("express");
 const commentsRouter = express.Router();
 const comments = require("../database/comments");
+const logger = require("../config/logger");
 const { checkAuthenticated } = require("../middleware/auth");
 
 /**
@@ -12,6 +13,7 @@ commentsRouter.get("/user/:userId", async (req, res) => {
     const userComments = await comments.findCommentsByUserId(id);
     res.send(userComments);
   } catch (err) {
+    logger.error("Error while fetching comments by user id: " + err);
     res.status(404).send(err);
   }
 });
@@ -25,6 +27,7 @@ commentsRouter.get("/post/:postId", async (req, res) => {
     const postComments = await comments.findCommentsByPostId(id);
     res.send(postComments);
   } catch (err) {
+    logger.error("Error while fetching comments by post id: " + err);
     res.status(404).send(err);
   }
 });
@@ -38,6 +41,7 @@ commentsRouter.get("/post/first/:postId", async (req, res) => {
     const firstComment = await comments.findFirstCommentByPostId(id);
     res.send(firstComment);
   } catch (err) {
+    logger.error("Error while fetching latest comment by post id: " + err);
     res.status(404).send(err);
   }
 });
@@ -52,6 +56,7 @@ commentsRouter.delete("/:id", checkAuthenticated, async (req, res) => {
     await comments.deleteCommentById(id, user_id);
     res.status(204).send();
   } catch (err) {
+    logger.error("Error deleting a comment: " + err);
     res.status(404).send(err);
   }
 });
@@ -68,7 +73,8 @@ commentsRouter.post("/", checkAuthenticated, async (req, res) => {
     const comment = await comments.saveComment({ post_id, user_id, body });
     res.status(201).send(comment);
   } catch (err) {
-    res.status(500).send();
+    logger.error("Error while saving comment: " + err);
+    res.status(500).send(err);
   }
 });
 
@@ -84,6 +90,7 @@ commentsRouter.patch("/:id", checkAuthenticated, async (req, res) => {
     const updatedComment = await comments.editCommentById(id, user_id, body);
     res.json(updatedComment);
   } catch (err) {
+    logger.error("Error while editing a comment: " + err);
     res.status(500).send(err);
   }
 });
