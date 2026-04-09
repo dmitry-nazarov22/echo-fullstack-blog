@@ -212,7 +212,7 @@ export default function Posts({ posts,
                 console.error(err);
             }
         };
-        loadUserData();
+        if (userId) loadUserData();
     }, [posts])
 
     return (
