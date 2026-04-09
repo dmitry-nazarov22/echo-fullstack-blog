@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const db = require("./database/db");
+const logger = require("./logger");
 const usersRouter = require("./routes/usersRouter");
 const postsRouter = require("./routes/postsRouter");
 const commentsRouter = require("./routes/commentsRouter");
@@ -32,7 +33,7 @@ const connectToDatabaseAndStartServer = async () => {
   await db.initializeDatabase();
 
   const server = app.listen(port, () => {
-    console.info(`Server is running on port ${port}`);
+    logger.info(`Server is running on port ${port}`);
   });
 
   setupGracefulShutdown(server);
@@ -40,15 +41,15 @@ const connectToDatabaseAndStartServer = async () => {
 
 const setupGracefulShutdown = (server) => {
   const shutdown = async () => {
-    console.info("Shutting down gracefully...");
+    logger.info("Shutting down gracefully...");
 
     server.close(() => {
-      console.info("HTTP server closed");
+      logger.info("HTTP server closed");
       process.exit(0);
     });
 
     await db.pool.end();
-    console.info("Database connection closed.");
+    logger.info("Database connection closed.");
   };
 
   process.on("SIGTERM", shutdown); // system manager, some other application
