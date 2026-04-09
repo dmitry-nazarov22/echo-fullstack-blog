@@ -1,6 +1,7 @@
 const express = require("express");
 const commentsRouter = express.Router();
 const comments = require("../database/comments");
+const { checkAuthenticated } = require("../middleware/auth");
 
 /**
  * Endpoint GET to find comments by user ID to show them in profile.
@@ -44,7 +45,7 @@ commentsRouter.get("/post/first/:postId", async (req, res) => {
 /**
  * Endpoint DELETE to delete comment from the database.
  */
-commentsRouter.delete("/:id", async (req, res) => {
+commentsRouter.delete("/:id", checkAuthenticated, async (req, res) => {
   const id = parseInt(req.params.id);
   try {
     await comments.deleteCommentById(id);
@@ -57,7 +58,7 @@ commentsRouter.delete("/:id", async (req, res) => {
 /**
  * Endpoint POST to save comment to the database.
  */
-commentsRouter.post("/", async (req, res) => {
+commentsRouter.post("/", checkAuthenticated, async (req, res) => {
   try {
     const post_id = req.body.post_id;
     const user_id = req.body.user_id;
@@ -73,7 +74,7 @@ commentsRouter.post("/", async (req, res) => {
 /**
  * Endpoint PATCH to edit comments by ID.
  */
-commentsRouter.patch("/:id", async (req, res) => {
+commentsRouter.patch("/:id", checkAuthenticated, async (req, res) => {
   const id = req.params.id;
   const body = req.body.body;
 
