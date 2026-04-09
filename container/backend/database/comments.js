@@ -111,24 +111,28 @@ function saveComment(comment) {
  * @param {int} id ID of a comment
  * @returns Promise which resolves empty or rejects with error
  */
-function deleteCommentById(id) {
+function deleteCommentById(id, user_id) {
   return new Promise((resolve, reject) => {
-    pool.query("DELETE FROM comments WHERE id = $1", [id], (err, res) => {
-      if (err) {
-        reject("Failed to delete comment data.");
-        return;
-      }
+    pool.query(
+      "DELETE FROM comments WHERE id = $1 AND user_id = $2",
+      [id, user_id],
+      (err, res) => {
+        if (err) {
+          reject("Failed to delete comment data.");
+          return;
+        }
 
-      if (res.rowCount === 0) {
-        reject({
-          error: `Comment with ID ${id} not found.`,
-          suggestion: "Verify the ID or check available comments.",
-        });
-        return;
-      }
+        if (res.rowCount === 0) {
+          reject({
+            error: `Comment with ID ${id} not found.`,
+            suggestion: "Verify the ID or check available comments.",
+          });
+          return;
+        }
 
-      resolve();
-    });
+        resolve();
+      },
+    );
   });
 }
 
@@ -139,11 +143,11 @@ function deleteCommentById(id) {
  * @param {String} body Body text for comment
  * @returns Promise which resolves with edited comment object or rejects with error message.
  */
-function edit(id, body) {
+function editCommentById(id, user_id, body) {
   return new Promise((resolve, reject) => {
     pool.query(
-      `UPDATE comments SET body = $1 WHERE id = $2 RETURNING *`,
-      [body, id],
+      `UPDATE comments SET body = $1 WHERE id = $2 AND user_id = $3 RETURNING *`,
+      [body, id, user_id],
       (err, res) => {
         if (err) {
           reject("Failed to update comment: " + "err");
@@ -169,5 +173,5 @@ module.exports = {
   findCommentsByUserId,
   saveComment,
   deleteCommentById,
-  edit,
+  editCommentById,
 };
