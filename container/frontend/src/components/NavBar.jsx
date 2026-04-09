@@ -19,7 +19,7 @@ export default function Navbar() {
     };
 
     return (
-        <nav style={{ background: '#ffffff', padding: '10px', minWidth: '100vw'}}>
+        <nav style={{ background: '#ffffff', padding: '10px', width: '100%'}}>
         <div className="main-links">
             <NavLink
                 to="/"
