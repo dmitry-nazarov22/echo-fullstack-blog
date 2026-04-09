@@ -19,7 +19,7 @@ async function initializeDatabase() {
     logger.info("Initializing database...");
     await pool.query(`
       CREATE TABLE IF NOT EXISTS users (
-          id          SERIAL      PRIMARY KEY,
+          id          SERIAL      PRIMARY KEY     NOT NULL,
           username    TEXT        UNIQUE          NOT NULL,
           password    TEXT        NOT NULL,
           description TEXT
@@ -29,26 +29,26 @@ async function initializeDatabase() {
     await pool.query(`
       CREATE TABLE IF NOT EXISTS posts (
           id          SERIAL      PRIMARY KEY,
-          user_id     INTEGER     REFERENCES users(id),
+          user_id     INTEGER     NOT NULL    REFERENCES users(id)    ON DELETE CASCADE,
           body        TEXT        NOT NULL,
-          created_at  TIMESTAMP   DEFAULT     CURRENT_TIMESTAMP
+          created_at  TIMESTAMP   NOT NULL    DEFAULT     CURRENT_TIMESTAMP
       );
     `);
 
     await pool.query(`
       CREATE TABLE IF NOT EXISTS comments (
-          id          SERIAL      PRIMARY KEY,
-          post_id     INTEGER     REFERENCES  posts(id),
-          user_id     INTEGER     REFERENCES  users(id),
+          id          SERIAL      NOT NULL    PRIMARY KEY,
+          post_id     INTEGER     NOT NULL    REFERENCES  posts(id)   ON DELETE CASCADE,
+          user_id     INTEGER     NOT NULL    REFERENCES  users(id)   ON DELETE CASCADE,
           body        TEXT        NOT NULL,
-          created_at  TIMESTAMP   DEFAULT     CURRENT_TIMESTAMP
+          created_at  TIMESTAMP   NOT NULL    DEFAULT     CURRENT_TIMESTAMP
       );
     `);
 
     await pool.query(`
       CREATE TABLE IF NOT EXISTS likes (
-          post_id     INTEGER     REFERENCES  posts(id),
-          user_id     INTEGER     REFERENCES  users(id),
+          post_id     INTEGER     NOT NULL     REFERENCES  posts(id)  ON DELETE CASCADE,
+          user_id     INTEGER     NOT NULL     REFERENCES  users(id)  ON DELETE CASCADE,
 
           PRIMARY KEY (post_id, user_id)
       );
