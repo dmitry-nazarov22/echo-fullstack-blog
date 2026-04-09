@@ -47,8 +47,9 @@ commentsRouter.get("/post/first/:postId", async (req, res) => {
  */
 commentsRouter.delete("/:id", checkAuthenticated, async (req, res) => {
   const id = parseInt(req.params.id);
+  const user_id = req.user.id;
   try {
-    await comments.deleteCommentById(id);
+    await comments.deleteCommentById(id, user_id);
     res.status(204).send();
   } catch (err) {
     res.status(404).send(err);
@@ -61,7 +62,7 @@ commentsRouter.delete("/:id", checkAuthenticated, async (req, res) => {
 commentsRouter.post("/", checkAuthenticated, async (req, res) => {
   try {
     const post_id = req.body.post_id;
-    const user_id = req.body.user_id;
+    const user_id = req.user.id;
     const body = req.body.body;
 
     const comment = await comments.saveComment({ post_id, user_id, body });
@@ -76,10 +77,11 @@ commentsRouter.post("/", checkAuthenticated, async (req, res) => {
  */
 commentsRouter.patch("/:id", checkAuthenticated, async (req, res) => {
   const id = req.params.id;
+  const user_id = req.user.id;
   const body = req.body.body;
 
   try {
-    const updatedComment = await comments.edit(id, body);
+    const updatedComment = await comments.editCommentById(id, user_id, body);
     res.json(updatedComment);
   } catch (err) {
     res.status(500).send(err);
