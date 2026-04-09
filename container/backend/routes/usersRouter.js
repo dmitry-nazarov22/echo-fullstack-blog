@@ -35,7 +35,7 @@ usersRouter.get("/", async (req, res) => {
  */
 usersRouter.get("/loggedin", checkAuthenticated, (req, res) => {
   res.status(200).send(req.user.id);
-  logger.info("User status: logged in, ID: " + req.user.id);
+  logger.info("User ID: " + req.user.id + " logged in");
 });
 
 /**

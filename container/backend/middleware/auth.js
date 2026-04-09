@@ -16,7 +16,7 @@ function checkAuthenticated(req, res, next) {
     return next();
   }
 
-  logger.error("Error: must log in first before proceeding with the operation");
+  logger.error("User not logged in");
   return res.status(401).send({ message: "You must log in first" });
 }
 
@@ -50,7 +50,7 @@ function checkNotAuthenticated(req, res, next) {
 async function checkAuthenticationForUD(req, res, next) {
   if (!req.isAuthenticated()) {
     logger.error(
-      "Error: must log in first before proceeding with the operation",
+      "Error: must log in first before proceeding with this operation",
     );
     return res.status(401).send({ message: "You must log in first" });
   }
