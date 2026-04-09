@@ -4,6 +4,10 @@ const bcrypt = require("bcrypt");
 const users = require("../database/users");
 const initializePassport = require("../passport-config");
 const passport = require("passport");
+const {
+  checkAuthenticated,
+  checkNotAuthenticated,
+} = require("../middleware/auth");
 
 initializePassport(
   passport,
@@ -43,7 +47,7 @@ usersRouter.get("/:id", async (req, res) => {
 /**
  * Endpoint POST for saving user to the database.
  */
-usersRouter.post("/register", async (req, res) => {
+usersRouter.post("/register", checkNotAuthenticated, async (req, res) => {
   try {
     const username = req.body.username;
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -59,7 +63,7 @@ usersRouter.post("/register", async (req, res) => {
 /**
  * Endpoint POST for logging user in to the database.
  */
-usersRouter.post("/login", async (req, res, next) => {
+usersRouter.post("/login", checkNotAuthenticated, async (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) {
       return res.status(500).send({ message: err.message });
@@ -85,7 +89,7 @@ usersRouter.post("/login", async (req, res, next) => {
 /**
  * Endpoint DELETE to log out user.
  */
-usersRouter.delete("/logout", (req, res) => {
+usersRouter.delete("/logout", checkAuthenticated, (req, res) => {
   req.logOut((err) => {
     if (err) return res.status(500).send({ message: "Logout failed." });
     res.status(200).send({ message: "Logged out succesfully." });
