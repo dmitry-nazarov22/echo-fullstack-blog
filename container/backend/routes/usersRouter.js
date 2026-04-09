@@ -25,7 +25,7 @@ usersRouter.get("/", async (req, res) => {
     const result = await users.findAllUsers();
     res.send(result);
   } catch (err) {
-    logger.error("Error while requesting all users: " + err);
+    logger.error("Error while requesting all users: ", err);
     res.status(500).send(err);
   }
 });
@@ -51,7 +51,7 @@ usersRouter.get("/:id", async (req, res) => {
       description: user.description,
     });
   } catch (err) {
-    logger.error("Error while requesting user by id: " + err);
+    logger.error("Error while requesting user by id: ", err);
     res.status(404).send(err);
   }
 });
@@ -65,10 +65,10 @@ usersRouter.post("/register", checkNotAuthenticated, async (req, res) => {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
     const user = await users.saveUser({ username, password: hashedPassword });
-    logger.info("New user registered: " + user);
+    logger.info("New user registered: ", user);
     res.status(201).send(user);
   } catch (err) {
-    logger.error("Error while trying to register a new user: " + err);
+    logger.error("Error while trying to register a new user: ", err);
     res.status(500).send(err);
   }
 });
@@ -79,18 +79,18 @@ usersRouter.post("/register", checkNotAuthenticated, async (req, res) => {
 usersRouter.post("/login", checkNotAuthenticated, async (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) {
-      logger.error("Error while logging in: " + err);
+      logger.error("Error while logging in: ", err);
       return res.status(500).send({ message: err.message });
     }
 
     if (!user) {
-      logger.error("Login error: " + err);
+      logger.error("Login error: ", err);
       return res.status(401).send({ message: info.message });
     }
 
     req.logIn(user, (loginErr) => {
       if (loginErr) {
-        logger.error("Login error: " + err);
+        logger.error("Login error: ", err);
         return res.status(500).send({ message: loginErr.message });
       }
 
@@ -108,7 +108,7 @@ usersRouter.post("/login", checkNotAuthenticated, async (req, res, next) => {
 usersRouter.delete("/logout", checkAuthenticated, (req, res) => {
   req.logOut((err) => {
     if (err) {
-      logger.error("Error while logging out: " + err);
+      logger.error("Error while logging out: ", err);
       return res.status(500).send({ message: "Logout failed." });
     }
     res.status(200).send({ message: "Logged out succesfully." });

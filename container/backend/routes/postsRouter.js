@@ -16,7 +16,7 @@ postsRouter.get("/", async (req, res) => {
     const result = await posts.findAllPosts();
     res.send(result);
   } catch (err) {
-    logger.error("Error while requesting all posts: " + err);
+    logger.error("Error while requesting all posts: ", err);
     res.status(500).send(err);
   }
 });
@@ -30,7 +30,7 @@ postsRouter.get("/:userId", async (req, res) => {
     const userPosts = await posts.findPostsByUserId(id);
     res.send(userPosts);
   } catch (err) {
-    logger.error("Error while requesting all posts by user ID: " + err);
+    logger.error("Error while requesting all posts by user ID: ", err);
     res.status(404).send(err);
   }
 });
@@ -44,7 +44,7 @@ postsRouter.delete("/:id", checkAuthenticationForUD, async (req, res) => {
     const post = await posts.deletePostById(id);
     res.status(204).send();
   } catch (err) {
-    logger.error("Error while deleting a post: " + err);
+    logger.error("Error while deleting a post: ", err);
     res.status(404).send(err);
   }
 });
@@ -60,7 +60,7 @@ postsRouter.post("/", checkAuthenticated, async (req, res) => {
     const post = await posts.savePost({ user_id, body });
     res.status(201).send(post);
   } catch (err) {
-    logger.error("Error while saving a post: " + err);
+    logger.error("Error while saving a post: ", err);
     res.status(500).send(err);
   }
 });
@@ -76,7 +76,7 @@ postsRouter.patch("/:id", checkAuthenticationForUD, async (req, res) => {
     const updatedPost = await posts.edit(id, body);
     res.json(updatedPost);
   } catch (err) {
-    logger.error("Error while editing a post: " + err);
+    logger.error("Error while editing a post: ", err);
     res.status(500).send(err);
   }
 });
