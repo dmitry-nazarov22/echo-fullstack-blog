@@ -11,6 +11,9 @@ Content-Type: application/json
   "password": "12345"
 }
 
+### FIND USER BY ID
+GET http://localhost:3000/users/10
+
 ### LOGIN USER
 
 POST http://localhost:3000/users/login

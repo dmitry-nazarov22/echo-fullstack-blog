@@ -30,7 +30,11 @@ usersRouter.get("/:id", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
     const user = await users.findUserById(id);
-    res.send(user);
+    res.send({
+      id: user.id,
+      username: user.username,
+      description: user.description,
+    });
   } catch (err) {
     res.status(404).send(err);
   }
