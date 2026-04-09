@@ -2,7 +2,7 @@ const express = require("express");
 const usersRouter = express.Router();
 const bcrypt = require("bcrypt");
 const users = require("../database/users");
-const initializePassport = require("../passport-config");
+const initializePassport = require("../config/passport-config");
 const passport = require("passport");
 const {
   checkAuthenticated,
