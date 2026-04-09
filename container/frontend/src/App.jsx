@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import api from './api/axios';
@@ -9,8 +9,10 @@ import Layout from "./components/Layout";
 import Profile from "./components/Profile";
 import Login from "./components/Login";
 import Register from "./components/Register";
+import AuthContext from './context/AuthContext';
 
 function App() {
+  const { userId, setUserId } = useContext(AuthContext);
   /**
    * State for all posts to display in the feed.
    */
@@ -116,6 +118,20 @@ function App() {
         ...user
       });
   }
+
+  useEffect(() => {
+    async function checkLoggedUserId() {
+      try {
+        const res = await api.get("/users/loggedin");
+        setUserId(res.data);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    if (userId != null) {
+      checkLoggedUserId();
+    }
+  }, [])
 
   return (
     <>
