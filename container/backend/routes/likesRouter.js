@@ -1,6 +1,7 @@
 const express = require("express");
 const likesRouter = express.Router();
 const likes = require("../database/likes");
+const logger = require("../config/logger");
 const { checkAuthenticated } = require("../middleware/auth");
 
 /**
@@ -12,6 +13,7 @@ likesRouter.get("/user/:userId", async (req, res) => {
     const userLikes = await likes.findLikesByUserId(id);
     res.send(userLikes);
   } catch (err) {
+    logger.error("Error while requesting for likes: " + err);
     res.status(404).send(err);
   }
 });
@@ -25,6 +27,7 @@ likesRouter.get("/post/:postId", async (req, res) => {
     const postLikesCount = await likes.countLikesByPostId(id);
     res.send(postLikesCount);
   } catch (err) {
+    logger.error("Error while requesting likes count: " + err);
     res.status(404).send(err);
   }
 });
@@ -39,6 +42,7 @@ likesRouter.get("/post/:post_id/user/:user_id", async (req, res) => {
     const isPostLiked = await likes.isPostLikedByUserId(post_id, user_id);
     res.send(isPostLiked);
   } catch (err) {
+    logger.error("Error while requesting like-status: " + err);
     res.status(404).send(err);
   }
 });
@@ -54,6 +58,7 @@ likesRouter.delete("/post/:post_id/", checkAuthenticated, async (req, res) => {
     await likes.deleteLikeById({ post_id, user_id });
     res.status(204).send();
   } catch (err) {
+    logger.error("Error while deleting a like: " + err);
     res.status(404).send(err);
   }
 });
@@ -69,6 +74,7 @@ likesRouter.post("/", checkAuthenticated, async (req, res) => {
     const like = await likes.saveLike({ post_id, user_id });
     res.status(201).send(like);
   } catch (err) {
+    logger.error("Error while saving a like: " + err);
     res.status(500).send(err);
   }
 });
