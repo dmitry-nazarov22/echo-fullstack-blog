@@ -1,4 +1,5 @@
 const posts = require("../database/posts");
+const logger = require("../config/logger");
 
 /**
  * Checks for authentication using passports isAuthenticated parameter.
@@ -15,6 +16,7 @@ function checkAuthenticated(req, res, next) {
     return next();
   }
 
+  logger.error("Error: must log in first before proceeding with the operation");
   return res.status(401).send({ message: "You must log in first" });
 }
 
@@ -30,6 +32,7 @@ function checkAuthenticated(req, res, next) {
  */
 function checkNotAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
+    logger.info("User already logged in");
     return res.status(401).send({ message: "You are already logged in" });
   }
 
@@ -46,6 +49,9 @@ function checkNotAuthenticated(req, res, next) {
  */
 async function checkAuthenticationForUD(req, res, next) {
   if (!req.isAuthenticated()) {
+    logger.error(
+      "Error: must log in first before proceeding with the operation",
+    );
     return res.status(401).send({ message: "You must log in first" });
   }
 
@@ -55,14 +61,14 @@ async function checkAuthenticationForUD(req, res, next) {
     const postId = parseInt(req.params.id);
     post = await posts.findPostById(postId);
   } catch (err) {
+    logger.error("Error while authenticating operation: " + err);
     return res.status(404).send(err);
   }
 
-  if (!post) {
-    return res.status(404).send({ message: "Post not found" });
-  }
-
   if (post.user_id != req.user.id) {
+    logger.error(
+      "Error while authenticating: access restricted for this operation.",
+    );
     return res.status(403).send({
       message:
         "Access restricted: this operation is only allowed for own posts",
