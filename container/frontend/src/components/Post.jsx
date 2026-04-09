@@ -67,7 +67,7 @@ export default function Post({ post, setPosts, closePost }) {
      */
     const deleteLike = async (like) => {
         try {
-        await api.delete(`${import.meta.env.VITE_API_URL}/likes/post/${like.post_id}/user/${like.user_id}`);
+        await api.delete(`${import.meta.env.VITE_API_URL}/likes/post/${like.post_id}`);
         } catch (err) {
             console.error(err);
         }
