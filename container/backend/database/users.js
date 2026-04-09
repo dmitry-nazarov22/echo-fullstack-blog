@@ -11,7 +11,7 @@ function findAllUsers() {
       "SELECT id, username, description FROM users",
       [],
       (err, res) => {
-        if (err) return reject(err);
+        if (err) return reject({ message: err });
         resolve(res.rows);
       },
     );
@@ -28,8 +28,8 @@ function findAllUsers() {
 function findUserById(id) {
   return new Promise((resolve, reject) => {
     pool.query("SELECT * FROM users WHERE id = $1", [id], (err, res) => {
-      if (err) return reject(err);
-      if (res.rows.length === 0) return reject("User not found");
+      if (err) return reject({ message: err });
+      if (res.rows.length === 0) return reject({ message: "User not found" });
       resolve(res.rows[0]);
     });
   });
@@ -48,8 +48,8 @@ function findUserByUsername(username) {
       "SELECT * FROM users WHERE username = $1",
       [username],
       (err, res) => {
-        if (err) return reject(err);
-        if (res.rows.length === 0) return reject("User not found");
+        if (err) return reject({ message: err });
+        if (res.rows.length === 0) return reject({ message: "User not found" });
         resolve(res.rows[0]);
       },
     );
@@ -70,7 +70,7 @@ function saveUser(user) {
       "INSERT INTO users (username, password) VALUES ($1, $2) RETURNING *",
       [user.username, user.password],
       (err, res) => {
-        if (err) return reject(err);
+        if (err) return reject({ message: err });
         resolve(res.rows[0]);
       },
     );

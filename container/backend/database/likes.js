@@ -13,7 +13,7 @@ function countLikesByPostId(post_id) {
       [post_id],
       (err, res) => {
         if (err) {
-          reject("Failed to count likes");
+          reject({ message: err });
           return;
         }
         resolve(res.rows);
@@ -35,7 +35,7 @@ function findLikesByUserId(user_id) {
       [user_id],
       (err, res) => {
         if (err) {
-          reject("Failed to find likes by user id.");
+          reject({ message: err });
           return;
         }
         resolve(res.rows);
@@ -57,7 +57,7 @@ function saveLike(like) {
       [like.post_id, like.user_id],
       (err, res) => {
         if (err) {
-          reject("Error inserting like data: " + err);
+          reject({ message: err });
           return;
         }
         resolve(res.rows[0]);
@@ -79,13 +79,13 @@ function deleteLikeById(like) {
       [like.post_id, like.user_id],
       (err, res) => {
         if (err) {
-          reject("Failed to delete like data.");
+          reject({ message: err });
           return;
         }
 
         if (res.rowCount === 0) {
           reject({
-            error: `Like with post_id: ${like.post_id}, user_id: ${like.user_id} not found.`,
+            message: `Like with post_id: ${like.post_id}, user_id: ${like.user_id} not found.`,
             suggestion: "Verify the IDs or check available likes.",
           });
           return;
@@ -110,7 +110,7 @@ function isPostLikedByUserId(post_id, user_id) {
       `SELECT 1 FROM likes WHERE post_id = $1 AND user_id = $2`,
       [post_id, user_id],
       (err, res) => {
-        if (err) return reject("Failed to check for like by user ID");
+        if (err) return reject({ message: err });
 
         resolve(res.rowCount > 0);
       },

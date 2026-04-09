@@ -17,7 +17,7 @@ function findAllPosts() {
       ORDER BY posts.created_at DESC`,
       [],
       (err, res) => {
-        if (err) return reject(err);
+        if (err) return reject({ message: err });
         resolve(res.rows);
       },
     );
@@ -44,7 +44,7 @@ function findPostsByUserId(user_id) {
       [user_id],
       (err, res) => {
         if (err) {
-          reject("Failed to find posts by user id.");
+          reject({ message: err });
           return;
         }
         resolve(res.rows);
@@ -72,7 +72,7 @@ function findPostById(id) {
       [id],
       (err, res) => {
         if (err) {
-          reject("Failed to find a post by id.");
+          reject({ message: err });
           return;
         }
         resolve(res.rows[0]);
@@ -96,7 +96,7 @@ function savePost(post) {
       [post.user_id, post.body],
       (err, res) => {
         if (err) {
-          reject("Error inserting post data: " + err);
+          reject({ message: err });
           return;
         }
         resolve(res.rows[0]);
@@ -118,13 +118,13 @@ function deletePostById(id) {
   return new Promise((resolve, reject) => {
     pool.query("DELETE FROM posts WHERE id = $1", [id], (err, res) => {
       if (err) {
-        reject("Failed to delete post data.");
+        reject({ message: "Failed to delete post data." });
         return;
       }
 
       if (res.rowCount === 0) {
         reject({
-          error: `Post with ID ${id} not found.`,
+          message: `Post with ID ${id} not found.`,
           suggestion: "Verify the ID or check available posts.",
         });
         return;
@@ -152,7 +152,7 @@ function edit(id, body) {
       [body, id],
       (err, res) => {
         if (err) {
-          reject("Failed to update post: " + "err");
+          reject({ message: err });
           return;
         }
 

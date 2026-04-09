@@ -19,7 +19,7 @@ function findCommentsByPostId(post_id) {
       [post_id],
       (err, res) => {
         if (err) {
-          reject("Failed to find comments by post id.");
+          reject({ message: err });
           return;
         }
         resolve(res.rows);
@@ -48,7 +48,7 @@ function findFirstCommentByPostId(post_id) {
       [post_id],
       (err, res) => {
         if (err) {
-          reject("Failed to find first comment by post id.");
+          reject({ message: err });
           return;
         }
         resolve(res.rows);
@@ -74,7 +74,7 @@ function findCommentsByUserId(user_id) {
       [user_id],
       (err, res) => {
         if (err) {
-          reject("Failed to find comments by user id.");
+          reject({ message: err });
           return;
         }
         resolve(res.rows);
@@ -96,7 +96,7 @@ function saveComment(comment) {
       [comment.post_id, comment.user_id, comment.body],
       (err, res) => {
         if (err) {
-          reject("Error inserting comment data: " + err);
+          reject({ message: err });
           return;
         }
         resolve(res.rows[0]);
@@ -118,13 +118,13 @@ function deleteCommentById(id, user_id) {
       [id, user_id],
       (err, res) => {
         if (err) {
-          reject("Failed to delete comment data.");
+          reject({ message: err });
           return;
         }
 
         if (res.rowCount === 0) {
           reject({
-            error: `Comment with ID ${id} not found.`,
+            message: `Comment with ID ${id} not found.`,
             suggestion: "Verify the ID or check available comments.",
           });
           return;
@@ -150,13 +150,13 @@ function editCommentById(id, user_id, body) {
       [body, id, user_id],
       (err, res) => {
         if (err) {
-          reject("Failed to update comment: " + "err");
+          reject({ message: err });
           return;
         }
 
         if (res.rowCount === 0) {
           reject({
-            error: `Comment with ID ${id} not found.`,
+            message: `Comment with ID ${id} not found.`,
           });
           return;
         }
