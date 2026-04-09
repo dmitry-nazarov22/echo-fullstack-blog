@@ -5,10 +5,6 @@
   text-align: center;
 }
 
-* {
-  box-sizing: border-box;
-}
-
 .container {
   display: flex;
   flex-direction: column;
@@ -43,9 +39,9 @@
 
 .form-textarea {
   min-width: 50vw;
-  max-width: 90vw;
   border: solid 1px #e2e2e2;
   box-shadow: 0 2px 4px 0 rgba(46, 46, 46, 0.2);
+
 }
 
 .post-card {
@@ -58,9 +54,7 @@
   display: flex;
   flex-direction: column;
   align-items: baseline;
-  width: 70vw;
-  max-width: 90vw;
-  box-sizing: border-box;
+  width: 80vw;
 }
 
 .post-card-username {
@@ -99,10 +93,8 @@
   text-decoration: none;
   display: flex;
   flex-direction: column;
-  max-width: 80vw;
-  padding: 5px;
-  box-sizing: border-bo: baseline;
-  width: 40vw;
+  align-items: baseline;
+  width: 50vw;
   padding: 5px;
 }
 
@@ -136,7 +128,7 @@
   flex-direction: row;
   gap: 10px;
 }
-  max-width: 70vw;
+
 .button-container-left textarea {
   border: 1px solid #ccc;
   min-width: 30vw;
@@ -152,8 +144,6 @@
 .comments-section {
   margin-bottom: 10px;
   text-decoration: none;
-  max-width: 90vw;
-  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: baseline;
@@ -169,7 +159,7 @@ nav {
 
 .main-links {
   position: absolute;
-  left: 50%;auto
+  left: 50%;
   white-space: nowrap;
   font-weight: bold;
 }
