@@ -1,6 +1,7 @@
 const express = require("express");
 const likesRouter = express.Router();
 const likes = require("../database/likes");
+const { checkAuthenticated } = require("../middleware/auth");
 
 /**
  * Endpoint GET for finding likes by user ID to show them in profile.
@@ -45,22 +46,26 @@ likesRouter.get("/post/:post_id/user/:user_id", async (req, res) => {
 /**
  * Endpoint DELETE to delete like by user_id and post_id together from the database.
  */
-likesRouter.delete("/post/:post_id/user/:user_id", async (req, res) => {
-  try {
-    const post_id = parseInt(req.params.post_id);
-    const user_id = parseInt(req.params.user_id);
+likesRouter.delete(
+  "/post/:post_id/user/:user_id",
+  checkAuthenticated,
+  async (req, res) => {
+    try {
+      const post_id = parseInt(req.params.post_id);
+      const user_id = parseInt(req.params.user_id);
 
-    await likes.deleteLikeById({ post_id, user_id });
-    res.status(204).send();
-  } catch (err) {
-    res.status(404).send(err);
-  }
-});
+      await likes.deleteLikeById({ post_id, user_id });
+      res.status(204).send();
+    } catch (err) {
+      res.status(404).send(err);
+    }
+  },
+);
 
 /**
  * Endpoint POST to save like to the database.
  */
-likesRouter.post("/", async (req, res) => {
+likesRouter.post("/", checkAuthenticated, async (req, res) => {
   try {
     const post_id = req.body.post_id;
     const user_id = req.body.user_id;
