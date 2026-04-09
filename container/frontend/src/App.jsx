@@ -125,12 +125,11 @@ function App() {
         const res = await api.get("/users/loggedin");
         setUserId(res.data);
       } catch (err) {
-        console.error(err);
+        console.info(err);
       }
     }
-    if (userId != null) {
-      checkLoggedUserId();
-    }
+
+    checkLoggedUserId();
   }, [])
 
   return (
