@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const db = require("./database/db");
-const logger = require("./logger");
+const logger = require("./config/logger");
 const usersRouter = require("./routes/usersRouter");
 const postsRouter = require("./routes/postsRouter");
 const commentsRouter = require("./routes/commentsRouter");
