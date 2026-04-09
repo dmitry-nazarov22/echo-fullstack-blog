@@ -24,6 +24,9 @@ Content-Type: application/json
   "password": "12345"
 }
 
+### LOGOUT USER
+DELETE http://localhost:3000/users/logout
+
 ### POST OPERATIONS
 ### FIND POST BY USER_ID
 GET http://localhost:3000/posts/5

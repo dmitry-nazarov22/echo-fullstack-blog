@@ -28,6 +28,13 @@ usersRouter.get("/", async (req, res) => {
 });
 
 /**
+ * Endpoint GET to see logged in users id to stay logged in after refreshes.
+ */
+usersRouter.get("/loggedin", checkAuthenticated, (req, res) => {
+  res.status(200).send(req.user.id);
+});
+
+/**
  * Endpoint to get user by id. No use cases yet. Made for testing.
  */
 usersRouter.get("/:id", async (req, res) => {
