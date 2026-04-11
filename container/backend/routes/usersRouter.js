@@ -1,6 +1,7 @@
 const express = require("express");
 const usersRouter = express.Router();
 const bcrypt = require("bcrypt");
+const Joi = require("joi");
 const users = require("../database/users");
 const logger = require("../config/logger");
 
@@ -16,6 +17,25 @@ initializePassport(
   async (username) => await users.findUserByUsername(username),
   async (id) => await users.findUserById(id),
 );
+
+const userSchema = Joi.object({
+  username: Joi.string()
+    .pattern(/^[a-zA-Z0-9.-]+$/)
+    .min(4)
+    .max(20)
+    .required(),
+  password: Joi.string()
+    .min(8)
+    .max(30)
+    .pattern(/[a-z]/)
+    .pattern(/[A-Z]/)
+    .pattern(/[0-9]/)
+    .required(),
+});
+
+const idSchema = Joi.object({
+  id: Joi.number().min(0),
+});
 
 /**
  * Endpoint to get all users from the database, to search through users.
@@ -42,6 +62,15 @@ usersRouter.get("/loggedin", checkAuthenticated, (req, res) => {
  * Endpoint to get user by id.
  */
 usersRouter.get("/:id", async (req, res) => {
+  // VALIDATION
+  const validationRes = idSchema.validate(req.params.id);
+
+  if (validationRes.error) {
+    logger.error("Invalid ID: ", validationRes.error.message);
+    return res.status(400).send(`Invalid ID: ${validationRes.error.message}`);
+  }
+
+  // OPERATION
   try {
     const id = parseInt(req.params.id);
     const user = await users.findUserById(id);
@@ -60,6 +89,17 @@ usersRouter.get("/:id", async (req, res) => {
  * Endpoint POST for saving user to the database.
  */
 usersRouter.post("/register", checkNotAuthenticated, async (req, res) => {
+  // VALIDATION
+  const validationRes = userSchema.validate(req.body);
+
+  if (validationRes.error) {
+    logger.error("Invalid user data: ", validationRes.error.message);
+    return res
+      .status(400)
+      .send(`Invalid user data: ${validationRes.error.message}`);
+  }
+
+  // OPERATION
   try {
     const username = req.body.username;
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -77,6 +117,17 @@ usersRouter.post("/register", checkNotAuthenticated, async (req, res) => {
  * Endpoint POST for logging user in to the database.
  */
 usersRouter.post("/login", checkNotAuthenticated, async (req, res, next) => {
+  // VALIDATION
+  const validationRes = userSchema.validate(req.body);
+
+  if (validationRes.error) {
+    logger.error("Invalid user data: ", validationRes.error.message);
+    return res
+      .status(400)
+      .send(`Invalid user data: ${validationRes.error.message}`);
+  }
+
+  // OPERATION
   passport.authenticate("local", (err, user, info) => {
     if (err) {
       logger.error("Error while logging in: ", err);
