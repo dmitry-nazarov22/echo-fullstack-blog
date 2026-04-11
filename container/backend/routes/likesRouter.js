@@ -5,9 +5,7 @@ const likes = require("../database/likes");
 const logger = require("../config/logger");
 const { checkAuthenticated } = require("../middleware/auth");
 
-const idSchema = Joi.object({
-  id: Joi.number().min(0),
-});
+const idSchema = Joi.number().integer().min(0).required;
 
 /**
  * Endpoint GET for finding likes by user ID to show them in profile.

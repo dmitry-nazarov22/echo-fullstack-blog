@@ -9,9 +9,7 @@ const {
   checkAuthenticationForUD,
 } = require("../middleware/auth");
 
-const idSchema = Joi.object({
-  id: Joi.number().min(0),
-});
+const idSchema = Joi.number().integer().min(0).required;
 
 /**
  * Endpoint to get all posts to display them in the feed.
