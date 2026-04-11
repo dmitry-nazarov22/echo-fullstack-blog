@@ -1,13 +1,29 @@
 const express = require("express");
 const likesRouter = express.Router();
+const Joi = require("joi");
 const likes = require("../database/likes");
 const logger = require("../config/logger");
 const { checkAuthenticated } = require("../middleware/auth");
+
+const idSchema = Joi.object({
+  id: Joi.number().min(0),
+});
 
 /**
  * Endpoint GET for finding likes by user ID to show them in profile.
  */
 likesRouter.get("/user/:userId", async (req, res) => {
+  // VALIDATION
+  const validationRes = idSchema.validate(req.params.userId);
+
+  if (validationRes.error) {
+    logger.error("Invalid user ID: ", validationRes.error.message);
+    return res
+      .status(400)
+      .send(`Invalid user ID: ${validationRes.error.message}`);
+  }
+
+  // OPERATION
   try {
     const id = parseInt(req.params.userId);
     const userLikes = await likes.findLikesByUserId(id);
@@ -22,6 +38,17 @@ likesRouter.get("/user/:userId", async (req, res) => {
  * Endpoint GET to get likes count on Posts to show amount of likes near the button.
  */
 likesRouter.get("/post/:postId", async (req, res) => {
+  // VALIDATION
+  const validationRes = idSchema.validate(req.params.postId);
+
+  if (validationRes.error) {
+    logger.error("Invalid post ID: ", validationRes.error.message);
+    return res
+      .status(400)
+      .send(`Invalid post ID: ${validationRes.error.message}`);
+  }
+
+  // OPERATION
   try {
     const id = parseInt(req.params.postId);
     const postLikesCount = await likes.countLikesByPostId(id);
@@ -36,6 +63,24 @@ likesRouter.get("/post/:postId", async (req, res) => {
  * Endpoint GET to find if user has liked the post.
  */
 likesRouter.get("/post/:post_id/user/:user_id", async (req, res) => {
+  // VALIDATION
+  const validationResPost = idSchema.validate(req.params.post_id);
+  const validationResUser = idSchema.validate(req.params.user_id);
+
+  if (validationResPost.error) {
+    logger.error("Invalid post ID: ", validationResPost.error.message);
+    return res
+      .status(400)
+      .send(`Invalid post ID: ${validationResPost.error.message}`);
+  }
+  if (validationResUser.error) {
+    logger.error("Invalid user ID: ", validationResUser.error.message);
+    return res
+      .status(400)
+      .send(`Invalid user ID: ${validationResUser.error.message}`);
+  }
+
+  // OPERATION
   try {
     const post_id = parseInt(req.params.post_id);
     const user_id = parseInt(req.params.user_id);
@@ -51,6 +96,17 @@ likesRouter.get("/post/:post_id/user/:user_id", async (req, res) => {
  * Endpoint DELETE to delete like by user_id and post_id together from the database.
  */
 likesRouter.delete("/post/:post_id/", checkAuthenticated, async (req, res) => {
+  // VALIDATION
+  const validationResPost = idSchema.validate(req.params.post_id);
+
+  if (validationResPost.error) {
+    logger.error("Invalid post ID: ", validationResPost.error.message);
+    return res
+      .status(400)
+      .send(`Invalid post ID: ${validationResPost.error.message}`);
+  }
+
+  // OPERATION
   try {
     const post_id = parseInt(req.params.post_id);
     const user_id = parseInt(req.user.id);
@@ -67,6 +123,17 @@ likesRouter.delete("/post/:post_id/", checkAuthenticated, async (req, res) => {
  * Endpoint POST to save like to the database.
  */
 likesRouter.post("/", checkAuthenticated, async (req, res) => {
+  // VALIDATION
+  const validationResPost = idSchema.validate(req.body.post_id);
+
+  if (validationResPost.error) {
+    logger.error("Invalid post ID: ", validationResPost.error.message);
+    return res
+      .status(400)
+      .send(`Invalid post ID: ${validationResPost.error.message}`);
+  }
+
+  // OPERATION
   try {
     const post_id = req.body.post_id;
     const user_id = req.user.id;
