@@ -7,7 +7,7 @@ navigating a minimalistic UI. In individual profile sections you can view all
 posts done by the person and in the future likes and comments will be visible as
 well.
 
-[Check it out here!](https://echo-fullstack-blog-app.onrender.com)
+[Check it out here! (live demo)](https://echo-fullstack-blog-app.onrender.com)
 
 This app showcases my skills in **fullstack programming** and enthusiasm towards
 creating a polished project.
@@ -38,6 +38,8 @@ Stable releases with realised functionalities are better found in releases.
 - **Docker**
 - **React (Vite)**
 - **JSDoc**
+- **Passport** + **Session** + **bcrypt**
+- **Joi**
 
 ## Link to the deployed project
 
@@ -51,6 +53,10 @@ Stable releases with realised functionalities are better found in releases.
 - **Likes** to show appreciation for a post
 - **Editing a post** directly in a post card
 - **Profile view** to view all posts, likes and comments made by user (still in development)
+- **Description** can be edited in profile to showcase to other users (opening other profiles in development still)
+- **Authentication, login and registration** with Passport, Session and Bcrypt. No one can change other persons data
+- **Input validation with JOI**
+- **Descriptive error messages** (not yet visible in frontend)
 
 ## Installation
 
@@ -70,7 +76,8 @@ Stable releases with realised functionalities are better found in releases.
 This runs the frontend with Vite and the backend together.
 
 > For local database configuration, copy `container/backend/.env.example` to
-> `container/backend/.env` and fill in your database values.
+> `container/backend/.env` and fill in your database values. Session secret can
+> be randomly generated
 
 ## Database structure
 
@@ -80,6 +87,8 @@ This runs the frontend with Vite and the backend together.
         | **users**           |       |        /--------------------\   |
     /-->| id          (PK)    |<------/        | **comments**       |   |
     |   | username            |                | id          (PK)   |   |
+    |   | password            |                |                    |   |
+    |   | description         |                |                    |   |
     |   \---------------------/          /---->| post_id     (FK)   |   |
     |                                    |     | user_id     (FK)   |---|
     |                                    |     | body               |   |
@@ -93,13 +102,22 @@ This runs the frontend with Vite and the backend together.
                                                \--------------------/
 ```
 
-## AI Usage
+## AI Usage & Tutorial help
 
 AI has been used through this project for debugging purposes especially in frontend
 and searching for typos in routing. AI has been also used to describe concepts and
 to help with SQL join queries.
+While creating authentication logic AI was used to explain the theme and tools
+available.
 
 Tools used:
 
 - ChatGPT
 - GitHub Copilot
+
+During creation of authentication, login and registering logic these tutorials
+and articles were helpful:
+
+- [Video I ended up using the most. Passport + Session + Bcrypt](https://www.youtube.com/watch?v=-RCnNyD0L-s&list=LL&index=3)
+- [Another video that was helpful to understand the context](https://www.youtube.com/watch?v=nI8PYZNFtac&list=LL&index=5&t=532s)
+- [Article I used to understand React and Passport interaction](https://www.freecodecamp.org/news/react-passport-authentication/)
