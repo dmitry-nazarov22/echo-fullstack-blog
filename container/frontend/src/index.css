@@ -186,3 +186,8 @@ nav {
   cursor: pointer;
   margin: 10px;
 }
+
+.direction {
+  font-size: xx-small;
+  color: #9c9c9c;
+}

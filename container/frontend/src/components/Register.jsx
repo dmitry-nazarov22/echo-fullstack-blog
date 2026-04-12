@@ -40,6 +40,7 @@ export default function Register({ createUser }) {
                     }
                     required
                 />
+                <p className="direction">Must be at least 4 characters</p>
             </div>
             <div>
                 <label htmlFor="password">Password</label>
@@ -53,6 +54,7 @@ export default function Register({ createUser }) {
                     }}
                     required
                 />
+                <p className="direction">Must be at least 8 characters and contain at least one big letter, one small letter and number</p>
             </div>
             <button type="submit">Register</button>
             </form>
