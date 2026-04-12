@@ -5,7 +5,11 @@ const logger = require("../config/logger");
 const Joi = require("joi");
 const { checkAuthenticated } = require("../middleware/auth");
 
-const idSchema = Joi.number().integer().min(0).required;
+const idSchema = Joi.number().integer().min(0).required();
+const commentSchema = Joi.object({
+  post_id: Joi.number().integer().min(0).required(),
+  body: Joi.string().min(1).max(500).required(),
+});
 
 /**
  * Endpoint GET to find comments by user ID to show them in profile.
@@ -113,13 +117,16 @@ commentsRouter.delete("/:id", checkAuthenticated, async (req, res) => {
  */
 commentsRouter.post("/", checkAuthenticated, async (req, res) => {
   // VALIDATION
-  const validationRes = idSchema.validate(req.body.post_id);
+  const validationRes = commentSchema.validate({
+    post_id: req.body.post_id,
+    body: req.body.body,
+  });
 
   if (validationRes.error) {
-    logger.error("Invalid post ID: ", validationRes.error.message);
+    logger.error("Invalid comment data: ", validationRes.error.message);
     return res
       .status(400)
-      .send(`Invalid post ID: ${validationRes.error.message}`);
+      .send(`Invalid comment data: ${validationRes.error.message}`);
   }
 
   // OPERATION
@@ -141,13 +148,16 @@ commentsRouter.post("/", checkAuthenticated, async (req, res) => {
  */
 commentsRouter.patch("/:id", checkAuthenticated, async (req, res) => {
   // VALIDATION
-  const validationRes = idSchema.validate(req.params.id);
+  const validationRes = commentSchema.validate({
+    post_id: req.params.id,
+    body: req.body.body,
+  });
 
   if (validationRes.error) {
-    logger.error("Invalid comment ID: ", validationRes.error.message);
+    logger.error("Invalid comment data: ", validationRes.error.message);
     return res
       .status(400)
-      .send(`Invalid comment ID: ${validationRes.error.message}`);
+      .send(`Invalid comment data: ${validationRes.error.message}`);
   }
 
   // OPERATION
