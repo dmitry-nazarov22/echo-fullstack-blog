@@ -77,9 +77,34 @@ function saveUser(user) {
   });
 }
 
+function editDescription(user) {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `UPDATE users SET description = $1 WHERE id = $2 RETURNING *`,
+      [user.description, user.id],
+      (err, res) => {
+        if (err) {
+          reject({ message: err });
+          return;
+        }
+
+        if (res.rowCount === 0) {
+          reject({
+            error: `User with ID ${user.id} not found.`,
+          });
+          return;
+        }
+
+        resolve(res.rows[0]);
+      },
+    );
+  });
+}
+
 module.exports = {
   findAllUsers,
   findUserById,
   findUserByUsername,
   saveUser,
+  editDescription,
 };
