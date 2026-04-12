@@ -77,6 +77,12 @@ function saveUser(user) {
   });
 }
 
+/**
+ * Edit user description which is automatically set to null when user is created.
+ *
+ * @param {Object} user Object containing user ID and description
+ * @returns Promise that resolves with edited User object or rejects with error.
+ */
 function editDescription(user) {
   return new Promise((resolve, reject) => {
     pool.query(
