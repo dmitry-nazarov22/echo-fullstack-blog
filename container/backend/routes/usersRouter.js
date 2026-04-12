@@ -101,17 +101,6 @@ usersRouter.post("/register", checkNotAuthenticated, async (req, res) => {
  * Endpoint POST for logging user in to the database.
  */
 usersRouter.post("/login", checkNotAuthenticated, async (req, res, next) => {
-  // VALIDATION
-  const validationRes = validateUser(req.body);
-
-  if (validationRes.error) {
-    logger.error("Invalid user data: ", validationRes.error.message);
-    return res
-      .status(400)
-      .send(`Invalid user data: ${validationRes.error.message}`);
-  }
-
-  // OPERATION
   passport.authenticate("local", (err, user, info) => {
     if (err) {
       logger.error("Error while logging in: ", err);
