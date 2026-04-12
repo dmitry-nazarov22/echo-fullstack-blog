@@ -15,7 +15,7 @@ commentsRouter.get("/user/:userId", async (req, res) => {
   const validationRes = validateId(id);
 
   if (validationRes.error) {
-    logger.error("Invalid user ID: ", validationRes.error.message);
+    logger.error(`Invalid user ID: ${validationRes.error.message}`);
     return res
       .status(400)
       .send(`Invalid user ID: ${validationRes.error.message}`);
@@ -26,7 +26,7 @@ commentsRouter.get("/user/:userId", async (req, res) => {
     const userComments = await comments.findCommentsByUserId(id);
     res.send(userComments);
   } catch (err) {
-    logger.error("Error while fetching comments by user id: ", err);
+    logger.error(`Error while fetching comments by user id: ${err.message}`);
     res.status(404).send(err);
   }
 });
@@ -41,7 +41,7 @@ commentsRouter.get("/post/:postId", async (req, res) => {
   const validationRes = validateId(id);
 
   if (validationRes.error) {
-    logger.error("Invalid post ID: ", validationRes.error.message);
+    logger.error(`Invalid post ID: ${validationRes.error.message}`);
     return res
       .status(400)
       .send(`Invalid post ID: ${validationRes.error.message}`);
@@ -52,7 +52,7 @@ commentsRouter.get("/post/:postId", async (req, res) => {
     const postComments = await comments.findCommentsByPostId(id);
     res.send(postComments);
   } catch (err) {
-    logger.error("Error while fetching comments by post id: ", err);
+    logger.error(`Error while fetching comments by post id: ${err.message}`);
     res.status(404).send(err);
   }
 });
@@ -67,7 +67,7 @@ commentsRouter.get("/post/first/:postId", async (req, res) => {
   const validationRes = validateId(id);
 
   if (validationRes.error) {
-    logger.error("Invalid post ID: ", validationRes.error.message);
+    logger.error(`Invalid post ID: ${validationRes.error.message}`);
     return res
       .status(400)
       .send(`Invalid post ID: ${validationRes.error.message}`);
@@ -78,7 +78,9 @@ commentsRouter.get("/post/first/:postId", async (req, res) => {
     const firstComment = await comments.findFirstCommentByPostId(id);
     res.send(firstComment);
   } catch (err) {
-    logger.error("Error while fetching latest comment by post id: ", err);
+    logger.error(
+      `Error while fetching latest comment by post id: ${err.message}`,
+    );
     res.status(404).send(err);
   }
 });
@@ -93,7 +95,7 @@ commentsRouter.delete("/:id", checkAuthenticated, async (req, res) => {
   const validationRes = validateId(id);
 
   if (validationRes.error) {
-    logger.error("Invalid comment ID: ", validationRes.error.message);
+    logger.error(`Invalid comment ID: ${validationRes.error.message}`);
     return res
       .status(400)
       .send(`Invalid comment ID: ${validationRes.error.message}`);
@@ -105,7 +107,7 @@ commentsRouter.delete("/:id", checkAuthenticated, async (req, res) => {
     await comments.deleteCommentById(id, user_id);
     res.status(204).send();
   } catch (err) {
-    logger.error("Error deleting a comment: ", err);
+    logger.error(`Error deleting a comment: ${err.message}`);
     res.status(404).send(err);
   }
 });
@@ -123,7 +125,7 @@ commentsRouter.post("/", checkAuthenticated, async (req, res) => {
   });
 
   if (validationRes.error) {
-    logger.error("Invalid comment data: ", validationRes.error.message);
+    logger.error(`Invalid comment data: ${validationRes.error.message}`);
     return res
       .status(400)
       .send(`Invalid comment data: ${validationRes.error.message}`);
@@ -137,7 +139,7 @@ commentsRouter.post("/", checkAuthenticated, async (req, res) => {
     const comment = await comments.saveComment({ post_id, user_id, body });
     res.status(201).send(comment);
   } catch (err) {
-    logger.error("Error while saving comment: ", err);
+    logger.error(`Error while saving comment: ${err.message}`);
     res.status(500).send(err);
   }
 });
@@ -155,7 +157,7 @@ commentsRouter.patch("/:id", checkAuthenticated, async (req, res) => {
   });
 
   if (validationRes.error) {
-    logger.error("Invalid comment data: ", validationRes.error.message);
+    logger.error(`Invalid comment data: ${validationRes.error.message}`);
     return res
       .status(400)
       .send(`Invalid comment data: ${validationRes.error.message}`);
@@ -169,7 +171,7 @@ commentsRouter.patch("/:id", checkAuthenticated, async (req, res) => {
     const updatedComment = await comments.editCommentById(id, user_id, body);
     res.json(updatedComment);
   } catch (err) {
-    logger.error("Error while editing a comment: ", err);
+    logger.error(`Error while editing a comment: ${err.message}`);
     res.status(500).send(err);
   }
 });

@@ -28,7 +28,7 @@ usersRouter.get("/", async (req, res) => {
     const result = await users.findAllUsers();
     res.send(result);
   } catch (err) {
-    logger.error("Error while requesting all users: ", err);
+    logger.error(`Error while requesting all users: ${err.message}`);
     res.status(500).send(err);
   }
 });
@@ -38,7 +38,7 @@ usersRouter.get("/", async (req, res) => {
  */
 usersRouter.get("/loggedin", checkAuthenticated, (req, res) => {
   res.status(200).send(req.user.id);
-  logger.info("User ID: " + req.user.id + " logged in");
+  logger.info(`User ID: ${req.user.id} is logged in`);
 });
 
 /**
@@ -51,7 +51,7 @@ usersRouter.get("/:id", async (req, res) => {
   const validationRes = validateId(id);
 
   if (validationRes.error) {
-    logger.error("Invalid ID: ", validationRes.error.message);
+    logger.error(`Invalid ID: ${validationRes.error.message}`);
     return res.status(400).send(`Invalid ID: ${validationRes.error.message}`);
   }
 
@@ -64,7 +64,7 @@ usersRouter.get("/:id", async (req, res) => {
       description: user.description,
     });
   } catch (err) {
-    logger.error("Error while requesting user by id: ", err);
+    logger.error(`Error while requesting user by id: ${err.message}`);
     res.status(404).send(err);
   }
 });
@@ -77,7 +77,7 @@ usersRouter.post("/register", checkNotAuthenticated, async (req, res) => {
   const validationRes = validateUser(req.body);
 
   if (validationRes.error) {
-    logger.error("Invalid user data: ", validationRes.error.message);
+    logger.error(`Invalid user data: ${validationRes.error.message}`);
     return res
       .status(400)
       .send(`Invalid user data: ${validationRes.error.message}`);
@@ -92,7 +92,7 @@ usersRouter.post("/register", checkNotAuthenticated, async (req, res) => {
     logger.info("New user registered: ", user);
     res.status(201).send(user);
   } catch (err) {
-    logger.error("Error while trying to register a new user: ", err);
+    logger.error(`Error while trying to register a new user: ${err.message}`);
     res.status(500).send(err);
   }
 });
@@ -103,21 +103,24 @@ usersRouter.post("/register", checkNotAuthenticated, async (req, res) => {
 usersRouter.post("/login", checkNotAuthenticated, async (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) {
-      logger.error("Error while logging in: ", err);
-      return res.status(500).send({ message: err.message });
+      logger.error(`Error while logging in: ${err.message}`);
+      return res.status(500).send(err);
     }
 
     if (!user) {
-      logger.error("Login error: ", err);
+      logger.error(`Login error: ${info.message}`);
       return res.status(401).send({ message: info.message });
     }
 
     req.logIn(user, (loginErr) => {
       if (loginErr) {
-        logger.error("Login error: ", err);
+        logger.error(`Login error: ${loginErr.message}`);
         return res.status(500).send({ message: loginErr.message });
       }
 
+      logger.info(
+        `Login succesful. User ID: ${req.user.id}, username: ${user.username}`,
+      );
       return res.status(200).send({
         message: "Login successful",
         user: { id: user.id, username: user.username },
@@ -130,11 +133,13 @@ usersRouter.post("/login", checkNotAuthenticated, async (req, res, next) => {
  * Endpoint DELETE to log out user.
  */
 usersRouter.delete("/logout", checkAuthenticated, (req, res) => {
+  const id = req.user.id;
   req.logOut((err) => {
     if (err) {
-      logger.error("Error while logging out: ", err);
+      logger.error(`Error while logging out: ${err.message}`);
       return res.status(500).send({ message: "Logout failed." });
     }
+    logger.info(`Logout succesful. User ID: ${id}`);
     res.status(200).send({ message: "Logged out succesfully." });
   });
 });
@@ -143,6 +148,17 @@ usersRouter.delete("/logout", checkAuthenticated, (req, res) => {
  * Endpoint PATCH to display it in the profile.
  */
 usersRouter.patch("/description", checkAuthenticated, async (req, res) => {
+  // VALIDATION
+  const validationRes = validateBody(req.body.description);
+
+  if (validationRes.error) {
+    logger.error(`Invalid description: ${validationRes.error.message}`);
+    return res
+      .status(400)
+      .send(`Invalid description: ${validationRes.error.message}`);
+  }
+
+  // OPERATION
   try {
     const updatedUser = await users.editDescription({
       id: req.user.id,
@@ -154,7 +170,7 @@ usersRouter.patch("/description", checkAuthenticated, async (req, res) => {
       description: updatedUser.description,
     });
   } catch {
-    logger.error("Error while editing a description: ", err);
+    logger.error(`Error while editing a description: ${err.message}`);
     res.status(500).send(err);
   }
 });

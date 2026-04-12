@@ -17,7 +17,7 @@ postsRouter.get("/", async (req, res) => {
     const result = await posts.findAllPosts();
     res.send(result);
   } catch (err) {
-    logger.error("Error while requesting all posts: ", err);
+    logger.error(`Error while requesting all posts: ${err.message}`);
     res.status(500).send(err);
   }
 });
@@ -32,7 +32,7 @@ postsRouter.get("/:userId", async (req, res) => {
   const validationRes = validateId(id);
 
   if (validationRes.error) {
-    logger.error("Invalid user ID: ", validationRes.error.message);
+    logger.error(`Invalid user ID: ${validationRes.error.message}`);
     return res
       .status(400)
       .send(`Invalid user ID: ${validationRes.error.message}`);
@@ -43,7 +43,7 @@ postsRouter.get("/:userId", async (req, res) => {
     const userPosts = await posts.findPostsByUserId(id);
     res.send(userPosts);
   } catch (err) {
-    logger.error("Error while requesting all posts by user ID: ", err);
+    logger.error(`Error while requesting all posts by user ID: ${err.message}`);
     res.status(404).send(err);
   }
 });
@@ -58,7 +58,7 @@ postsRouter.delete("/:id", checkAuthenticationForUD, async (req, res) => {
   const validationRes = validateId(id);
 
   if (validationRes.error) {
-    logger.error("Invalid post ID: ", validationRes.error.message);
+    logger.error(`Invalid post ID: ${validationRes.error.message}`);
     return res
       .status(400)
       .send(`Invalid post ID: ${validationRes.error.message}`);
@@ -69,7 +69,7 @@ postsRouter.delete("/:id", checkAuthenticationForUD, async (req, res) => {
     const post = await posts.deletePostById(id);
     res.status(204).send();
   } catch (err) {
-    logger.error("Error while deleting a post: ", err);
+    logger.error(`Error while deleting a post: ${err.message}`);
     res.status(404).send(err);
   }
 });
@@ -82,7 +82,7 @@ postsRouter.post("/", checkAuthenticated, async (req, res) => {
   const validationRes = validateBody(req.body.body);
 
   if (validationRes.error) {
-    logger.error("Invalid post body: ", validationRes.error.message);
+    logger.error(`Invalid post body: ${validationRes.error.message}`);
     return res
       .status(400)
       .send(`Invalid post body: ${validationRes.error.message}`);
@@ -96,7 +96,7 @@ postsRouter.post("/", checkAuthenticated, async (req, res) => {
     const post = await posts.savePost({ user_id, body });
     res.status(201).send(post);
   } catch (err) {
-    logger.error("Error while saving a post: ", err);
+    logger.error(`Error while saving a post: ${err.message}`);
     res.status(500).send(err);
   }
 });
@@ -113,14 +113,14 @@ postsRouter.patch("/:id", checkAuthenticationForUD, async (req, res) => {
   const validationResBody = validateBody(body);
 
   if (validationResId.error) {
-    logger.error("Invalid post ID: ", validationResId.error.message);
+    logger.error(`Invalid post ID: ${validationResId.error.message}`);
     return res
       .status(400)
       .send(`Invalid post ID: ${validationResId.error.message}`);
   }
 
   if (validationResBody.error) {
-    logger.error("Invalid post body: ", validationResBody.error.message);
+    logger.error(`Invalid post body: ${validationResBody.error.message}`);
     return res
       .status(400)
       .send(`Invalid post body: ${validationResBody.error.message}`);
@@ -132,7 +132,7 @@ postsRouter.patch("/:id", checkAuthenticationForUD, async (req, res) => {
     const updatedPost = await posts.edit(id, body);
     res.status(200).send(updatedPost);
   } catch (err) {
-    logger.error("Error while editing a post: ", err);
+    logger.error(`Error while editing a post: ${err.message}`);
     res.status(500).send(err);
   }
 });

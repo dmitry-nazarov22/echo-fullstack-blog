@@ -14,8 +14,8 @@ Content-Type: application/json
   "username": "testuser3",
   "password": "1234Abcd"
 }
-### LOGIN USER
 
+### LOGIN USER
 POST http://localhost:3000/users/login
 Content-Type: application/json
 
@@ -114,4 +114,97 @@ Content-Type: application/json
 
 {
     "post_id": "5"
+}
+
+
+
+### ERROR EXAMPLES
+
+### USER OPERATIONS
+
+### Invalid ID 400
+GET http://localhost:3000/users/-1
+### User not found 404
+GET http://localhost:3000/users/10000
+
+### Invalid user data 400
+POST http://localhost:3000/users/register
+Content-Type: application/json
+
+{
+  "username": "foo",
+  "password": "1234"
+}
+
+### LOGIN: Password incorrect 401
+POST http://localhost:3000/users/login
+Content-Type: application/json
+
+{
+  "username": "testuser3",
+  "password": "1234"
+}
+
+### Invalid description 400
+PATCH http://localhost:3000/users/description
+Content-Type: application/json
+
+{
+  "description": ""
+}
+
+
+### POST OPERATIONS
+
+### DELETE POST BY ID (NOT WORKING)
+DELETE http://localhost:3000/posts/10
+
+### SAVE POST
+POST http://localhost:3000/posts
+Content-Type: application/json
+
+{
+  "user_id": 10,
+  "body": ""
+}
+### EDIT POST
+PATCH http://localhost:3000/posts/20
+Content-Type: application/json
+
+{
+    "body": "edited through http request!!"
+}
+
+### COMMENT OPERATIONS
+
+### Comment not found 404
+DELETE http://localhost:3000/comments/1000
+
+### Body is not allowed to be empty 400
+POST http://localhost:3000/comments
+Content-Type: application/json
+
+{
+  "post_id": 10,
+  "body": ""
+}
+### NEEDS NEW MESSAGE 404
+PATCH http://localhost:3000/1000
+Content-Type: application/json
+
+{
+    "body": "edited through http request!!"
+}
+
+### LIKE OPERATIONS
+
+### Like not found 404
+DELETE http://localhost:3000/likes/post/1000
+
+### SAVE LIKE BY POST ID (NOT WORKING)
+POST http://localhost:3000/likes/
+Content-Type: application/json
+
+{
+    "post_id": "100"
 }
