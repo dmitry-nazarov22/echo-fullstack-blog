@@ -1,6 +1,10 @@
 ### USER OPERATIONS
+
 ### FIND ALL USERS
 GET http://localhost:3000/users
+
+### FIND USER BY ID
+GET http://localhost:3000/users/1
 
 ### CREATE USER
 POST http://localhost:3000/users/register
@@ -8,12 +12,8 @@ Content-Type: application/json
 
 {
   "username": "testuser3",
-  "password": "12345"
+  "password": "1234Abcd"
 }
-
-### FIND USER BY ID
-GET http://localhost:3000/users/10
-
 ### LOGIN USER
 
 POST http://localhost:3000/users/login
@@ -21,44 +21,54 @@ Content-Type: application/json
 
 {
   "username": "testuser3",
-  "password": "12345"
+  "password": "1234Abcd"
 }
 
 ### LOGOUT USER
 DELETE http://localhost:3000/users/logout
 
+
 ### POST OPERATIONS
+
+### FIND ALL POSTS
+GET http://localhost:3000/posts/
+
 ### FIND POST BY USER_ID
-GET http://localhost:3000/posts/5
+GET http://localhost:3000/posts/1
+
+### DELETE POST BY ID
+DELETE http://localhost:3000/posts/10
+
 ### SAVE POST
 POST http://localhost:3000/posts
 Content-Type: application/json
 
 {
   "user_id": 5,
-  "body": "hey! this is the first post!"
+  "body": "posted through http request!"
 }
 ### EDIT POST
 PATCH http://localhost:3000/posts/20
 Content-Type: application/json
 
 {
-    "body": "Logged in user: updated text!!!"
-}
-
-### ERROR: EDIT POST
-PATCH http://localhost:3000/posts/6
-Content-Type: application/json
-
-{
-    "body": "updated text!!!"
+    "body": "edited through http request!!"
 }
 
 ### COMMENT OPERATIONS
+
 ### FIND COMMENTS BY USER_ID
-GET http://localhost:3000/comments/user/5
+GET http://localhost:3000/comments/user/2
+
 ### FIND COMMENTS BY POST_ID
-GET http://localhost:3000/comments/post/10
+GET http://localhost:3000/comments/post/5
+
+### GET LATEST COMMENT BY POST ID
+GET http://localhost:3000/comments/post/first/5
+
+### DELETE COMMENT BY ID
+DELETE http://localhost:3000/comments/10
+
 ### CREATE COMMENT
 POST http://localhost:3000/comments
 Content-Type: application/json
@@ -68,13 +78,32 @@ Content-Type: application/json
   "user_id": 5,
   "body": "hey comments are visible!"
 }
-### DELETE COMMENT BY ID
-DELETE http://localhost:3000/comments/11
+### EDIT COMMENT BY ID
+PATCH http://localhost:3000/10
+Content-Type: application/json
+
+{
+    "body": "edited through http request!!"
+}
 
 ### LIKE OPERATIONS
-### COUNT LIKES BY POST_ID
-GET http://localhost:3000/likes/post/10
+
 ### FIND LIKES BY USER_ID
-GET http://localhost:3000/likes/user/5
+GET http://localhost:3000/likes/user/1
+
+### COUNT LIKES BY POST_ID
+GET http://localhost:3000/likes/post/5
+
 ### IS POST LIKED BY USER_ID
-GET http://localhost:3000/likes/post/10/user/5
+GET http://localhost:3000/likes/post/5/user/1
+
+### DELETE LIKE BY USER ID
+DELETE http://localhost:3000/likes/post/5
+
+### SAVE LIKE BY POST ID
+POST http://localhost:3000/likes/
+Content-Type: application/json
+
+{
+    "post_id": "5"
+}
