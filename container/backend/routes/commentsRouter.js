@@ -2,21 +2,17 @@ const express = require("express");
 const commentsRouter = express.Router();
 const comments = require("../database/comments");
 const logger = require("../config/logger");
-const Joi = require("joi");
+const { validateComment, validateId } = require("../config/schemas");
 const { checkAuthenticated } = require("../middleware/auth");
-
-const idSchema = Joi.number().integer().min(0).required();
-const commentSchema = Joi.object({
-  post_id: Joi.number().integer().min(0).required(),
-  body: Joi.string().min(1).max(500).required(),
-});
 
 /**
  * Endpoint GET to find comments by user ID to show them in profile.
  */
 commentsRouter.get("/user/:userId", async (req, res) => {
+  const id = parseInt(req.params.userId);
+
   // VALIDATION
-  const validationRes = idSchema.validate(req.params.userId);
+  const validationRes = validateId(id);
 
   if (validationRes.error) {
     logger.error("Invalid user ID: ", validationRes.error.message);
@@ -27,7 +23,6 @@ commentsRouter.get("/user/:userId", async (req, res) => {
 
   // OPERATION
   try {
-    const id = parseInt(req.params.userId);
     const userComments = await comments.findCommentsByUserId(id);
     res.send(userComments);
   } catch (err) {
@@ -40,8 +35,10 @@ commentsRouter.get("/user/:userId", async (req, res) => {
  * Endpoint GET to find comments by post ID to show them under individual post.
  */
 commentsRouter.get("/post/:postId", async (req, res) => {
+  const id = parseInt(req.params.postId);
+
   // VALIDATION
-  const validationRes = idSchema.validate(req.params.postId);
+  const validationRes = validateId(id);
 
   if (validationRes.error) {
     logger.error("Invalid post ID: ", validationRes.error.message);
@@ -52,7 +49,6 @@ commentsRouter.get("/post/:postId", async (req, res) => {
 
   // OPERATION
   try {
-    const id = parseInt(req.params.postId);
     const postComments = await comments.findCommentsByPostId(id);
     res.send(postComments);
   } catch (err) {
@@ -65,8 +61,10 @@ commentsRouter.get("/post/:postId", async (req, res) => {
  * Endpoint GET to find the latest comment for post to showcase it in the feed.
  */
 commentsRouter.get("/post/first/:postId", async (req, res) => {
+  const id = parseInt(req.params.postId);
+
   // VALIDATION
-  const validationRes = idSchema.validate(req.params.postId);
+  const validationRes = validateId(id);
 
   if (validationRes.error) {
     logger.error("Invalid post ID: ", validationRes.error.message);
@@ -77,7 +75,6 @@ commentsRouter.get("/post/first/:postId", async (req, res) => {
 
   // OPERATION
   try {
-    const id = parseInt(req.params.postId);
     const firstComment = await comments.findFirstCommentByPostId(id);
     res.send(firstComment);
   } catch (err) {
@@ -90,8 +87,10 @@ commentsRouter.get("/post/first/:postId", async (req, res) => {
  * Endpoint DELETE to delete comment from the database.
  */
 commentsRouter.delete("/:id", checkAuthenticated, async (req, res) => {
+  const id = parseInt(req.params.id);
+
   // VALIDATION
-  const validationRes = idSchema.validate(req.params.id);
+  const validationRes = validateId(id);
 
   if (validationRes.error) {
     logger.error("Invalid comment ID: ", validationRes.error.message);
@@ -101,7 +100,6 @@ commentsRouter.delete("/:id", checkAuthenticated, async (req, res) => {
   }
 
   // OPERATION
-  const id = parseInt(req.params.id);
   const user_id = req.user.id;
   try {
     await comments.deleteCommentById(id, user_id);
@@ -116,9 +114,11 @@ commentsRouter.delete("/:id", checkAuthenticated, async (req, res) => {
  * Endpoint POST to save comment to the database.
  */
 commentsRouter.post("/", checkAuthenticated, async (req, res) => {
+  const post_id = parseInt(req.body.post_id);
+
   // VALIDATION
-  const validationRes = commentSchema.validate({
-    post_id: req.body.post_id,
+  const validationRes = validateComment({
+    post_id: post_id,
     body: req.body.body,
   });
 
@@ -131,7 +131,6 @@ commentsRouter.post("/", checkAuthenticated, async (req, res) => {
 
   // OPERATION
   try {
-    const post_id = req.body.post_id;
     const user_id = req.user.id;
     const body = req.body.body;
 
@@ -147,9 +146,11 @@ commentsRouter.post("/", checkAuthenticated, async (req, res) => {
  * Endpoint PATCH to edit comments by ID.
  */
 commentsRouter.patch("/:id", checkAuthenticated, async (req, res) => {
+  const id = parseInt(req.params.id);
+
   // VALIDATION
-  const validationRes = commentSchema.validate({
-    post_id: req.params.id,
+  const validationRes = validateComment({
+    post_id: id,
     body: req.body.body,
   });
 
@@ -161,7 +162,6 @@ commentsRouter.patch("/:id", checkAuthenticated, async (req, res) => {
   }
 
   // OPERATION
-  const id = req.params.id;
   const user_id = req.user.id;
   const body = req.body.body;
 

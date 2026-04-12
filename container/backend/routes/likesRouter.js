@@ -1,18 +1,18 @@
 const express = require("express");
 const likesRouter = express.Router();
-const Joi = require("joi");
 const likes = require("../database/likes");
 const logger = require("../config/logger");
 const { checkAuthenticated } = require("../middleware/auth");
-
-const idSchema = Joi.number().integer().min(0).required;
+const { validateId } = require("../config/schemas");
 
 /**
  * Endpoint GET for finding likes by user ID to show them in profile.
  */
 likesRouter.get("/user/:userId", async (req, res) => {
+  const id = parseInt(req.params.userId);
+
   // VALIDATION
-  const validationRes = idSchema.validate(req.params.userId);
+  const validationRes = validateId(id);
 
   if (validationRes.error) {
     logger.error("Invalid user ID: ", validationRes.error.message);
@@ -23,7 +23,6 @@ likesRouter.get("/user/:userId", async (req, res) => {
 
   // OPERATION
   try {
-    const id = parseInt(req.params.userId);
     const userLikes = await likes.findLikesByUserId(id);
     res.send(userLikes);
   } catch (err) {
@@ -36,8 +35,10 @@ likesRouter.get("/user/:userId", async (req, res) => {
  * Endpoint GET to get likes count on Posts to show amount of likes near the button.
  */
 likesRouter.get("/post/:postId", async (req, res) => {
+  const id = parseInt(req.params.postId);
+
   // VALIDATION
-  const validationRes = idSchema.validate(req.params.postId);
+  const validationRes = validateId(id);
 
   if (validationRes.error) {
     logger.error("Invalid post ID: ", validationRes.error.message);
@@ -48,7 +49,6 @@ likesRouter.get("/post/:postId", async (req, res) => {
 
   // OPERATION
   try {
-    const id = parseInt(req.params.postId);
     const postLikesCount = await likes.countLikesByPostId(id);
     res.send(postLikesCount);
   } catch (err) {
@@ -61,9 +61,12 @@ likesRouter.get("/post/:postId", async (req, res) => {
  * Endpoint GET to find if user has liked the post.
  */
 likesRouter.get("/post/:post_id/user/:user_id", async (req, res) => {
+  const post_id = parseInt(req.params.post_id);
+  const user_id = parseInt(req.params.user_id);
+
   // VALIDATION
-  const validationResPost = idSchema.validate(req.params.post_id);
-  const validationResUser = idSchema.validate(req.params.user_id);
+  const validationResPost = validateId(post_id);
+  const validationResUser = validateId(user_id);
 
   if (validationResPost.error) {
     logger.error("Invalid post ID: ", validationResPost.error.message);
@@ -80,8 +83,6 @@ likesRouter.get("/post/:post_id/user/:user_id", async (req, res) => {
 
   // OPERATION
   try {
-    const post_id = parseInt(req.params.post_id);
-    const user_id = parseInt(req.params.user_id);
     const isPostLiked = await likes.isPostLikedByUserId(post_id, user_id);
     res.send(isPostLiked);
   } catch (err) {
@@ -94,8 +95,10 @@ likesRouter.get("/post/:post_id/user/:user_id", async (req, res) => {
  * Endpoint DELETE to delete like by user_id and post_id together from the database.
  */
 likesRouter.delete("/post/:post_id/", checkAuthenticated, async (req, res) => {
+  const post_id = parseInt(req.params.post_id);
+
   // VALIDATION
-  const validationResPost = idSchema.validate(req.params.post_id);
+  const validationResPost = validateId(post_id);
 
   if (validationResPost.error) {
     logger.error("Invalid post ID: ", validationResPost.error.message);
@@ -121,8 +124,10 @@ likesRouter.delete("/post/:post_id/", checkAuthenticated, async (req, res) => {
  * Endpoint POST to save like to the database.
  */
 likesRouter.post("/", checkAuthenticated, async (req, res) => {
+  const post_id = parseInt(req.body.post_id);
+
   // VALIDATION
-  const validationResPost = idSchema.validate(req.body.post_id);
+  const validationResPost = validateId(post_id);
 
   if (validationResPost.error) {
     logger.error("Invalid post ID: ", validationResPost.error.message);
@@ -133,7 +138,6 @@ likesRouter.post("/", checkAuthenticated, async (req, res) => {
 
   // OPERATION
   try {
-    const post_id = req.body.post_id;
     const user_id = req.user.id;
 
     const like = await likes.saveLike({ post_id, user_id });
