@@ -27,6 +27,14 @@ Content-Type: application/json
 ### LOGOUT USER
 DELETE http://localhost:3000/users/logout
 
+### EDIT USER DESCRIPTION
+PATCH http://localhost:3000/users/description
+Content-Type: application/json
+
+{
+  "description": "profile description edited from a HTTP-request"
+}
+
 
 ### POST OPERATIONS
 

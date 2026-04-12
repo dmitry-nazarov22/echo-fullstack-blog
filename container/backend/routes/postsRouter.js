@@ -130,7 +130,7 @@ postsRouter.patch("/:id", checkAuthenticationForUD, async (req, res) => {
 
   try {
     const updatedPost = await posts.edit(id, body);
-    res.json(updatedPost);
+    res.status(200).send(updatedPost);
   } catch (err) {
     logger.error("Error while editing a post: ", err);
     res.status(500).send(err);

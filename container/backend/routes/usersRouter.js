@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const users = require("../database/users");
 const logger = require("../config/logger");
 
-const { validateId, validateUser } = require("../config/schemas");
+const { validateId, validateUser, validateBody } = require("../config/schemas");
 
 const initializePassport = require("../config/passport-config");
 const passport = require("passport");
@@ -137,6 +137,36 @@ usersRouter.delete("/logout", checkAuthenticated, (req, res) => {
     }
     res.status(200).send({ message: "Logged out succesfully." });
   });
+});
+
+usersRouter.patch("/description", checkAuthenticated, async (req, res) => {
+  // VALIDATION
+  const validationRes = validateBody(req.body.description);
+
+  if (validationRes.error) {
+    logger.error("Invalid description: ", validationRes.error.message);
+    return res
+      .status(400)
+      .send(`Invalid description: ${validationRes.error.message}`);
+  }
+
+  // OPERATION
+  try {
+    const updatedUser = await users.editDescription({
+      id: req.user.id,
+      description: req.body.description,
+    });
+    res
+      .status(200)
+      .send({
+        id: updatedUser.id,
+        username: updatedUser.username,
+        description: updatedUser.description,
+      });
+  } catch {
+    logger.error("Error while editing a description: ", err);
+    res.status(500).send(err);
+  }
 });
 
 module.exports = usersRouter;
