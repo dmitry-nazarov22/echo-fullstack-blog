@@ -40,7 +40,11 @@ export default function Profile({ fetchPostsByUserId, fetchUserById, deletePost,
             console.error(err);
         }
     }
-
+    /**
+     * Fetching comments by user to display them in profile.
+     *
+     * @param {int} id User ID, whose comments are fetched.
+     */
     const fetchCommentsByUser = async (id) => {
         try {
             const res = await api.get(`/comments/user/${id}`)
