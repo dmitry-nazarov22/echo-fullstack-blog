@@ -3,10 +3,13 @@ import Posts from "./Posts";
 import AuthContext from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import api from '../api/axios';
+import Comments from './Comments';
 
 export default function Profile({ fetchPostsByUserId, fetchUserById, deletePost, editPost }) {
     /** State for all posts made by user. */
     const [userPosts, setUserPosts] = useState([]);
+    /** State for all comments made by user */
+    const [userComments, setUserComments] = useState([]);
     /** State for user to display info in profile */
     const [user, setUser] = useState({});
     /** Boolean value referencing state of editing */
@@ -15,6 +18,8 @@ export default function Profile({ fetchPostsByUserId, fetchUserById, deletePost,
     const [descriptionText, setDescriptionText] = useState("");
     /** State for the description, to update afer editing */
     const [description, setDescription] = useState("");
+    /** State to display tabs of either posts, likes or comments made by user displayed in profile */
+    const [activeTab, setActiveTab] = useState("posts")
     /** State for logged in user ID to use for posting */
     const { userId } = useContext(AuthContext);
     /** State for navigating through views */
@@ -31,6 +36,15 @@ export default function Profile({ fetchPostsByUserId, fetchUserById, deletePost,
             setDescription(descriptionText);
             setEditing(false);
             setDescriptionText("");
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    const fetchCommentsByUser = async (id) => {
+        try {
+            const res = await api.get(`/comments/user/${id}`)
+            setUserComments(res.data);
         } catch (err) {
             console.error(err);
         }
@@ -53,6 +67,8 @@ export default function Profile({ fetchPostsByUserId, fetchUserById, deletePost,
 
             const posts = await fetchPostsByUserId(userId);
             setUserPosts(posts);
+
+            fetchCommentsByUser(userId);
         };
         loadUserData();
     }, []);
@@ -93,13 +109,23 @@ export default function Profile({ fetchPostsByUserId, fetchUserById, deletePost,
                             </>
                         )}
                     </div>
-                    <Posts
-                        posts={userPosts}
-                        setPosts={setUserPosts}
-                        fetchPostsByUserId={fetchPostsByUserId}
-                        deletePost={deletePost}
-                        editPost={editPost}
-                    />
+                    <div className="tab-buttons">
+                        <button onClick={() => setActiveTab("posts")}>Posts</button>
+                        <button onClick={() => setActiveTab("comments")}>Comments</button>
+                    </div>
+                    {activeTab === "posts" && (
+                        <Posts
+                            posts={userPosts}
+                            setPosts={setUserPosts}
+                            fetchPostsByUserId={fetchPostsByUserId}
+                            deletePost={deletePost}
+                            editPost={editPost}
+                        />
+                    )}
+
+                    {activeTab === "comments" && (
+                        <Comments comments={userComments} setComments={setUserComments} />
+                    )}
                 </div>
             </>
             )}
