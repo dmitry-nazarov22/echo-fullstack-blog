@@ -24,18 +24,39 @@ const commentSchema = Joi.object({
 
 const bodySchema = Joi.string().min(1).required();
 
+/**
+ * Validation function, to check for user input.
+ *
+ * @param {int} id id for validation.
+ * @returns Object which contains error and value.
+ */
 const validateId = (id) => {
   return idSchema.validate(id);
 };
-
+/**
+ * Validation function, to check for user input.
+ *
+ * @param {Object} user Object containing user data.
+ * @returns Object which contains error and value.
+ */
 const validateUser = (user) => {
   return userSchema.validate(user);
 };
-
+/**
+ * Validation function to check for user input.
+ *
+ * @param {Object} comment Object containing comment data.
+ * @returns Object which contains error and value.
+ */
 const validateComment = (comment) => {
   return commentSchema.validate(comment);
 };
-
+/**
+ * Validation function to check user input.
+ *
+ * @param {String} body Text to be displayed in the post or comment.
+ * @returns Objedct which contains error and value.
+ */
 const validateBody = (body) => {
   return bodySchema.validate(body);
 };
