@@ -139,6 +139,9 @@ usersRouter.delete("/logout", checkAuthenticated, (req, res) => {
   });
 });
 
+/**
+ * Endpoint PATCH to display it in the profile.
+ */
 usersRouter.patch("/description", checkAuthenticated, async (req, res) => {
   // VALIDATION
   const validationRes = validateBody(req.body.description);
@@ -156,13 +159,11 @@ usersRouter.patch("/description", checkAuthenticated, async (req, res) => {
       id: req.user.id,
       description: req.body.description,
     });
-    res
-      .status(200)
-      .send({
-        id: updatedUser.id,
-        username: updatedUser.username,
-        description: updatedUser.description,
-      });
+    res.status(200).send({
+      id: updatedUser.id,
+      username: updatedUser.username,
+      description: updatedUser.description,
+    });
   } catch {
     logger.error("Error while editing a description: ", err);
     res.status(500).send(err);
