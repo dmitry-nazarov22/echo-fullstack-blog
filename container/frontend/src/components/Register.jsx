@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 
 export default function Register({ createUser }) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
 
     /**
      * Send createUser functional call with username and password values to
@@ -20,6 +21,7 @@ export default function Register({ createUser }) {
         };
 
         createUser(newUser);
+        navigate("/login");
     }
 
     return (
