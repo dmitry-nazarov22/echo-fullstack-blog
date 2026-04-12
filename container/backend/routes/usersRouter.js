@@ -143,17 +143,6 @@ usersRouter.delete("/logout", checkAuthenticated, (req, res) => {
  * Endpoint PATCH to display it in the profile.
  */
 usersRouter.patch("/description", checkAuthenticated, async (req, res) => {
-  // VALIDATION
-  const validationRes = validateBody(req.body.description);
-
-  if (validationRes.error) {
-    logger.error("Invalid description: ", validationRes.error.message);
-    return res
-      .status(400)
-      .send(`Invalid description: ${validationRes.error.message}`);
-  }
-
-  // OPERATION
   try {
     const updatedUser = await users.editDescription({
       id: req.user.id,
