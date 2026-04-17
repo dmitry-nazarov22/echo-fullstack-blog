@@ -1,3 +1,4 @@
+import { Button, Container, Typography, Box } from "@mui/material";
 import { useState } from "react";
 import { useNavigate, NavLink } from "react-router-dom";
 
@@ -25,10 +26,10 @@ export default function Register({ createUser }) {
     }
 
     return (
-        <div className="container">
-            <h1>Register</h1>
+        <Container>
+            <Typography variant="h4">Register</Typography>
             <form onSubmit={handleRegister}>
-            <div>
+            <Box sx={{ margin:"10px" }}>
                 <label htmlFor="username">Username</label>
                 <input
                     type="text"
@@ -40,9 +41,9 @@ export default function Register({ createUser }) {
                     }
                     required
                 />
-                <p className="direction">Must be at least 4 characters</p>
-            </div>
-            <div>
+                <Typography sx={{ fontSize:"x-small", color:"#9c9c9c" }}>Must be at least 4 characters</Typography>
+            </Box>
+            <Box>
                 <label htmlFor="password">Password</label>
                 <input
                     type="password"
@@ -54,11 +55,11 @@ export default function Register({ createUser }) {
                     }}
                     required
                 />
-                <p className="direction">Must be at least 8 characters and contain at least one big letter, one small letter and number</p>
-            </div>
-            <button type="submit">Register</button>
+                <Typography sx={{ fontSize:"x-small", color:"#9c9c9c" }}>Must be at least 8 characters and contain at least one big letter, one small letter and number</Typography>
+            </Box>
+            <Button type="submit">Register</Button>
             </form>
             <NavLink to="/login">Already a user? Login</NavLink>
-        </div>
+        </Container>
     );
 }
