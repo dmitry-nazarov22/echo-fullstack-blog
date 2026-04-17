@@ -3,6 +3,12 @@ import { useContext, useEffect, useState } from "react";
 import Post from "./Post";
 import AuthContext from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { Box, Button, Card, CardActions, CardContent, Input, List, ListItem, TextField, Typography } from '@mui/material';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import CommentIcon from '@mui/icons-material/Comment';
+import SendIcon from '@mui/icons-material/Send';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 
 export default function Posts({ posts,
     setPosts,
@@ -217,103 +223,109 @@ export default function Posts({ posts,
 
     return (
         <>
-        <ul>
+        <List>
             {posts.map((post) => (
-                <li key={post.id} className='post-card' onClick={() => {
+                <Card key={post.id} sx={{ margin:"10px", display:"flex", flexDirection:"column", alignItems:"flex-start"}} onClick={() => {
                     setSelectedPostId(post.id);
                 }}>
 
-                    <p className='post-card-username'>{post.username}</p>
+                    <CardContent sx={{ display:"flex", flexDirection:"column", alignItems:"flex-start"}}>
+                        <Typography variant='h6'>@{post.username}</Typography>
 
-                    {editingId === post.id ? (
-                            <textarea
-                            value={editText}
-                            onClick={(e) => e.stopPropagation()}
-                            onChange={(e) => setEditText(e.target.value)}
-                            />
-                        ) : (
-                            <p className='post-card-body'>{post.body}</p>
-                        )
-                    }
-                    <p className='post-card-date'>{post.created_at}</p>
-                    <div className="button-container">
-                        <div className='button-container-left'>
-                            <button onClick={(e) => {
+                        {editingId === post.id ? (
+                                <Input
+                                value={editText}
+                                onClick={(e) => e.stopPropagation()}
+                                onChange={(e) => setEditText(e.target.value)}
+                                sx={{ width:"60vw", border:"1px solid #ccc", resize:"none", borderRadius:"4px", fontSize:"small" }}
+                                />
+                            ) : (
+                                <Typography sx={{ fontSize:"medium" }}>{post.body}</Typography>
+                            )
+                        }
+                        <Typography sx={{ fontSize:"small", color:"#b3b3b3" }}>{post.created_at}</Typography>
+                    </CardContent>
+
+                    <CardActions sx={{ display:"flex", justifyContent:"space-between", width:"100%" }}>
+                        <Box sx={{ display:"flex", alignSelf:'flex-start', flexDirection:"row", gap:"10px" }}>
+                            <Button onClick={(e) => {
                                 handleLike(post.id, userId);
                                 e.stopPropagation();
-                            }}>Like</button>
-                            <p>{post.likes}</p>
+                            }}>
+                                <FavoriteBorderIcon sx={{ color:"black" }} />
+                                <Typography sx={{ color:"black", margin:"5px" }}>{post.likes}</Typography>
+                            </Button>
                             {commentingId === post.id ? (
                                 <>
-                                    <button onClick={(e) => {
+                                    <Button onClick={(e) => {
                                         cancelCommenting();
                                         e.stopPropagation();
-                                    }}>Cancel</button>
-                                    <textarea onClick={(e) => e.stopPropagation()} value={commentText} onChange={(e) => {
+                                    }}>Cancel</Button>
+                                    <TextField size="small" sx={{ minWidth:"50vw" }} onClick={(e) => e.stopPropagation()} value={commentText} onChange={(e) => {
                                         setCommentText(e.target.value);
                                         setCommentingId(post.id);
                                     }} placeholder='Write your comment here...'>
-                                    </textarea>
-                                    <button onClick={(e) => {
+                                    </TextField>
+                                    <Button onClick={(e) => {
                                         postComment(userId);
                                         e.stopPropagation();
-                                    }}>Post</button>
+                                    }}><SendIcon /></Button>
                                 </>
-                            ) : (<button onClick={(e) => {
+                            ) : (<Button onClick={(e) => {
                                 startCommenting(post);
                                 e.stopPropagation();
-                            }}>Comment</button>)
+                            }}><CommentIcon sx={{ color:"black" }} /></Button>)
                             }
-                        </div>
-                        <div className='button-container-right'>
+                        </Box>
+                        <Box sx={{ display:"flex", alignSelf:'flex-end', margin:"10px" }}>
                             {username === post.username ? (
                                 <>
                                     {editingId === post.id ? (
-                                        <button onClick={(e) => {
+                                        <Button onClick={(e) => {
                                             saveEditing(post.id);
                                             e.stopPropagation();
-                                        }}>Save</button>
+                                        }}>Save</Button>
                                     ) : (
-                                        <button className='button-edit' onClick={(e) => {
+                                        <Button className='button-edit' onClick={(e) => {
                                             startEditing(post)
                                             e.stopPropagation();
-                                        }}>Edit</button>
+                                        }}><EditIcon /></Button>
                                     )}
-                                    <button className='button-delete' onClick={(e) => {
+                                    <Button className='button-delete' onClick={(e) => {
                                         handleDelete(post.id);
                                         e.stopPropagation();
-                                    }}>Delete</button>
+                                    }}><DeleteIcon /></Button>
                                 </>
                             ) : (
                                 <>
                                 </>
                             )}
-                        </div>
-                    </div>
-                    <div>
+                        </Box>
+                    </CardActions>
+                    <Box>
                         {firstComments[post.id] ? (
                         <>
-                            <div className='comment-card'>
-                                <p className='comment-username'>{firstComments[post.id].username} commented:</p>
-                                <p className='comment-body'>{firstComments[post.id].body}</p>
-                                <p className='comment-date'>{firstComments[post.id].created_at}</p>
-                            </div>
+                            <Box sx={{ margin:"20px", border:"solid 1px #e2e2e2", background:"#fafafa", display:"flex", flexDirection:"column", alignItems:"baseline", p:"5px" }}>
+                                <Typography sx={{ fontWeight:"bold", fontSize:"small" }}>{firstComments[post.id].username} commented:</Typography>
+                                <Typography sx={{ fontSize:"small" }}>{firstComments[post.id].body}</Typography>
+                                <Typography sx={{ fontSize:"x-small", color:"#b3b3b3" }}>{firstComments[post.id].created_at}</Typography>
+                            </Box>
                         </>
                         ) : (
-                            <p></p>
+                            <Typography></Typography>
                         )}
-                    </div>
+                    </Box>
                     {selectedPostId === post.id ? (
-                        <div onClick={(e) => { e.stopPropagation() }}>
+                        <Box onClick={(e) => { e.stopPropagation() }}>
                         {/* stopPropagation doesn't trigger li-elements onClick when clicking on <Post /> */}
                             <Post post={post} setPosts={setPosts} closePost={() => setSelectedPostId(null)} />
-                        </div>
+                        </Box>
 
-                    ) : ( <div></div>
+                    ) : ( <Box></Box>
                     )}
-                </li>
+                </Card>
             ))}
-        </ul>
+        </List>
         </>
     );
 }
