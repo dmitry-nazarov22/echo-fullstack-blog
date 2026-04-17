@@ -1,4 +1,6 @@
+import { Box, Button, List, ListItem, Typography } from "@mui/material";
 import api from "../api/axios";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 export default function Comments({ comments, setComments }) {
     /**
@@ -19,23 +21,23 @@ export default function Comments({ comments, setComments }) {
     }
 
     return (
-        <div className='comments-section'>
-            <ul>
+        <Box sx={{ margin:"10px", display:"flex", flexDirection:"column", alignItems:"baseline", width:"60vw" }}>
+            <List>
                 {comments.map((comment) => (
-                    <li key={comment.id} className='comment-card'>
-                        <p className='comment-username'>@{comment.username}</p>
-                        <p className='comment-body'>{comment.body}</p>
-                        <p className='comment-date'>{comment.created_at}</p>
+                    <ListItem key={comment.id} sx={{ background:"#fafafa", margin:"20px", border:"solid 1px #e2e2e2", borderRadius:"5px", display:"flex", flexDirection:"column", alignItems:"baseline", width:"50vw", padding:"5px" }}>
+                        <Typography variant="h6">@{comment.username}</Typography>
+                        <Typography sx={{ fontSize:"medium" }}>{comment.body}</Typography>
+                        <Typography sx={{ fontSize:"small", color:"#b3b3b3" }}>{comment.created_at}</Typography>
 
-                        <div className="button-container">
-                            <div className='button-container-left'></div>
-                            <div className='button-container-right'>
-                                <button className='button-delete' onClick={() => handleCommentDelete(comment.id)}>Delete</button>
-                            </div>
-                        </div>
-                    </li>
+                        <Box sx={{ display:"flex", justifyContent:"space-between", width:"100%" }}>
+                            <Box className='button-container-left'></Box>
+                            <Box sx={{ display:"flex", alignSelf:'flex-end', margin:"10px" }}>
+                                <Button onClick={() => handleCommentDelete(comment.id)}><DeleteIcon /></Button>
+                            </Box>
+                        </Box>
+                    </ListItem>
                 ))}
-            </ul>
-        </div>
+            </List>
+        </Box>
     )
 }
