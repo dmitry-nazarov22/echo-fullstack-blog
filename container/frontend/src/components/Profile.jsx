@@ -4,6 +4,10 @@ import AuthContext from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import api from '../api/axios';
 import Comments from './Comments';
+import { Box, Button, TextField, Typography } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit"
+import MailIcon from "@mui/icons-material/Mail"
+import CommentIcon from "@mui/icons-material/Comment"
 
 export default function Profile({ fetchPostsByUserId, fetchUserById, deletePost, editPost }) {
     /** State for all posts made by user. */
@@ -81,42 +85,45 @@ export default function Profile({ fetchPostsByUserId, fetchUserById, deletePost,
         <>
             {userId === null ? (
                 <>
-                <div className="container">
-                    <h2>You're not logged in</h2>
-                    <div className="not-logged-buttons">
-                        <button onClick={() => navigate('/login')}>Login</button>
-                        <button onClick={() => navigate('/register')}>Register</button>
-                    </div>
-                </div>
+                <Box sx={{ display:"flex", flexDirection:"column", alignContent:"center", margin:"100px" }}>
+                    <Typography variant="h4">You're not logged in</Typography>
+                    <Box sx={{ display:"flex", justifyContent:"center", margin:"10px" }}>
+                        <Button sx={{ margin:"20px" }} onClick={() => navigate('/login')}>Login</Button>
+                        <Button sx={{ margin:"20px" }} onClick={() => navigate('/register')}>Register</Button>
+                    </Box>
+                </Box>
                 </>
             ) : (
                 <>
-                <div className='container'>
-                    <h2>@{user.username}</h2>
-                    <div className="description-container">
+                <Box sx={{ display:"flex", flexDirection:"column", alignContent:"center", margin:"100px" }}>
+                    <Typography variant="h4" sx={{ margin:"10px" }}>@{user.username}</Typography>
+                    <Box sx={{ display:"flex", justifyContent:"center" }}>
                         {editing === false ? (
                             <>
-                                <p>{description}</p>
-                                <button onClick={() => setEditing(true)}>Edit description</button>
+                                <Typography variant="h5">{description}</Typography>
+                                <Button onClick={() => setEditing(true)}><EditIcon /></Button>
                             </>
                         ) : (
                             <>
-                                <textarea value={descriptionText} onChange={(e) => {
+                                <TextField value={descriptionText}
+                                    onChange={(e) => {
                                         setDescriptionText(e.target.value);
-                                    }} placeholder='Write your description here...'>
-                                    </textarea>
-                                    <button onClick={(e) => {
+                                    }} placeholder='Write your description here...'
+                                    sx={{ width:"60%" }}
+                                >
+                                    </TextField>
+                                    <Button onClick={(e) => {
                                         saveDescription();
                                         e.stopPropagation();
-                                    }}>Save</button>
-                                    <button onClick={() => { setEditing(false) }}>Cancel</button>
+                                    }}>Save</Button>
+                                    <Button onClick={() => { setEditing(false) }}>Cancel</Button>
                             </>
                         )}
-                    </div>
-                    <div className="tab-buttons">
-                        <button onClick={() => setActiveTab("posts")}>Posts</button>
-                        <button onClick={() => setActiveTab("comments")}>Comments</button>
-                    </div>
+                    </Box>
+                    <Box sx={{ padding:"5px", margin:"50px", borderRadius:"10px", border:"solid 1px", color:"#d4d4d4" }}>
+                        <Button sx={{ margin:"20px" }} onClick={() => setActiveTab("posts")}>Posts</Button>
+                        <Button sx={{ margin:"20px" }} onClick={() => setActiveTab("comments")}>Replies</Button>
+                    </Box>
                     {activeTab === "posts" && (
                         <Posts
                             posts={userPosts}
@@ -130,7 +137,7 @@ export default function Profile({ fetchPostsByUserId, fetchUserById, deletePost,
                     {activeTab === "comments" && (
                         <Comments comments={userComments} setComments={setUserComments} />
                     )}
-                </div>
+                </Box>
             </>
             )}
         </>
