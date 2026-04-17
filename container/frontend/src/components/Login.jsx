@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import api from "../api/axios"
 import AuthContext from "../context/AuthContext"
+import { Box, Container, Typography, Button } from "@mui/material";
 
 export default function Login() {
     const [username, setUsername] = useState("");
@@ -32,10 +33,10 @@ export default function Login() {
     }
 
     return (
-        <div className="container">
-            <h1>Login</h1>
+        <Container>
+            <Typography variant="h4">Login</Typography>
             <form onSubmit={handleLogin}>
-            <div>
+            <Box sx={{ margin:"10px" }}>
                 <label htmlFor="username">Username</label>
                 <input
                     type="text"
@@ -47,8 +48,8 @@ export default function Login() {
                     }}
                     required
                 />
-            </div>
-            <div>
+            </Box>
+            <Box>
                 <label htmlFor="password">Password</label>
                 <input
                     type="password"
@@ -59,11 +60,11 @@ export default function Login() {
                         setPassword(e.target.value)
                     }}
                     required />
-            </div>
-            <button type="submit">Login</button>
+            </Box>
+            <Button type="submit">Login</Button>
             </form>
 
             <NavLink to="/register">Not a user yet? Register</NavLink>
-        </div>
+        </Container>
     );
 }
