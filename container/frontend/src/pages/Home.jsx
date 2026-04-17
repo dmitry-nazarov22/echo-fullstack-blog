@@ -2,6 +2,8 @@ import { useState, useEffect, useContext } from 'react'
 import Posts from "../components/Posts";
 import AuthContext from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { Button, Container, Input } from "@mui/material";
+import SendIcon from '@mui/icons-material/Send';
 
 export default function Home({
     posts,
@@ -67,21 +69,17 @@ export default function Home({
         fetchPosts();
     }, []);
 
-    return (
-        <div className='container'>
-            <form className="form-inline" onSubmit={handleSubmit}>
-                <input className='form-textarea' type="text" placeholder="Write your post here..." onChange={handleChange} required />
-
-                <p>{message}</p>
-                <button type="submit">Post</button>
-            </form>
-            <Posts
-                posts={posts}
-                setPosts={setPosts}
-                fetchPostsByUserId={fetchPostsByUserId}
-                deletePost={deletePost}
-                editPost={editPost}
-            />
-        </div>
-    );
+    return <Container sx={{ color:"black" }}>
+        <form className="form-inline" onSubmit={handleSubmit}>
+            <Input sx={{ minWidth:"50vw", border:"solid 1px #e2e2e2", borderRadius:"2px" }} type="text" placeholder="Write your post here..." onChange={handleChange} required />
+            <Button type="submit"><SendIcon /></Button>
+        </form>
+        <Posts
+            posts={posts}
+            setPosts={setPosts}
+            fetchPostsByUserId={fetchPostsByUserId}
+            deletePost={deletePost}
+            editPost={editPost}
+        />
+    </Container>
 }
