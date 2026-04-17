@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
+import { Box, Button } from "@mui/material";
 
 export default function Navbar() {
     /** State for logged in user ID to use for posting */
@@ -20,7 +21,7 @@ export default function Navbar() {
 
     return (
         <nav style={{ background: '#ffffff', padding: '10px', width: '100%'}}>
-        <div className="main-links">
+        <Box className="main-links">
             <NavLink
                 to="/"
                 style={({ isActive }) => isActive ? { ...linkStyle, ...activeStyle } : linkStyle}
@@ -33,8 +34,8 @@ export default function Navbar() {
             >
                 Profile
             </NavLink>
-        </div>
-        <div className="login-links">
+        </Box>
+        <Box className="login-links">
             {userId === null ? (<>
                 <NavLink
                     to="/login"
@@ -43,9 +44,9 @@ export default function Navbar() {
                     Login
                 </NavLink>
             </>) : (<>
-                <button onClick={() => logout()}>Logout</button>
+                <Button onClick={() => logout()}>Log out</Button>
             </>)}
-        </div>
+        </Box>
         </nav>
     );
 }
