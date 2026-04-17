@@ -3,6 +3,10 @@ import { useContext, useEffect, useState } from "react";
 import Comments from './Comments';
 import AuthContext from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { Box, Button, TextField, Typography } from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import SendIcon from '@mui/icons-material/Send';
 
 export default function Post({ post, setPosts, closePost }) {
     /** State for comment field text value. */
@@ -121,25 +125,24 @@ export default function Post({ post, setPosts, closePost }) {
     }, [])
 
     return (
-        <div className='post-container'>
-            <div className='post-card'>
-                <button className='close-post-button' onClick={() => closePost()}>Close</button>
-                <p className='post-card-username'>{post.username}</p>
-                <p className='post-card-body'>{post.body}</p>
-                <p className='post-card-date'>{post.created_at}</p>
-                <div className="button-container">
-                    <div className='button-container-left'>
-                        <button onClick={() => handleLike(post.id, userId)}>Like</button>
-                        <p>{post.likes}</p>
-                        <textarea value={commentText} onChange={
+        <Box sx={{ display:"flex", flexDirection:"column", position:"fixed", inset:"0", justifyContent:"center", alignItems:"center", background:"rgba(255, 255, 255, 0.012)", backdropFilter:"blur(10px)" }}>
+            <Box sx={{ background:"#ffffff", padding: "5px", margin:"10px", border:"1px solid #e8e8e8", borderRadius:"5px", display:"flex", flexDirection:"column", alignItems:"baseline", width:"80vw" }}>
+                <Button sx={{ alignSelf:"flex-end" }} onClick={() => closePost()}><CloseIcon/></Button>
+                <Typography variant="h6">{post.username}</Typography>
+                <Typography sx={{ fontSize:"medium" }}>{post.body}</Typography>
+                <Typography sx={{ fontSize:"small", color:"#b3b3b3" }}>{post.created_at}</Typography>
+                <Box sx={{ display:"flex", justifyContent:"space-between", width:"100%" }}>
+                    <Box sx={{ display:"flex", alignSelf:'flex-start', flexDirection:"row", gap:"10px" }}>
+                        <Button onClick={() => handleLike(post.id, userId)}><FavoriteBorderIcon /> <Typography>{post.likes}</Typography></Button>
+                        <TextField size="small" sx={{ width:"50vw" }} value={commentText} onChange={
                             (e) => setCommentText(e.target.value)
                             } placeholder='Write your comment here...'>
-                        </textarea>
-                        <button onClick={() => postComment(userId)}>Post comment</button>
-                    </div>
-                </div>
-            </div>
+                        </TextField>
+                        <Button onClick={() => postComment(userId)}><SendIcon /></Button>
+                    </Box>
+                </Box>
+            </Box>
             <Comments comments={comments} setComments={setComments} />
-        </div>
+        </Box>
     );
 }
