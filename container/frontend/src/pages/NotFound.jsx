@@ -1,7 +1,9 @@
+import { Container } from "@mui/material";
+
 export default function NotFound() {
     return (
-        <div>
+        <Container>
             <h1>Error: Page not found.</h1>
-        </div>
+        </Container>
     )
 }
