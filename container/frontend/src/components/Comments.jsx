@@ -1,8 +1,12 @@
 import { Box, Button, List, ListItem, Typography } from "@mui/material";
 import api from "../api/axios";
 import DeleteIcon from '@mui/icons-material/Delete';
+import { useContext } from "react";
+import AuthContext from "../context/AuthContext";
 
 export default function Comments({ comments, setComments }) {
+    /** State for logged in user ID to use for posting */
+    const { userId } = useContext(AuthContext);
     /**
      * Handles comment deletion when delete button is pressed.
      *
@@ -32,7 +36,11 @@ export default function Comments({ comments, setComments }) {
                         <Box sx={{ display:"flex", justifyContent:"space-between", width:"100%" }}>
                             <Box className='button-container-left'></Box>
                             <Box sx={{ display:"flex", alignSelf:'flex-end', margin:"10px" }}>
-                                <Button onClick={() => handleCommentDelete(comment.id)}><DeleteIcon /></Button>
+                                {Number(userId) === Number(comment.user_id) ? (
+                                    <Button onClick={() => handleCommentDelete(comment.id)}><DeleteIcon /></Button>
+                                ) : (
+                                    <></>
+                                )}
                             </Box>
                         </Box>
                     </ListItem>
