@@ -2,13 +2,15 @@ import { useContext, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import api from "../api/axios"
 import AuthContext from "../context/AuthContext"
-import { Box, Container, Typography, Button } from "@mui/material";
+import { Box, Container, Typography, Button, Snackbar, Alert } from "@mui/material";
 
 export default function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const { login } = useContext(AuthContext);
     const navigate = useNavigate();
+    const [errorMsg, setErrorMsg] = useState(null);
+    const [successMsg, setSuccessMsg] = useState(null);
 
     /**
      * Send login request to either get 401 unsauthorized or user id and username.
@@ -26,9 +28,10 @@ export default function Login() {
             );
 
             login(res.data.user.id);
-            navigate("/");
+            setSuccessMsg(res.data.message);
+            setTimeout(() => navigate("/"), 1000);
         } catch (err) {
-            return { error: err };
+            setErrorMsg(err.response?.data?.message) || err.message;
         }
     }
 
@@ -65,6 +68,32 @@ export default function Login() {
             </form>
 
             <NavLink to="/register">Not a user yet? Register</NavLink>
+            {errorMsg && (
+                <Snackbar
+                    open={Boolean(errorMsg)}autoHideDuration={6000}
+                    onClose={() => setErrorMsg(null)}
+                >
+                    <Alert
+                        severity="error"
+                        variant="filled"
+                    >
+                        {errorMsg}
+                    </Alert>
+                </Snackbar>
+            )}
+            {successMsg && (
+                <Snackbar
+                    open={Boolean(successMsg)}autoHideDuration={6000}
+                    onClose={() => setSuccessMsg(null)}
+                >
+                    <Alert
+                        severity="success"
+                        variant="filled"
+                    >
+                        {successMsg}
+                    </Alert>
+                </Snackbar>
+            )}
         </Container>
     );
 }
