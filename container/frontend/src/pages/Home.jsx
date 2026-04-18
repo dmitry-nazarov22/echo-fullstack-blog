@@ -63,7 +63,7 @@ export default function Home({
 
     return <Container sx={{ color:"black" }}>
         <form className="form-inline" onSubmit={handleSubmit}>
-            <Input sx={{ minWidth:"50vw", border:"solid 1px #e2e2e2", borderRadius:"2px" }} type="text" placeholder="Write your post here..." onChange={handleChange} required />
+            <Input sx={{ minWidth:"50vw", padding:"10px" }} type="text" placeholder="Write your post here..." onChange={handleChange} required />
             <Button type="submit"><SendIcon /></Button>
         </form>
         <Posts
