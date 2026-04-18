@@ -6,8 +6,6 @@ import api from '../api/axios';
 import Comments from './Comments';
 import { Box, Button, TextField, Typography } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit"
-import MailIcon from "@mui/icons-material/Mail"
-import CommentIcon from "@mui/icons-material/Comment"
 
 export default function Profile({ fetchPostsByUserId, fetchUserById, deletePost, editPost }) {
     /** State for all posts made by user. */
