@@ -225,9 +225,27 @@ export default function Posts({ posts,
         <>
         <List>
             {posts.map((post) => (
-                <Card key={post.id} sx={{ margin:"10px", display:"flex", flexDirection:"column", alignItems:"flex-start"}} onClick={() => {
-                    setSelectedPostId(post.id);
-                }}>
+                <Card
+                    key={post.id}
+                    sx={{
+                        margin:"10px",
+                        display:"flex",
+                        flexDirection:"column",
+                        alignItems:"flex-start",
+                        borderRadius:"10px",
+                        transition: 'transform 0.3s ease-in-out',
+                        '&:hover': {
+                            ...(selectedPostId !== post.id && {
+                                transform: 'scale(1.01)',
+                                boxShadow: 5,
+                                cursor: 'pointer',
+                            })
+                        }
+                    }}
+                    onClick={() => {
+                        setSelectedPostId(post.id);
+                    }}
+                >
 
                     <CardContent sx={{ display:"flex", flexDirection:"column", alignItems:"flex-start"}}>
                         <Typography variant='h6'>@{post.username}</Typography>
