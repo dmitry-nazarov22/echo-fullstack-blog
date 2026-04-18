@@ -1,11 +1,14 @@
-import { Button, Container, Typography, Box } from "@mui/material";
+import { Button, Container, Typography, Box, Snackbar, Alert } from "@mui/material";
 import { useState } from "react";
 import { useNavigate, NavLink } from "react-router-dom";
+import api from "../api/axios"
 
-export default function Register({ createUser }) {
+export default function Register() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
+    const [errorMsg, setErrorMsg] = useState(null);
+    const [successMsg, setSuccessMsg] = useState(null);
 
     /**
      * Send createUser functional call with username and password values to
@@ -13,16 +16,20 @@ export default function Register({ createUser }) {
      *
      * @param {Event} e event of changing value inside input field.
      */
-    const handleRegister = (e) => {
+    const handleRegister = async (e) => {
         e.preventDefault();
 
-        const newUser = {
-            username: username,
-            password: password,
-        };
+        try {
+            const res = await api.post(`/users/register`, {
+                username: username,
+                password: password
+            });
 
-        createUser(newUser);
-        navigate("/login");
+            setSuccessMsg("Registration successful!");
+            setTimeout(() => navigate("/login"), 1500);
+        } catch (err) {
+            setErrorMsg(err.response?.data || err.message);
+        }
     }
 
     return (
@@ -60,6 +67,32 @@ export default function Register({ createUser }) {
             <Button type="submit">Register</Button>
             </form>
             <NavLink to="/login">Already a user? Login</NavLink>
+            {errorMsg && (
+                <Snackbar
+                    open={Boolean(errorMsg)}autoHideDuration={6000}
+                    onClose={() => setErrorMsg(null)}
+                >
+                    <Alert
+                        severity="error"
+                        variant="filled"
+                    >
+                        {errorMsg}
+                    </Alert>
+                </Snackbar>
+            )}
+            {successMsg && (
+                <Snackbar
+                    open={Boolean(successMsg)}autoHideDuration={6000}
+                    onClose={() => setSuccessMsg(null)}
+                >
+                    <Alert
+                        severity="success"
+                        variant="filled"
+                    >
+                        {successMsg}
+                    </Alert>
+                </Snackbar>
+            )}
         </Container>
     );
 }
