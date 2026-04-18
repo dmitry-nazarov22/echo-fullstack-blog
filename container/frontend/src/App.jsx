@@ -108,17 +108,6 @@ function App() {
     }
   }
 
-  /**
-   * Save user to the database.
-   *
-   * @param {Object} user user to be saved.
-   */
-  const createUser = async (user) => {
-      await api.post(`/users/register`, {
-        ...user
-      });
-  }
-
   useEffect(() => {
     async function checkLoggedUserId() {
       try {
@@ -153,7 +142,7 @@ function App() {
               deletePost={deletePost}
               />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register createUser={createUser} />} />
+            <Route path="/register" element={<Register />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
