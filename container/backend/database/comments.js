@@ -11,7 +11,7 @@ const { pool } = require("./db");
 function findCommentsByPostId(post_id) {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT comments.id, comments.body, comments.created_at, users.username
+      `SELECT comments.id, comments.user_id, comments.body, comments.created_at, users.username
       FROM comments
       JOIN users ON comments.user_id = users.id
       WHERE comments.post_id = $1
@@ -39,7 +39,7 @@ function findCommentsByPostId(post_id) {
 function findFirstCommentByPostId(post_id) {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT comments.id, comments.body, comments.created_at, users.username
+      `SELECT comments.id, comments.user_id, comments.body, comments.created_at, users.username
       FROM comments
       JOIN users ON comments.user_id = users.id
       WHERE comments.post_id = $1
