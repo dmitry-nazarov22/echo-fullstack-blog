@@ -66,7 +66,7 @@ function findFirstCommentByPostId(post_id) {
 function findCommentsByUserId(user_id) {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT comments.id, comments.body, comments.created_at, users.username
+      `SELECT comments.id, comments.user_id, comments.body, comments.created_at, users.username
       FROM comments
       JOIN users ON comments.user_id = users.id
       WHERE comments.user_id = $1
