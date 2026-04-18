@@ -228,6 +228,7 @@ export default function Posts({ posts,
                 <Card
                     key={post.id}
                     sx={{
+                        background:"#ffffff",
                         margin:"10px",
                         display:"flex",
                         flexDirection:"column",
@@ -236,6 +237,7 @@ export default function Posts({ posts,
                         transition: 'transform 0.3s ease-in-out',
                         '&:hover': {
                             ...(selectedPostId !== post.id && {
+                                background:"#fcfcfc",
                                 transform: 'scale(1.01)',
                                 boxShadow: 5,
                                 cursor: 'pointer',
@@ -266,7 +268,7 @@ export default function Posts({ posts,
 
                     <CardActions sx={{ display:"flex", justifyContent:"space-between", width:"100%" }}>
                         <Box sx={{ display:"flex", alignSelf:'flex-start', flexDirection:"row", gap:"10px" }}>
-                            <Button onClick={(e) => {
+                            <Button color="primary" onClick={(e) => {
                                 handleLike(post.id, userId);
                                 e.stopPropagation();
                             }}>
