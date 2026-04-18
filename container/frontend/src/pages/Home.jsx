@@ -16,8 +16,6 @@ export default function Home({
 }) {
     /** State for forms text value. */
     const [form, setForm] = useState("");
-    /** State for message to be displayed under the form. Not used yet. */
-    const [message, setMessage] = useState("");
     /** State for logged in user ID to use for posting */
     const { userId } = useContext(AuthContext);
     /** State for navigating through views */
@@ -46,20 +44,14 @@ export default function Home({
 
         if (userId == null) return navigate('/login');
 
-        if (!form) {
-            setMessage("Post can't be empty!");
-        } else {
+        const newPost = {
+            user_id: userId,
+            body: form,
+        };
 
-            const newPost = {
-                user_id: userId,
-                body: form,
-            };
+        createPost(newPost);
 
-            createPost(newPost);
-
-            setForm("");
-            setMessage("");
-        }
+        setForm("");
     };
 
     /**

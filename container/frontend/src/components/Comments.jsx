@@ -28,7 +28,26 @@ export default function Comments({ comments, setComments }) {
         <Box sx={{ margin:"10px", display:"flex", flexDirection:"column", alignItems:"baseline", width:"60vw" }}>
             <List>
                 {comments.map((comment) => (
-                    <ListItem key={comment.id} sx={{ background:"#fafafa", margin:"20px", border:"solid 1px #e2e2e2", borderRadius:"5px", display:"flex", flexDirection:"column", alignItems:"baseline", width:"50vw", padding:"5px" }}>
+                    <ListItem
+                        key={comment.id}
+                        sx={{
+                            backgroundColor:"#fafafa",
+                            margin:"20px",
+                            border:"solid 1px #e2e2e2",
+                            borderRadius:"5px",
+                            display:"flex",
+                            flexDirection:"column",
+                            alignItems:"baseline",
+                            width:"50vw",
+                            padding:"5px",
+                            transition: 'transform 0.3s ease-in-out',
+                            '&:hover': {
+                                    background:"#fcfcfc",
+                                    transform: 'scale(1.005)',
+                                    boxShadow: 3,
+                            }
+                        }}
+                    >
                         <Typography variant="h6">@{comment.username}</Typography>
                         <Typography sx={{ fontSize:"medium" }}>{comment.body}</Typography>
                         <Typography sx={{ fontSize:"small", color:"#b3b3b3" }}>{comment.created_at}</Typography>
