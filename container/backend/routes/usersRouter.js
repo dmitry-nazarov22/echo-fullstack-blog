@@ -169,7 +169,7 @@ usersRouter.patch("/description", checkAuthenticated, async (req, res) => {
       username: updatedUser.username,
       description: updatedUser.description,
     });
-  } catch {
+  } catch (err) {
     logger.error(`Error while editing a description: ${err.message}`);
     res.status(500).send(err);
   }
