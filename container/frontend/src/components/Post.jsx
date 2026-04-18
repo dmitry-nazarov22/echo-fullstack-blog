@@ -40,10 +40,12 @@ export default function Post({ post, setPosts, closePost }) {
     const postComment = async (user_id) => {
         if (userId == null) return navigate('/login');
         try {
-            api.post(`${import.meta.env.VITE_API_URL}/comments`,
+            const res = await api.post(`${import.meta.env.VITE_API_URL}/comments`,
                 {
                     post_id: post.id, user_id: user_id, body: commentText }
             )
+            setCommentText("");
+            setComments(prev => [res.data, ...prev])
         } catch (err) {
             console.error(err);
         }
