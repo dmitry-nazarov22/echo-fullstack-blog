@@ -8,7 +8,7 @@ const { pool } = require("./db");
 function findAllPosts() {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT posts.id, posts.body, posts.created_at, users.username,
+      `SELECT posts.id, posts.body, posts.created_at, posts.user_id, users.username,
       COUNT(likes.post_id) AS likes
       FROM posts
       JOIN users ON posts.user_id = users.id
