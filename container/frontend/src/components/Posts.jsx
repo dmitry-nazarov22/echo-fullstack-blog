@@ -250,7 +250,20 @@ export default function Posts({ posts,
                 >
 
                     <CardContent sx={{ display:"flex", flexDirection:"column", alignItems:"flex-start"}}>
-                        <Typography variant='h6'>@{post.username}</Typography>
+                        <Typography
+                            variant='h6'
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                navigate(`/profile/${post.user_id}`);
+                            }}
+                            sx={{
+                                ":hover": {
+                                    color: "#b0b0b0",
+                                }
+                            }}
+                        >
+                            @{post.username}
+                        </Typography>
 
                         {editingId === post.id ? (
                                 <Input
