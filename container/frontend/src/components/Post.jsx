@@ -130,7 +130,21 @@ export default function Post({ post, setPosts, closePost }) {
         <Box sx={{ display:"flex", flexDirection:"column", position:"fixed", zIndex: 9999, inset:"0", justifyContent:"center", alignItems:"center", background:"rgba(255, 255, 255, 0.012)", backdropFilter:"blur(10px)" }}>
             <Box sx={{ background:"#ffffff", padding: "5px", margin:"10px", border:"1px solid #e8e8e8", borderRadius:"5px", display:"flex", flexDirection:"column", alignItems:"baseline", width:"80vw" }}>
                 <Button sx={{ alignSelf:"flex-end" }} onClick={() => closePost()}><CloseIcon/></Button>
-                <Typography variant="h6">{post.username}</Typography>
+                <Typography
+                    variant="h6"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(`/profile/${post.user_id}`);
+                    }}
+                    sx={{
+                        ":hover": {
+                            color: "#b0b0b0",
+                            cursor: "pointer"
+                        }
+                    }}
+                >
+                    @{post.username}
+                </Typography>
                 <Typography sx={{ fontSize:"medium" }}>{post.body}</Typography>
                 <Typography sx={{ fontSize:"small", color:"#b3b3b3" }}>{post.created_at}</Typography>
                 <Box sx={{ display:"flex", justifyContent:"space-between", width:"100%" }}>
