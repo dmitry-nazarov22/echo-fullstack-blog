@@ -77,7 +77,7 @@ export default function Profile({ fetchPostsByUserId, fetchUserById, deletePost,
         };
 
         loadUserData(id);
-    }, []);
+    }, [id]);
 
     return (
         <>
