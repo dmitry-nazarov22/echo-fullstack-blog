@@ -29,7 +29,7 @@ export default function Navbar() {
                 Home
             </NavLink>
             <NavLink
-                to="/profile"
+                to={`/profile/${userId}`}
                 style={({ isActive }) => isActive ? { ...linkStyle, ...activeStyle } : linkStyle}
             >
                 Profile
