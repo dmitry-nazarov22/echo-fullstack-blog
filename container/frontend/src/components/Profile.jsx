@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import Posts from "./Posts";
 import AuthContext from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import api from '../api/axios';
 import Comments from './Comments';
 import { Box, Button, TextField, Typography } from "@mui/material";
@@ -24,6 +24,8 @@ export default function Profile({ fetchPostsByUserId, fetchUserById, deletePost,
     const [activeTab, setActiveTab] = useState("posts")
     /** State for logged in user ID to use for posting */
     const { userId } = useContext(AuthContext);
+    /** ID from parameters; which profile to open. */
+    const { id } = useParams();
     /** State for navigating through views */
     const navigate = useNavigate();
 
@@ -63,25 +65,23 @@ export default function Profile({ fetchPostsByUserId, fetchUserById, deletePost,
      * - in the future: likes and comments made by user
      */
     useEffect(() => {
-        if (userId == null) {
-            return;
-        }
-        const loadUserData = async () => {
-            const res = await fetchUserById(userId);
+        const loadUserData = async (id) => {
+            const res = await fetchUserById(id);
             setUser(res);
             setDescription(res.description);
 
-            const posts = await fetchPostsByUserId(userId);
+            const posts = await fetchPostsByUserId(id);
             setUserPosts(posts);
 
-            fetchCommentsByUser(userId);
+            fetchCommentsByUser(id);
         };
-        loadUserData();
+
+        loadUserData(id);
     }, []);
 
     return (
         <>
-            {userId === null ? (
+            {id === "null" ? (
                 <>
                 <Box sx={{ display:"flex", flexDirection:"column", alignContent:"center", margin:"100px" }}>
                     <Typography variant="h4">You're not logged in</Typography>
@@ -99,7 +99,12 @@ export default function Profile({ fetchPostsByUserId, fetchUserById, deletePost,
                         {editing === false ? (
                             <>
                                 <Typography variant="h5">{description}</Typography>
-                                <Button onClick={() => setEditing(true)}><EditIcon /></Button>
+                                {userId == id ? (
+                                        <>
+                                            <Button onClick={() => setEditing(true)}><EditIcon /></Button>
+                                        </>
+                                    ) : (<></>)
+                                }
                             </>
                         ) : (
                             <>
