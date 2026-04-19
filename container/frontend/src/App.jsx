@@ -135,7 +135,7 @@ function App() {
               deletePost={deletePost}
               editPost={editPost}
               />} />
-            <Route path="/profile" element={<Profile
+            <Route path="/profile/:id" element={<Profile
               fetchUserById={fetchUserById}
               fetchPostsByUserId={fetchPostsByUserId}
               editPost={editPost}
