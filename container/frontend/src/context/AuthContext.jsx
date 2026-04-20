@@ -3,6 +3,12 @@ import api from "../api/axios";
 
 const AuthContext = createContext();
 
+/**
+ * Provides authentication methods and userId context-variable.
+ *
+ * @param {*} children Children components that will have access to the context.
+ * @returns Context Provider wrapping children.
+ */
 export function AuthProvider({ children }) {
     const [userId, setUserId] = useState(null);
 
