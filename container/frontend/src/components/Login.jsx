@@ -5,12 +5,17 @@ import AuthContext from "../context/AuthContext"
 import { Box, Container, Typography, Button, Snackbar, Alert } from "@mui/material";
 
 export default function Login() {
+    /** State for username in the login form. */
     const [username, setUsername] = useState("");
+    /** State for password in the login form. */
     const [password, setPassword] = useState("");
+    /** State for error message to display it in a snack bar. */
+    const [errorMsg, setErrorMsg] = useState(null);
+    /** State for success message to display it in a snack bar. */
+    const [successMsg, setSuccessMsg] = useState(null);
+    /** Login function from AuthContext. */
     const { login } = useContext(AuthContext);
     const navigate = useNavigate();
-    const [errorMsg, setErrorMsg] = useState(null);
-    const [successMsg, setSuccessMsg] = useState(null);
 
     /**
      * Send login request to either get 401 unsauthorized or user id and username.

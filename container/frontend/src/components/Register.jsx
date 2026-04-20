@@ -4,11 +4,15 @@ import { useNavigate, NavLink } from "react-router-dom";
 import api from "../api/axios"
 
 export default function Register() {
+    /** State for username in the register form. */
     const [username, setUsername] = useState("");
+    /** State for password in the register form. */
     const [password, setPassword] = useState("");
-    const navigate = useNavigate();
+    /** State for error message to display it in a snack bar. */
     const [errorMsg, setErrorMsg] = useState(null);
+    /** State for success message to display it in a snack bar. */
     const [successMsg, setSuccessMsg] = useState(null);
+    const navigate = useNavigate();
 
     /**
      * Send createUser functional call with username and password values to
