@@ -13,7 +13,8 @@ const pool = new Pool({
 });
 
 /**
- * Insert data to the database.
+ * Insert data to the database. QUERYS MADE WITH AI TO BACK UP SAMPLE DATA
+ * WHEN RENDER.COM DELETES FREE DATABASE AFTER ONE MONTH OF USAGE.
  *
  * Supposed to be used while making the project, because Render.com Postgres server is temporary
  * in free plan. Used to populate the tables. This includes blueprint users, posts, comments, and likes.
