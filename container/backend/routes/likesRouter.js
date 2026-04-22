@@ -27,7 +27,7 @@ likesRouter.get("/user/:userId", async (req, res) => {
     res.send(userLikes);
   } catch (err) {
     logger.error(`Error while requesting for likes: ${err.message}`);
-    res.status(404).send(err);
+    res.status(500).send(err);
   }
 });
 
@@ -53,7 +53,7 @@ likesRouter.get("/post/:postId", async (req, res) => {
     res.send(postLikesCount);
   } catch (err) {
     logger.error(`Error while requesting likes count: ${err.message}`);
-    res.status(404).send(err);
+    res.status(500).send(err);
   }
 });
 
@@ -87,7 +87,7 @@ likesRouter.get("/post/:post_id/user/:user_id", async (req, res) => {
     res.send(isPostLiked);
   } catch (err) {
     logger.error(`Error while requesting like-status: ${err.message}`);
-    res.status(404).send(err);
+    res.status(500).send(err);
   }
 });
 
