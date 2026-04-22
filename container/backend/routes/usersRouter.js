@@ -104,7 +104,7 @@ usersRouter.post("/login", checkNotAuthenticated, async (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) {
       logger.error(`Error while logging in: ${err.message}`);
-      return res.status(500).send(err);
+      return res.status(401).send(err);
     }
 
     if (!user) {
