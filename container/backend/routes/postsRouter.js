@@ -44,7 +44,7 @@ postsRouter.get("/:userId", async (req, res) => {
     res.send(userPosts);
   } catch (err) {
     logger.error(`Error while requesting all posts by user ID: ${err.message}`);
-    res.status(404).send(err);
+    res.status(500).send(err);
   }
 });
 
@@ -110,14 +110,14 @@ postsRouter.patch("/:id", checkAuthenticationForUD, async (req, res) => {
 
   // VALIDATION
   const validationResId = validateId(id);
-  const validationResBody = validateBody(body);
-
   if (validationResId.error) {
     logger.error(`Invalid post ID: ${validationResId.error.message}`);
     return res
       .status(400)
       .send(`Invalid post ID: ${validationResId.error.message}`);
   }
+
+  const validationResBody = validateBody(body);
 
   if (validationResBody.error) {
     logger.error(`Invalid post body: ${validationResBody.error.message}`);
