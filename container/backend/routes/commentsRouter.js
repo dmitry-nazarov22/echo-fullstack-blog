@@ -27,7 +27,7 @@ commentsRouter.get("/user/:userId", async (req, res) => {
     res.send(userComments);
   } catch (err) {
     logger.error(`Error while fetching comments by user id: ${err.message}`);
-    res.status(404).send(err);
+    res.status(500).send(err);
   }
 });
 
@@ -53,7 +53,7 @@ commentsRouter.get("/post/:postId", async (req, res) => {
     res.send(postComments);
   } catch (err) {
     logger.error(`Error while fetching comments by post id: ${err.message}`);
-    res.status(404).send(err);
+    res.status(500).send(err);
   }
 });
 
@@ -81,7 +81,7 @@ commentsRouter.get("/post/first/:postId", async (req, res) => {
     logger.error(
       `Error while fetching latest comment by post id: ${err.message}`,
     );
-    res.status(404).send(err);
+    res.status(500).send(err);
   }
 });
 
@@ -169,7 +169,7 @@ commentsRouter.patch("/:id", checkAuthenticated, async (req, res) => {
 
   try {
     const updatedComment = await comments.editCommentById(id, user_id, body);
-    res.json(updatedComment);
+    res.status(200).send(updatedComment);
   } catch (err) {
     logger.error(`Error while editing a comment: ${err.message}`);
     res.status(500).send(err);
