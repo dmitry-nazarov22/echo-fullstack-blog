@@ -101,7 +101,7 @@ describe("PATCH /posts/:id || Edit a post", () => {
   });
 
   test("should fail on invalid id", async () => {
-    const res = await request(app).patch(`/posts/abc`).send("test");
+    const res = await request(app).patch(`/posts/abc`).send({ body: "test" });
 
     expect(res.statusCode).toBe(400);
   });
@@ -117,8 +117,4 @@ describe("PATCH /posts/:id || Edit a post", () => {
 
     await pool.query("DELETE FROM posts WHERE id = $1", [created.body.id]);
   });
-});
-
-afterAll(async () => {
-  await pool.end();
 });
