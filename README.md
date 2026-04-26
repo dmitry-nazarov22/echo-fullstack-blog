@@ -6,7 +6,8 @@
 navigating a minimalistic UI using MUI package. In individual profile sections you can view all
 posts or comments done by the person.
 
-[Check it out here! (live demo)](https://echo-fullstack-blog-app.onrender.com)
+- [Check it out here! (live demo)](https://echo-fullstack-blog-app.onrender.com)
+- [Screencast link!](https://youtu.be/15GsaxUIlO8)
 
 This app showcases my skills in **fullstack programming** and enthusiasm towards
 creating a polished project.
@@ -47,10 +48,6 @@ Stable releases with realised functionalities are better found in releases.
 - **Joi**
 - **MaterialUI**
 - **Jest** + **SuperTest**
-
-## Link to the deployed project
-
-[Check it out here!](https://echo-fullstack-blog-app.onrender.com)
 
 ## Features
 
