@@ -7,7 +7,6 @@ navigating a minimalistic UI using MUI package. In individual profile sections y
 posts or comments done by the person.
 
 - [Check it out here! (live demo)](https://echo-fullstack-blog-app.onrender.com)
-- [Screencast link!](https://youtu.be/15GsaxUIlO8)
 
 This app showcases my skills in **fullstack programming** and enthusiasm towards
 creating a polished project.
